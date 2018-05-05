@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusedByDefault="true"
+    android:focusableInTouchMode="true"
+    tools:context=".subMenu.laporanMenu.DetailKartuPersediaan">
+
+
+    <RelativeLayout
+        android:id="@+id/titleDetailLapInfoBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:background="@android:color/holo_blue_dark"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:id="@+id/backFromDetail"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            app:srcCompat="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/ImagetitleDetailLapInfo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="14dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/titleDetailLapInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_toLeftOf="@+id/ImagetitleDetailLapInfo"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="title"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_marginTop="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/DateDetailLap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="2dp"
+                    android:text="10-10-2001" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="15dp">
+
+                    <TextView
+                        android:id="@+id/nameProductDetailLap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="product Name"
+                        android:textColor="@android:color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/PriceDetailLap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Price"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/QtyDetailLap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Qty"
+                        android:textColor="@android:color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/TotalDetailLapInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Total"
+                        android:textColor="@color/greenMoney"
+                        android:textSize="20sp" />
+                </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:paddingRight="12dp"
+                android:paddingLeft="12dp"
+                android:id="@+id/LayoutlistDetailLap"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/listDetailLap"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

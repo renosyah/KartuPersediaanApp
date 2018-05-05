@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/LaporanMenu"
+            android:icon="@drawable/list"
+            android:title="Menu Laporan" />
+        <item
+            android:id="@+id/TransaksiMenu"
+            android:icon="?android:attr/actionModePasteDrawable"
+            android:title="Menu Transaksi" />
+        <item
+            android:id="@+id/ProdukMenu"
+            android:icon="@drawable/cardboard"
+            android:title="Produk" />
+
+        <item
+            android:id="@+id/SideSettingMenu"
+            android:icon="@drawable/settingdr"
+            android:title="Setting" />
+        <item
+            android:id="@+id/Logout"
+            android:icon="@drawable/logout"
+            android:title="Logout" />
+    </group>
+
+
+</menu>
