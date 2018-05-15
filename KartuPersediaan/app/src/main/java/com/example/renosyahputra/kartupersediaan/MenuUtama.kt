@@ -1,5 +1,6 @@
 package com.example.renosyahputra.kartupersediaan
 
+import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -11,19 +12,18 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.example.renosyahputra.kartupersediaan.loginAndRegister.Login
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddProduk
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
-import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
+import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.FormatLaporan
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
+import com.example.renosyahputra.kartupersediaan.storage.local.SaveUserData
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.KartuPersediaanMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.ProdukMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
@@ -56,6 +56,8 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
     lateinit var produkMenu : ProdukMenu
     lateinit var transaksiMenu : TransaksiMenu
 
+    lateinit var formatLaporan : FormatLaporan
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,27 +71,8 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         context = this@MenuUtama
         IntentData = intent
 
-        kartuPersediaanData = KartuPersediaanData()
-        kartuPersediaanData.metodePersediaan = MetodePersediaan()
-        kartuPersediaanData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
-        kartuPersediaanData.ListProdukData = ArrayList()
-        kartuPersediaanData.ListTransaksiData = ArrayList()
-        kartuPersediaanData.ListPersediaanData = ArrayList()
-
-
-        val save = SaveMainData(context,kartuPersediaanData)
-        if (save.Load() != null){
-            kartuPersediaanData.metodePersediaan = save.Load()!!.metodePersediaan
-            kartuPersediaanData.ListProdukData = save.Load()!!.ListProdukData
-            kartuPersediaanData.ListTransaksiData = save.Load()!!.ListTransaksiData
-            kartuPersediaanData.ListPersediaanData = save.Load()!!.ListPersediaanData
-
-        }
-
-        userData = UserData()
-        userData.Name = "Reno"
-        userData.Email = "Reno@mail.com"
-        userData.CompanyName = "PT Maju Mundur"
+        userData = IntentData.getSerializableExtra("user") as UserData
+        kartuPersediaanData = IntentData.getSerializableExtra("data") as KartuPersediaanData
 
         langSetting = LangSetting(context)
         langSetting.CheckLangSetting()
@@ -99,6 +82,9 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
         fab = findViewById(R.id.fab)
         Toolbar = findViewById(R.id.toolbar)
+
+        formatLaporan = FormatLaporan()
+        formatLaporan.TypeFormat = FormatLaporan.BIASA
 
         setSupportActionBar(Toolbar)
 
@@ -132,6 +118,8 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
         kartuPersediaanMenu = KartuPersediaanMenu()
         kartuPersediaanMenu.SetMainData(kartuPersediaanData)
+        kartuPersediaanMenu.SetUserData(userData)
+        kartuPersediaanMenu.setFormatLaporan(formatLaporan)
         kartuPersediaanMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
 
@@ -168,13 +156,16 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         Logout.setTitle(lang.mainMenuLang.subMenu4)
 
         nav_view.setItemTextAppearance(themeSetting.GetThemeSetting().TextColor)
+
     }
 
     internal fun SettitleInOptionMenu(OptionMenu : Menu,lang : LangObj){
+
         val setting = OptionMenu.findItem(R.id.action_settings)
         val exit = OptionMenu.findItem(R.id.action_Exit)
         exit.setTitle(lang.mainMenuLang.MenuSetting2)
         setting.setTitle(lang.mainMenuLang.MenuSetting1)
+
     }
 
     fun SetSideProfile(){
@@ -191,18 +182,21 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
     }
 
     fun setTheme(){
+
         val header = nav_view.getHeaderView(0)
         val background : LinearLayout = header.findViewById(R.id.LinearLayoutDrawerUser)
         background.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
         Toolbar.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
         Toolbar.setTitleTextColor(themeSetting.GetThemeSetting().TextColor)
         fab.backgroundTintList = ColorStateList.valueOf(themeSetting.GetThemeSetting().BackGroundColor)
+
     }
 
     internal fun OpenLangAndThemeSetting(){
         val optionLang = arrayOf<CharSequence>(
                 langSetting.GetlangObj().mainMenuSettingLang.OpenSetting1,
-                langSetting.GetlangObj().mainMenuSettingLang.OpenSetting2
+                langSetting.GetlangObj().mainMenuSettingLang.OpenSetting2,
+                langSetting.GetlangObj().mainMenuSettingLang.typeLaporan
         )
         AlertDialog.Builder(context)
                 .setTitle(langSetting.GetlangObj().mainMenuLang.MenuSetting1)
@@ -215,11 +209,38 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
                         OpenThemeSetting()
 
+                    } else if (i == 2){
+
+                        OpenTypeLaporanSetting()
                     }
                     dialogInterface.dismiss()
                 })
                 .setNegativeButton(langSetting.GetlangObj().mainMenuSettingLang.Cancel, DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.dismiss()
+                })
+                .create().show()
+    }
+
+    internal fun OpenTypeLaporanSetting(){
+        val optionLang = arrayOf<CharSequence>(FormatLaporan.BIASA,FormatLaporan.ACCOUNTING)
+        AlertDialog.Builder(context)
+                .setTitle(langSetting.GetlangObj().mainMenuSettingLang.typeLaporan)
+                .setItems(optionLang, DialogInterface.OnClickListener { dialogInterface, i ->
+                    if (i == 0){
+
+                        formatLaporan.TypeFormat = FormatLaporan.BIASA
+
+                    }else if (i == 1){
+
+                        formatLaporan.TypeFormat = FormatLaporan.ACCOUNTING
+                    }
+
+                    RefreshChangeSetting()
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton(langSetting.GetlangObj().mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    OpenLangAndThemeSetting()
                 })
                 .create().show()
     }
@@ -253,7 +274,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
     internal fun OpenThemeSetting(){
 
-        val optionLang = arrayOf<CharSequence>(ThemeSetting.red,ThemeSetting.blue,ThemeSetting.yellow,ThemeSetting.green,ThemeSetting.dark)
+        val optionLang = arrayOf<CharSequence>(ThemeSetting.red,ThemeSetting.blue,ThemeSetting.yellow,ThemeSetting.green,ThemeSetting.dark,ThemeSetting.purple,ThemeSetting.brown,ThemeSetting.blue_sea,ThemeSetting.oranges)
         AlertDialog.Builder(context)
                 .setTitle(langSetting.GetlangObj().mainMenuSettingLang.TitleOpenSetting2)
                 .setItems(optionLang, DialogInterface.OnClickListener { dialogInterface, i ->
@@ -277,6 +298,22 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
                         4 -> {
                             themeSetting.ChangeTheme(ThemeSetting.dark)
                             themeSetting.SetThemeSetting(ThemeSetting.dark)
+                        }
+                        5 -> {
+                            themeSetting.ChangeTheme(ThemeSetting.purple)
+                            themeSetting.SetThemeSetting(ThemeSetting.purple)
+                        }
+                        6 -> {
+                            themeSetting.ChangeTheme(ThemeSetting.brown)
+                            themeSetting.SetThemeSetting(ThemeSetting.brown)
+                        }
+                        7 -> {
+                            themeSetting.ChangeTheme(ThemeSetting.blue_sea)
+                            themeSetting.SetThemeSetting(ThemeSetting.blue_sea)
+                        }
+                        8 -> {
+                            themeSetting.ChangeTheme(ThemeSetting.oranges)
+                            themeSetting.SetThemeSetting(ThemeSetting.oranges)
                         }
                     }
 
@@ -318,6 +355,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         AddContentToFrame()
         SetSlideMenuTitle(nav_view.menu,langSetting.GetlangObj())
         SettitleInOptionMenu(OptionMenu,langSetting.GetlangObj())
+
     }
 
 
@@ -337,10 +375,11 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
             }
 
             R.id.action_Exit ->{
-                val save = SaveMainData(context,kartuPersediaanData)
-                if (save.Save()){
+                val saveMainData = SaveMainData(context,kartuPersediaanData)
+                if (saveMainData.Save()) {
                     System.exit(0)
                 }
+
                 return true
             }
             else -> return super.onOptionsItemSelected(item)
@@ -379,30 +418,34 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
             R.id.Logout -> {
 
                 val save = SaveMainData(context,kartuPersediaanData)
-                if (save.Save()){
-                    System.exit(0)
+                val user = SaveUserData(context,userData)
+                if (save.Delete() && user.Delete()){
+
+                    val intent = Intent(context, Login::class.java)
+                    context.startActivity(intent)
+                    (context as Activity).finish()
+
                 }
-
-
-//                var DataString = ""
-//                val gson = Gson()
-//                DataString = gson.toJson(kartuPersediaanData.ListProdukData)
-//                Log.e("dataKartu",DataString)
-//
-//
-//                val typeOfListOfIdea = object : TypeToken<ArrayList<ProdukData>>() {}.type
-//                val newData = gson.fromJson<ArrayList<ProdukData>>(DataString, typeOfListOfIdea)
-//                for (i in newData){
-//                    Log.e("dataKartuFromJson",i.Nama)
-//                }
-
-
             }
 
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    override fun onDestroy() {
+        val save = SaveMainData(context,kartuPersediaanData)
+        save.Save()
+        super.onDestroy()
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            val save = SaveMainData(context,kartuPersediaanData)
+            save.Save()
+        }
+        return super.onKeyDown(keyCode, event)
     }
 
     override fun onBackPressed() {

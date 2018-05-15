@@ -16,9 +16,13 @@ class ThemeSetting(ctx : Context){
     companion object {
         val red = "RED"
         val green = "GREEN"
-        val yellow = "ORANGE"
+        val yellow = "YELLOW"
         val blue = "BLUE"
         val dark = "DARK"
+        val purple= "PURPLE"
+        val blue_sea = "LIGHT BLUE"
+        val brown = "BROWN"
+        val oranges = "ORANGE"
     }
     val FilenameLangSetting : String = "ThemeSetting.txt"
 
@@ -38,6 +42,18 @@ class ThemeSetting(ctx : Context){
             }
             dark ->{
                 Setdark()
+            }
+            purple -> {
+                Setpurple()
+            }
+            brown -> {
+                Setbrown()
+            }
+            oranges -> {
+                Setorange()
+            }
+            blue_sea -> {
+                Setbluesea()
             }
             else ->{
                 Setred()
@@ -70,6 +86,23 @@ class ThemeSetting(ctx : Context){
         themeObj.BackGroundColor = ResourcesCompat.getColor(context.resources, R.color.dark,null)
         themeObj.TextColor = ResourcesCompat.getColor(context.resources, R.color.whiteText,null)
     }
+    fun Setpurple() {
+        themeObj.BackGroundColor = ResourcesCompat.getColor(context.resources, R.color.purple,null)
+        themeObj.TextColor = ResourcesCompat.getColor(context.resources, R.color.whiteText,null)
+
+    }
+    fun Setbluesea() {
+        themeObj.BackGroundColor = ResourcesCompat.getColor(context.resources, R.color.blue_sea,null)
+        themeObj.TextColor = ResourcesCompat.getColor(context.resources, R.color.whiteText,null)
+    }
+    fun Setbrown() {
+        themeObj.BackGroundColor = ResourcesCompat.getColor(context.resources, R.color.brown,null)
+        themeObj.TextColor = ResourcesCompat.getColor(context.resources, R.color.whiteText,null)
+    }
+    fun Setorange() {
+        themeObj.BackGroundColor = ResourcesCompat.getColor(context.resources, R.color.orange,null)
+        themeObj.TextColor = ResourcesCompat.getColor(context.resources, R.color.whiteText,null)
+    }
 
     fun CheckThemeSetting(){
 
@@ -91,8 +124,20 @@ class ThemeSetting(ctx : Context){
             dark ->{
                 Setdark()
             }
+            purple -> {
+                Setpurple()
+            }
+            brown -> {
+                Setbrown()
+            }
+            oranges -> {
+                Setorange()
+            }
+            blue_sea -> {
+                Setbluesea()
+            }
             else ->{
-               Setblue()
+                Setred()
             }
         }
     }

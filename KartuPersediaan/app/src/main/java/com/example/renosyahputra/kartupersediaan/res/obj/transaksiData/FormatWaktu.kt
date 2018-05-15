@@ -1,6 +1,7 @@
 package com.example.renosyahputra.kartupersediaan.res.obj.transaksiData
 
 import java.io.Serializable
+import java.text.SimpleDateFormat
 
 class FormatWaktu : Serializable{
     var Jam : Int = 0
@@ -17,7 +18,10 @@ class FormatWaktu : Serializable{
     }
 
     fun BandingkanWaktuYangLebihKecil(waktu: FormatWaktu) :Boolean {
-        return (this.Jam >= waktu.Jam && this.Menit > waktu.Menit)
+        val parser = SimpleDateFormat("HH:mm")
+        val time1 = parser.parse(waktu.MakeJamString())
+        val time2 = parser.parse(this.MakeJamString())
+        return (time2 > time1)
     }
 
     fun MakeClear(){

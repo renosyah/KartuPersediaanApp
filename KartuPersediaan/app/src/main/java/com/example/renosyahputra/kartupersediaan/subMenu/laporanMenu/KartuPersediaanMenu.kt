@@ -15,14 +15,18 @@ import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.GenerateDataInventoryCard
 import com.example.renosyahputra.kartupersediaan.res.SortData.Companion.GetAllPeriodeInGroup
+import com.example.renosyahputra.kartupersediaan.res.ValidateOutProduct
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterLaporanKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
+import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.FormatLaporan
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -36,8 +40,20 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
     lateinit var LaporanKartuPersediaan : ArrayList<LaporanKartuPersediaanObj>
 
+    internal lateinit var formatLaporan : FormatLaporan
+
+    fun setFormatLaporan(formatLaporan : FormatLaporan){
+        this.formatLaporan = formatLaporan
+    }
+
     fun SetMainData(MainData : KartuPersediaanData){
         this.MainData = MainData
+    }
+
+    lateinit var user : UserData
+
+    fun SetUserData(userData: UserData){
+        this.user = userData
     }
 
     internal lateinit var lang : LangObj
@@ -79,12 +95,30 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         MainData.ListPersediaanData.clear()
         LaporanKartuPersediaan.clear()
 
+        val duplicateListTransaksi = ArrayList<TransaksiData>()
 
-        for (dataTrans in MainData.ListTransaksiData.sortedWith(compareBy({it.TanggalTransaksi.Tahun},{it.TanggalTransaksi.Bulan},{it.TanggalTransaksi.Hari},{it.Jam.Jam},{it.Jam.Menit}))){
-            GenerateDataInventoryCard.GenerateForEachTransaction(MainData,dataTrans)
+        for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
+            duplicateListTransaksi.add(trs.CloneTransData())
+
         }
 
-        for (dataTrans in MainData.ListTransaksiData.sortedWith(compareBy({it.TanggalTransaksi.Tahun},{it.TanggalTransaksi.Bulan},{it.TanggalTransaksi.Hari},{it.Jam.Jam},{it.Jam.Menit}))){
+        if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE && formatLaporan.TypeFormat == FormatLaporan.ACCOUNTING) {
+
+            for (transData in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
+                ValidateOutProduct.GenerateForEachTransaction(MainData,duplicateListTransaksi,transData)
+            }
+            MainData.ListPersediaanData.clear()
+        }
+
+
+
+        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
+            GenerateDataInventoryCard.GenerateForEachTransaction(MainData, dataTrans)
+
+        }
+
+
+        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({it.TanggalTransaksi.Tahun},{it.TanggalTransaksi.Bulan},{it.TanggalTransaksi.Hari},{it.Jam.Jam},{it.Jam.Menit}))){
             if (filter.tahun > 0 && (dataTrans.TanggalTransaksi.Tahun == filter.tahun)){
                 for (detail in dataTrans.ListDetail){
                     if (filter.p != null && (filter.p!!.IdProduk == detail.ProdukData.IdProduk)){
@@ -105,6 +139,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             }
         }
 
+
         SetAdapter(LaporanKartuPersediaan)
     }
 
@@ -122,6 +157,18 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
     }
 
     fun SetAdapter(l : ArrayList<LaporanKartuPersediaanObj>){
+
+        val intPosWhenNolFound = ArrayList<Int>()
+        for (finNol in 0..(l.size)-1){
+            if (l.get(finNol).Quantity == 0){
+                intPosWhenNolFound.add(finNol)
+            }
+        }
+        for (getRidNol in 0..(intPosWhenNolFound.size)-1){
+            l.removeAt(intPosWhenNolFound.get(getRidNol))
+        }
+
+
         val adapter = CustomAdapterLaporanKartuPersediaan(ctx,R.layout.custom_adapter_laporan_kartu_persediaan,l)
         adapter.SetLangTheme(lang,theme)
         ListViewKartuPersediaan.adapter = adapter
@@ -137,6 +184,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             ListViewKartuPersediaan.visibility = View.VISIBLE
         }
     }
+
 
     internal fun InitiationWidget(v : View){
 
@@ -154,7 +202,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
         SetMethodeLap = v.findViewById(R.id.setMethod)
         SetMethodeLap.setTextColor(theme.BackGroundColor)
-        SetMethodeLap.setText(lang.laporanMenuLang.filterPilihMethod + " : " + MainData.metodePersediaan.MetodeUse)
+        SetMethodeLap.setText(MainData.metodePersediaan.MetodeUse)
 
         sortInventoryCard = v.findViewById(R.id.sortInventoryCard)
         sortInventoryCard.setTextColor(theme.BackGroundColor)
@@ -189,6 +237,10 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         when (p0) {
             PrintNowButton-> {
 
+                if (LaporanKartuPersediaan.size < 1){
+                    return
+                }
+
                 filterSearch.p = null
                 filterSearch.tahun = 0
 
@@ -200,15 +252,15 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                 GenerateData(filterSearch)
-                val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
                 GenerateData(filterSearch)
-                val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
                 GenerateData(filterSearch)
-                val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 AlertDialog.Builder(ctx)
                         .setTitle(lang.laporanMenuLang.exportTitle)
@@ -228,6 +280,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                                 }
                             }
                             Toast.makeText(ctx,lang.laporanMenuLang.saved,Toast.LENGTH_SHORT).show()
+                            MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
+                            GenerateData(filterSearch)
+
                         }).create().show()
 
             }
@@ -246,7 +301,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
 
                             }
-                            SetMethodeLap.setText(lang.laporanMenuLang.filterPilihMethod + " : " + MainData.metodePersediaan.MetodeUse)
+                            SetMethodeLap.setText(MainData.metodePersediaan.MetodeUse)
 
                             GenerateData(filterSearch)
                             dialogInterface.dismiss()

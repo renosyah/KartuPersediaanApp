@@ -1,6 +1,7 @@
 package com.example.renosyahputra.kartupersediaan.res.obj.transaksiData
 
 import java.io.Serializable
+import java.text.SimpleDateFormat
 
 class FormatTanggal  :Serializable {
     var Hari : Int = 0
@@ -11,7 +12,10 @@ class FormatTanggal  :Serializable {
         return Hari.toString() +"/"+Bulan+"/"+ Tahun
     }
 
-    fun BandingkanTanggalYangLebihKecil(tanggal: FormatTanggal) : Boolean {
-        return (this.Hari >= tanggal.Hari && this.Bulan >= tanggal.Bulan && this.Tahun >= tanggal.Tahun)
+    fun BandingkanTanggalYangLebihKecil(j1 : FormatWaktu,j2  :FormatWaktu,tanggal: FormatTanggal) : Boolean {
+        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
+        val tgl1 = sdf.parse(tanggal.toDateString()+" "+j1.MakeJamString())
+        val tgl2 = sdf.parse(this.toDateString()+" "+j2.MakeJamString())
+        return (tgl2 >= tgl1)
     }
 }

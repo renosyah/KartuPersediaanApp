@@ -1,7 +1,7 @@
 package com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 
 import android.app.Activity
-import android.app.AlertDialog
+import android.support.v7.app.AlertDialog
 import android.app.FragmentManager
 import android.content.Context
 import android.content.DialogInterface
@@ -235,6 +235,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
                 var finalCheckQtyIsMin = false
 
+
                 for (detailFinalCheck in newTrans.ListDetail){
                     if (ResFunction.FinalQtyCheckInNewTrans(newTrans,detailFinalCheck.ProdukData, newTrans.ListDetail, MainData.ListTransaksiData)){
                         finalCheckQtyIsMin = true
@@ -242,6 +243,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
                     }
 
                 }
+
 
                 if (finalCheckQtyIsMin && newTrans.ProductFlow == TransaksiData.ProductOut){
                     Toast.makeText(context,lang.addTransDialogLang.warningThereIsProductQtyLow,Toast.LENGTH_SHORT).show()

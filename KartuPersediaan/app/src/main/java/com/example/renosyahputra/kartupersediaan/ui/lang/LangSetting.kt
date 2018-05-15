@@ -8,6 +8,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addProdukFormLang.A
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addTransDialogLang.AddTransDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.editProdukFormLang.EditProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.laporanMenuLang.LaporanMenuLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginLang.LoginLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
@@ -39,7 +40,7 @@ class LangSetting(ctx : Context){
         val mainMenuLang = MainMenuLang()
         mainMenuLang.MenuSetting2 = "Exit"
         mainMenuLang.MenuSetting1 = "Setting"
-        mainMenuLang.subMenu1 = "Inventory Card"
+        mainMenuLang.subMenu1 = "Supplies Card"
         mainMenuLang.subMenu2 = "Transaction Menu"
         mainMenuLang.subMenu3 = "Product Menu"
         mainMenuLang.subMenu4 = "Logout"
@@ -57,6 +58,7 @@ class LangSetting(ctx : Context){
         mainMenuAddTaskLang.addProduct = "Add Product"
         mainMenuAddTaskLang.addTransaction = "Add Transaction"
         mainMenuAddTaskLang.cancel = "Cancel"
+        mainMenuSettingLang.typeLaporan = "Type Report"
 
         val subMenuProdukLang = SubMenuProdukLang()
         subMenuProdukLang.CariProduk = "Search Product..."
@@ -123,11 +125,11 @@ class LangSetting(ctx : Context){
         addTransDialogLang.warningThereIsProductQtyLow = "Warning, there is some Product Stock is below require"
 
         val laporanMenuLang =  LaporanMenuLang()
-        laporanMenuLang.Kartupersediaan = "Inventory Card"
-        laporanMenuLang.filterPilihMethod = "Choose Method"
-        laporanMenuLang.filterPilihPeriode = "Select Period"
-        laporanMenuLang.filterPilihProduk = "Select Product"
-        laporanMenuLang.KartuPersediaanKosong = "Inventory Card Is Empty"
+        laporanMenuLang.Kartupersediaan = "Supplies Card"
+        laporanMenuLang.filterPilihMethod = "Method"
+        laporanMenuLang.filterPilihPeriode = "Period"
+        laporanMenuLang.filterPilihProduk = "Product"
+        laporanMenuLang.KartuPersediaanKosong = "Supplies Card Is Empty"
         laporanMenuLang.namaProductDetail = "Product Name"
         laporanMenuLang.price = "Price"
         laporanMenuLang.qty = "Quantity In Transaction"
@@ -139,7 +141,7 @@ class LangSetting(ctx : Context){
         laporanMenuLang.save = "Save"
         laporanMenuLang.cancel = "Cancel"
         laporanMenuLang.saved = "File Hass been saved in Folder KartuPersediaan"
-        laporanMenuLang.titleLaporan = "Inventory Card"
+        laporanMenuLang.titleLaporan = "Supplies Card"
         laporanMenuLang.dateAwalLap = "From"
         laporanMenuLang.dateAkhirLap = ""
         laporanMenuLang.hinga = "To"
@@ -157,6 +159,17 @@ class LangSetting(ctx : Context){
         printLaporanLang.metode = "Method"
 
 
+        val loginLang = LoginLang()
+        loginLang.name = "Owner Name"
+        loginLang.email = "Email"
+        loginLang.company = "Company Name"
+        loginLang.register = "Register"
+        loginLang.title = "Register Form"
+        loginLang.login = "Login"
+        loginLang.setting = "Setting"
+        loginLang.inputEmpty = "there is some empty form, please check again!"
+
+
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
         langObj.mainMenuAddTaskLang = mainMenuAddTaskLang
@@ -167,6 +180,7 @@ class LangSetting(ctx : Context){
         langObj.addTransDialogLang = addTransDialogLang
         langObj.laporanMenuLang = laporanMenuLang
         langObj.printLaporanLang = printLaporanLang
+        langObj.loginLang = loginLang
     }
     private fun SetIndo(){
 
@@ -185,6 +199,7 @@ class LangSetting(ctx : Context){
         mainMenuSettingLang.TitleOpenSetting1 = "Tetapkan Bahasa"
         mainMenuSettingLang.TitleOpenSetting2 = "Pilih"
         mainMenuSettingLang.Back = "Kembali"
+        mainMenuSettingLang.typeLaporan = "Tipe Laporan"
 
         val mainMenuAddTaskLang = MainMenuAddTaskLang()
         mainMenuAddTaskLang.title = "Penambahan Data"
@@ -261,9 +276,9 @@ class LangSetting(ctx : Context){
 
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Kartu Persediaan"
-        laporanMenuLang.filterPilihMethod = "Pilih Metode"
-        laporanMenuLang.filterPilihPeriode = "Pilih Periode"
-        laporanMenuLang.filterPilihProduk = "Pilih Produk"
+        laporanMenuLang.filterPilihMethod = "Metode"
+        laporanMenuLang.filterPilihPeriode = "Periode"
+        laporanMenuLang.filterPilihProduk = "Produk"
         laporanMenuLang.KartuPersediaanKosong = "Kartu Persediaan Kosong"
         laporanMenuLang.namaProductDetail = "Nama Produk"
         laporanMenuLang.price = "Harga"
@@ -290,10 +305,19 @@ class LangSetting(ctx : Context){
         printLaporanLang.hargaP = "Harga"
         printLaporanLang.qtyP = "Kuantitas"
         printLaporanLang.total = "Total"
-        printLaporanLang.stok = "Stok"
+        printLaporanLang.stok = "Kuantitas"
         printLaporanLang.metode = "Metode Pencatatan"
 
 
+        val loginLang = LoginLang()
+        loginLang.name = "Nama Pemilik"
+        loginLang.email = "Email"
+        loginLang.company = "Nama Perusahaan"
+        loginLang.register = "Registrasi"
+        loginLang.title = "Form Registrasi"
+        loginLang.login = "Login"
+        loginLang.setting = "Pengaturan"
+        loginLang.inputEmpty = "ada form yg kosong, tolong cek kembali!"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
@@ -305,6 +329,7 @@ class LangSetting(ctx : Context){
         langObj.addTransDialogLang = addTransDialogLang
         langObj.laporanMenuLang = laporanMenuLang
         langObj.printLaporanLang = printLaporanLang
+        langObj.loginLang = loginLang
     }
 
 

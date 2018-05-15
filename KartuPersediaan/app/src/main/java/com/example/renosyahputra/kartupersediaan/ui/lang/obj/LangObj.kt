@@ -4,6 +4,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addProdukFormLang.A
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addTransDialogLang.AddTransDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.editProdukFormLang.EditProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.laporanMenuLang.LaporanMenuLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginLang.LoginLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
@@ -23,4 +24,5 @@ class LangObj : Serializable {
     lateinit var addTransDialogLang : AddTransDialogLang
     lateinit var laporanMenuLang : LaporanMenuLang
     lateinit var printLaporanLang : PrintLaporanLang
+    lateinit var loginLang : LoginLang
 }

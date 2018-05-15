@@ -11,4 +11,6 @@ class MainMenuSettingLang :Serializable {
     lateinit var TitleOpenSetting2 : String
 
     lateinit var Back : String
+
+    lateinit var typeLaporan : String
 }

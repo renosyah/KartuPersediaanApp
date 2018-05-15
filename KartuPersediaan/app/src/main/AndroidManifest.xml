@@ -14,15 +14,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
             android:name=".MenuUtama"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".subMenu.laporanMenu.DetailKartuPersediaan" />
+        <activity
+            android:name=".loginAndRegister.Splash"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".subMenu.laporanMenu.DetailKartuPersediaan"></activity>
+        <activity android:name=".loginAndRegister.Login"></activity>
     </application>
 
 </manifest>

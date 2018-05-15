@@ -6,6 +6,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.itextpdf.text.Document
 import com.itextpdf.text.html.simpleparser.HTMLWorker
@@ -40,6 +41,7 @@ class SaveMainData(context: Context,MainData : KartuPersediaanData){
         return save
     }
 
+
     fun Load() : KartuPersediaanData? {
 
         var data : KartuPersediaanData? = null
@@ -55,6 +57,11 @@ class SaveMainData(context: Context,MainData : KartuPersediaanData){
             e.printStackTrace()
         }
         return data
+    }
+
+    fun Delete() : Boolean {
+        val f = File(ctx.filesDir,filename)
+        return f.deleteRecursively()
     }
 companion object {
 
@@ -96,7 +103,7 @@ companion object {
         }
     }
 
-    fun KartuPersediaanToHtml(tglPeriod : ArrayList<FormatTanggal>,MainData: KartuPersediaanData,methode : String ,laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
+    fun KartuPersediaanToHtml(userData: UserData, tglPeriod : ArrayList<FormatTanggal>, MainData: KartuPersediaanData, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
 
         val formatter = DecimalFormat("##,###")
         val now = Calendar.getInstance()
@@ -108,8 +115,15 @@ companion object {
         var opening = ""
         opening += "<p>${tgl_now.toDateString()}</p><br />"
         opening += "<div style='text-align:center;font-size:8px'><h1>${langObj.laporanMenuLang.titleLaporan}</h1>"
-        opening += "<h3>${tglPeriod.get(0).toDateString() + " " +langObj.laporanMenuLang.hinga + " " + tglPeriod.get(tglPeriod.size-1).toDateString() }</h3>"
-        opening += "</div><br /><br /><h2>${langObj.printLaporanLang.metode + " : " + methode}</h2>"
+        if (tglPeriod.get(0).toDateString() == tglPeriod.get(tglPeriod.size-1).toDateString()){
+            opening += "<h3>${tglPeriod.get(0).toDateString()}</h3>"
+
+        }else {
+            opening += "<h3>${tglPeriod.get(0).toDateString() + " " +langObj.laporanMenuLang.hinga + " " + tglPeriod.get(tglPeriod.size-1).toDateString() }</h3>"
+
+        }
+        opening += "<h3><b>${userData.CompanyName}</b></h3>"
+        opening += "</div><br /><br /><h2>${langObj.printLaporanLang.metode + " : " + methode}</h2><br />"
 
 
 

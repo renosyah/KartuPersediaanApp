@@ -69,7 +69,9 @@ class ResFunction {
         fun GetTotalQtyProductFromAllTrans(newTrans : TransaksiData,p : ProdukData,t : ArrayList<TransaksiData>) : Int{
             var qty = 0
             for (trans in t){
-            if (newTrans.TanggalTransaksi.BandingkanTanggalYangLebihKecil(trans.TanggalTransaksi) && newTrans.Jam.BandingkanWaktuYangLebihKecil(trans.Jam)){
+
+                if (newTrans.TanggalTransaksi.BandingkanTanggalYangLebihKecil(trans.Jam,newTrans.Jam,trans.TanggalTransaksi) && newTrans.IdTransaksiData != trans.IdTransaksiData) {
+
                     for (dt in trans.ListDetail) {
                         if (dt.ProdukData.IdProduk == p.IdProduk) {
                             if (trans.ProductFlow == TransaksiData.ProductIn) {
@@ -77,6 +79,8 @@ class ResFunction {
                             } else if (trans.ProductFlow == TransaksiData.ProductOut) {
                                 qty -= dt.Quantity
                             }
+
+
                         }
                     }
 

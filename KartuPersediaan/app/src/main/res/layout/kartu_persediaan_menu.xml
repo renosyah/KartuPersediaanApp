@@ -16,20 +16,20 @@
 
         <TextView
             android:id="@+id/sortInventoryCard"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
             android:background="@android:color/background_light"
             android:gravity="center"
-            android:text="Pilih Produk"
+            android:text="Produk"
             android:textSize="12sp" />
 
         <TextView
-            android:layout_marginLeft="1dp"
             android:id="@+id/SetPeriode"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
             android:layout_weight="1"
             android:background="@android:color/background_light"
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/setMethod"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="1dp"
             android:layout_marginRight="1dp"
@@ -50,10 +50,10 @@
             android:textSize="12sp" />
 
         <ImageView
-            android:layout_marginLeft="1dp"
             android:id="@+id/PrintNowButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="1dp"
             android:layout_weight="1"
             android:background="@android:color/background_light"
             app:srcCompat="@drawable/print" />

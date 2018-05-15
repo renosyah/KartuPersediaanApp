@@ -7,37 +7,81 @@ import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 
-class GenerateDataInventoryCard {
+class ValidateOutProduct {
+
+
+
     companion object {
 
-        fun InventoryFifoLifoMethod(product: ProdukData, s: ArrayList<PersediaanData>, qty: Int): ArrayList<PersediaanData> {
+        fun InventoryFifoLifoMethod(Maindata: KartuPersediaanData,TransData : TransaksiData,detail : DetailTransaksi,product: ProdukData, s: ArrayList<PersediaanData>,qty : Int,transData  : ArrayList<TransaksiData>): ArrayList<PersediaanData> {
 
             var qtyHolder = qty
-            val newDs = ArrayList<PersediaanData>()
+            val newS = RefreshClone(s)
+            var addNumber = 1
 
-            for (pos in 0..(s.size) - 1) {
-                val dt = s.get(pos)
-                if (dt.Produk.IdProduk == product.IdProduk) {
-                    if (dt.Jumlah - qtyHolder < 0) {
 
-                        qtyHolder = qtyHolder - dt.Jumlah
-                        s.get(pos).Jumlah = 0
+            for (pos in 0..(newS.size) - 1) {
 
-                    } else if (dt.Jumlah - qtyHolder > 0) {
+                if (newS.get(pos).Produk.IdProduk == product.IdProduk) {
 
-                        s.get(pos).Jumlah = dt.Jumlah - qtyHolder
+                    if (newS.get(pos).Jumlah - qtyHolder < 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+
+                        qtyHolder -= newS.get(pos).Jumlah
+
+                        if(newS.get(pos).Jumlah > 0) {
+                            addNumber++
+
+                            val id = IdGenerator()
+                            id.CreateRandomString(15)
+
+                            val clone = TransData.CloneTransData()
+                            clone.Jam.Menit += addNumber
+                            clone.IdTransaksiData += "Clone" + id.GetId()
+                            clone.ListDetail.clear()
+
+                            val newDetail = DetailTransaksi()
+                            val Cloneproduct = ProdukData()
+
+                            Cloneproduct.IdProduk = product.IdProduk
+                            Cloneproduct.Nama = product.Nama
+                            Cloneproduct.Harga = product.Harga
+
+                            newDetail.IdTransaksiData = clone.IdTransaksiData
+                            newDetail.ProdukData = Cloneproduct
+                            newDetail.ListPersediaanData = ArrayList()
+
+                            newDetail.Quantity = qtyHolder
+                            newDetail.Total = (newDetail.Quantity * newDetail.ProdukData.Harga)
+                            clone.ListDetail.add(newDetail)
+
+                            transData.add(clone)
+
+                            detail.Quantity = newS.get(pos).Jumlah
+                        }
+
+
+                        newS.get(pos).Jumlah = 0
+
+                    } else if (newS.get(pos).Jumlah - qtyHolder> 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+
+                        newS.get(pos).Jumlah -= qtyHolder
 
                         break
-                    } else if (dt.Jumlah - qtyHolder >= 0) {
 
-                        s.get(pos).Jumlah = dt.Jumlah - qtyHolder
+                    }else if (newS.get(pos).Jumlah - qtyHolder>= 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+
+                        newS.get(pos).Jumlah -= qtyHolder
 
                         break
                     }
+
+
                 }
 
             }
-            for (d in s) {
+
+            val newDs = ArrayList<PersediaanData>()
+            for (d in newS) {
                 val stk = PersediaanData()
                 stk.Produk = ProdukData()
 
@@ -83,49 +127,30 @@ class GenerateDataInventoryCard {
             return newDs
         }
 
-
-        fun SetToOne(metode : String,trans : TransaksiData,transDetail : DetailTransaksi,product: ProdukData,s: ArrayList<PersediaanData>): ArrayList<PersediaanData> {
-
-            val newDs = ArrayList<PersediaanData>()
-            val LastData = PersediaanData()
-            LastData.Produk = ProdukData()
+        fun RefreshClone( s: ArrayList<PersediaanData>) : ArrayList<PersediaanData> {
+            val clone = ArrayList<PersediaanData>()
 
 
-            for (data in s) {
+            for (i in 0..(s.size)-1){
 
-                if (data.Produk.IdProduk == product.IdProduk){
+                val stk = PersediaanData()
+                stk.Produk = ProdukData()
+                stk.TanggalMasuk.Hari = s.get(i).TanggalMasuk.Hari
+                stk.TanggalMasuk.Bulan = s.get(i).TanggalMasuk.Bulan
+                stk.TanggalMasuk.Tahun = s.get(i).TanggalMasuk.Tahun
+                stk.Jumlah = s.get(i).Jumlah
+                stk.Produk.Harga = s.get(i).Produk.Harga
+                stk.Produk.Nama = s.get(i).Produk.Nama
+                stk.Produk.IdProduk = s.get(i).Produk.IdProduk
+                stk.Total = s.get(i).Total
 
-                    LastData.TanggalMasuk.Hari = data.TanggalMasuk.Hari
-                    LastData.TanggalMasuk.Bulan = data.TanggalMasuk.Bulan
-                    LastData.TanggalMasuk.Tahun = data.TanggalMasuk.Tahun
-
-                    LastData.Produk.Harga = data.Produk.Harga
-                    LastData.Jumlah += data.Jumlah
-                    LastData.Total += data.Total
-
-                    if (LastData.Jumlah > 0 && LastData.Total > 0){
-                        LastData.Produk.Harga = LastData.Total /  if (metode == TransaksiData.ProductOut) LastData.Jumlah + transDetail.Quantity else LastData.Jumlah
-                    }
-
-                    if (trans.ProductFlow == TransaksiData.ProductOut) {
-                        transDetail.ProdukData.Harga = LastData.Produk.Harga
-                    }
-                }
+                clone.add(stk)
             }
-
-
-
-
-            LastData.Produk.IdProduk = product.IdProduk
-            LastData.Produk.Nama = product.Nama
-
-
-            newDs.add(LastData)
-            return newDs
+            return clone
         }
 
 
-        fun GenerateForEachTransaction(Maindata: KartuPersediaanData, item: TransaksiData) {
+        fun GenerateForEachTransaction(Maindata: KartuPersediaanData,transData : ArrayList<TransaksiData>, item: TransaksiData) {
 
             for (itemInDetail in item.ListDetail){
 
@@ -140,7 +165,7 @@ class GenerateDataInventoryCard {
                     newStock.TanggalMasuk.Hari = item.TanggalTransaksi.Hari
                     newStock.TanggalMasuk.Bulan = item.TanggalTransaksi.Bulan
                     newStock.TanggalMasuk.Tahun = item.TanggalTransaksi.Tahun
-                    newStock.Total = (itemInDetail.ProdukData.Harga * itemInDetail.Quantity)
+                    newStock.Total = itemInDetail.Total
 
                     Maindata.ListPersediaanData.add(newStock)
 
@@ -148,16 +173,16 @@ class GenerateDataInventoryCard {
 
                 } else if (item.ProductFlow == TransaksiData.ProductOut) {
 
+
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)
                     }
 
-
-                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(itemInDetail.ProdukData, Maindata.ListPersediaanData, itemInDetail.Quantity)
-
+                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(Maindata,item,itemInDetail,itemInDetail.ProdukData,Maindata.ListPersediaanData ,itemInDetail.Quantity,transData)
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)
+
                     }
                 }
 
@@ -182,26 +207,16 @@ class GenerateDataInventoryCard {
 
                     }
 
-                    if (Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
-
-                        val intPosWhenNolFound = ArrayList<Int>()
-                        for (finNol in 0..(newStock.size) - 1) {
-                            if (newStock.get(finNol).Jumlah == 0) {
-                                intPosWhenNolFound.add(finNol)
-                            }
-                        }
-
-
-                        for (getRidNol in 0..(intPosWhenNolFound.size) - 1) {
-                            newStock.removeAt(intPosWhenNolFound.get(getRidNol))
+                    val intPosWhenNolFound = ArrayList<Int>()
+                    for (finNol in 0..(newStock.size)-1){
+                        if (newStock.get(finNol).Jumlah == 0){
+                            intPosWhenNolFound.add(finNol)
                         }
                     }
 
-                    if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
-                        val holder = SetToOne(item.ProductFlow,item,itemInDetail,itemInDetail.ProdukData,newStock)
-                        newStock = holder
+                    for (getRidNol in 0..(intPosWhenNolFound.size)-1){
+                        newStock.removeAt(intPosWhenNolFound.get(getRidNol))
                     }
-
                     itemInDetail.ListPersediaanData = newStock
                 }
 
@@ -209,4 +224,5 @@ class GenerateDataInventoryCard {
         }
 
     }
+
 }
