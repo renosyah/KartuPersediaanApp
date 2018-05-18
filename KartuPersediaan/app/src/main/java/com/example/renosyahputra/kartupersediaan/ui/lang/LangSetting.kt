@@ -354,7 +354,7 @@ class LangSetting(ctx : Context){
         }else if(SettingLangData == SetIdoLang){
             SetIndo()
         }else {
-           SetInglish()
+            SetIndo()
         }
     }
 

@@ -99,22 +99,40 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
         for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
             duplicateListTransaksi.add(trs.CloneTransData())
-
         }
+
+
 
         if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE && formatLaporan.TypeFormat == FormatLaporan.ACCOUNTING) {
 
-            for (transData in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
-                ValidateOutProduct.GenerateForEachTransaction(MainData,duplicateListTransaksi,transData)
+            duplicateListTransaksi.clear()
+
+            for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
+                if (trs.ProductFlow == TransaksiData.ProductIn){
+
+                    duplicateListTransaksi.add(trs.CloneTransData())
+
+
+                }else {
+
+                    duplicateListTransaksi.add(trs.CloneTransData())
+                    for (i in 0..10) {
+                        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
+                            ValidateOutProduct.GenerateForEachTransaction(MainData, duplicateListTransaksi, dataTrans)
+                        }
+
+                        MainData.ListPersediaanData.clear()
+                    }
+
+                }
+
             }
-            MainData.ListPersediaanData.clear()
+
+
         }
-
-
 
         for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
             GenerateDataInventoryCard.GenerateForEachTransaction(MainData, dataTrans)
-
         }
 
 

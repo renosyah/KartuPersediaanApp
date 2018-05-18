@@ -13,22 +13,19 @@ class ValidateOutProduct {
 
     companion object {
 
-        fun InventoryFifoLifoMethod(Maindata: KartuPersediaanData,TransData : TransaksiData,detail : DetailTransaksi,product: ProdukData, s: ArrayList<PersediaanData>,qty : Int,transData  : ArrayList<TransaksiData>): ArrayList<PersediaanData> {
+        fun InventoryFifoLifoMethod(TransData : TransaksiData,detail : DetailTransaksi,product: ProdukData, s: ArrayList<PersediaanData>,qty : Int,transData  : ArrayList<TransaksiData>): ArrayList<PersediaanData> {
 
             var qtyHolder = qty
             val newS = RefreshClone(s)
             var addNumber = 1
 
 
-            for (pos in 0..(newS.size) - 1) {
+            for (dt in newS) {
 
-                if (newS.get(pos).Produk.IdProduk == product.IdProduk) {
+                if (dt.Produk.IdProduk == product.IdProduk) {
 
-                    if (newS.get(pos).Jumlah - qtyHolder < 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+                    if (dt.Jumlah - qtyHolder < 0 && dt.Jumlah > 0 && dt.Jumlah != qtyHolder) {
 
-                        qtyHolder -= newS.get(pos).Jumlah
-
-                        if(newS.get(pos).Jumlah > 0) {
                             addNumber++
 
                             val id = IdGenerator()
@@ -50,27 +47,36 @@ class ValidateOutProduct {
                             newDetail.ProdukData = Cloneproduct
                             newDetail.ListPersediaanData = ArrayList()
 
-                            newDetail.Quantity = qtyHolder
+                            newDetail.Quantity = qtyHolder - dt.Jumlah
                             newDetail.Total = (newDetail.Quantity * newDetail.ProdukData.Harga)
                             clone.ListDetail.add(newDetail)
 
                             transData.add(clone)
 
-                            detail.Quantity = newS.get(pos).Jumlah
-                        }
+                            detail.Quantity = dt.Jumlah
 
+                            dt.Jumlah = 0
 
-                        newS.get(pos).Jumlah = 0
+                            break
 
-                    } else if (newS.get(pos).Jumlah - qtyHolder> 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+                    }
 
-                        newS.get(pos).Jumlah -= qtyHolder
+                    if (dt.Jumlah > 0 && dt.Jumlah == qtyHolder){
+
+                        qtyHolder -= dt.Jumlah
+                        dt.Jumlah = 0
 
                         break
 
-                    }else if (newS.get(pos).Jumlah - qtyHolder>= 0 && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+                    }else if (dt.Jumlah - qtyHolder> 0) {
 
-                        newS.get(pos).Jumlah -= qtyHolder
+                        dt.Jumlah -= qtyHolder
+
+                        break
+
+                    }else if (dt.Jumlah - qtyHolder>= 0) {
+
+                        dt.Jumlah -= qtyHolder
 
                         break
                     }
@@ -178,7 +184,8 @@ class ValidateOutProduct {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)
                     }
 
-                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(Maindata,item,itemInDetail,itemInDetail.ProdukData,Maindata.ListPersediaanData ,itemInDetail.Quantity,transData)
+
+                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(item, itemInDetail, itemInDetail.ProdukData, Maindata.ListPersediaanData, itemInDetail.Quantity, transData)
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)

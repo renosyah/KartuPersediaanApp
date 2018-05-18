@@ -84,7 +84,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         Toolbar = findViewById(R.id.toolbar)
 
         formatLaporan = FormatLaporan()
-        formatLaporan.TypeFormat = FormatLaporan.BIASA
+        formatLaporan.TypeFormat = FormatLaporan.ACCOUNTING
 
         setSupportActionBar(Toolbar)
 

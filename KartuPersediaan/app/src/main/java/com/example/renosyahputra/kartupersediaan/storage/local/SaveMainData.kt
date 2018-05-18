@@ -163,12 +163,14 @@ companion object {
                                 "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n" +
                                 "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n"
 
-                        for (dt in 0..(d.ListPersediaanData.size) - 1) {
-                            if (dt > 0) {
-                                body += "<tr>\n"
-                            }
-                            body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
-                            body += "</tr>"
+
+                            for (dt in 0..(d.ListPersediaanData.size) - 1) {
+                                if (dt > 0) {
+                                    body += "<tr>\n"
+                                }
+                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
+                                body += "</tr>"
+
                         }
 
 
@@ -181,13 +183,16 @@ companion object {
                                 "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n"
 
 
-                        for (dt in 0..(d.ListPersediaanData.size) - 1) {
-                            if (dt > 0) {
-                                body += "<tr>\n"
+
+                            for (dt in 0..(d.ListPersediaanData.size) - 1) {
+                                if (dt > 0) {
+                                    body += "<tr>\n"
+                                }
+                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
+                                body += "</tr>"
+
                             }
-                            body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
-                            body += "</tr>"
-                        }
+
                     }
                 }
 

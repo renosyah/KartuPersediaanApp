@@ -137,7 +137,7 @@ class ThemeSetting(ctx : Context){
                 Setbluesea()
             }
             else ->{
-                Setred()
+                Setgreen()
             }
         }
     }

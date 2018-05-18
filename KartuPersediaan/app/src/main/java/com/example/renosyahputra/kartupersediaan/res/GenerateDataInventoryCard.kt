@@ -10,20 +10,21 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Transaksi
 class GenerateDataInventoryCard {
     companion object {
 
-        fun InventoryFifoLifoMethod(product: ProdukData, s: ArrayList<PersediaanData>, qty: Int): ArrayList<PersediaanData> {
+        fun InventoryFifoLifoMethod(product: ProdukData, s: ArrayList<PersediaanData>, detail : DetailTransaksi): ArrayList<PersediaanData> {
 
-            var qtyHolder = qty
+            var qtyHolder = detail.Quantity
             val newDs = ArrayList<PersediaanData>()
 
             for (pos in 0..(s.size) - 1) {
                 val dt = s.get(pos)
                 if (dt.Produk.IdProduk == product.IdProduk) {
+
                     if (dt.Jumlah - qtyHolder < 0) {
 
                         qtyHolder = qtyHolder - dt.Jumlah
                         s.get(pos).Jumlah = 0
 
-                    } else if (dt.Jumlah - qtyHolder > 0) {
+                    }else if (dt.Jumlah - qtyHolder > 0) {
 
                         s.get(pos).Jumlah = dt.Jumlah - qtyHolder
 
@@ -153,7 +154,7 @@ class GenerateDataInventoryCard {
                     }
 
 
-                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(itemInDetail.ProdukData, Maindata.ListPersediaanData, itemInDetail.Quantity)
+                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(itemInDetail.ProdukData, Maindata.ListPersediaanData, itemInDetail)
 
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
