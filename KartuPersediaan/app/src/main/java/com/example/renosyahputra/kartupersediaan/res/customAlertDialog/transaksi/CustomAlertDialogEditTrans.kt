@@ -1,10 +1,10 @@
 package com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 
 import android.app.Activity
-import android.support.v7.app.AlertDialog
 import android.app.FragmentManager
 import android.content.Context
 import android.content.DialogInterface
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
@@ -379,7 +379,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
         val productdialog = AlertDialog.Builder(context)
                 .setTitle(lang.addTransDialogLang.addProduct)
-                .setNegativeButton(lang.addTransDialogLang.add, DialogInterface.OnClickListener { dialogInterface, i ->
+                .setNegativeButton(lang.addTransDialogLang.tutup, DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.dismiss()
                 }).create()
 

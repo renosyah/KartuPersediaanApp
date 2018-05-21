@@ -54,6 +54,7 @@ class ValidateOutProduct {
                             transData.add(clone)
 
                             detail.Quantity = dt.Jumlah
+                            detail.ProdukData.Harga = dt.Produk.Harga
 
                             dt.Jumlah = 0
 
@@ -63,6 +64,7 @@ class ValidateOutProduct {
 
                     if (dt.Jumlah > 0 && dt.Jumlah == qtyHolder){
 
+                        detail.ProdukData.Harga = dt.Produk.Harga
                         qtyHolder -= dt.Jumlah
                         dt.Jumlah = 0
 
@@ -70,12 +72,14 @@ class ValidateOutProduct {
 
                     }else if (dt.Jumlah - qtyHolder> 0) {
 
+                        detail.ProdukData.Harga = dt.Produk.Harga
                         dt.Jumlah -= qtyHolder
 
                         break
 
                     }else if (dt.Jumlah - qtyHolder>= 0) {
 
+                        detail.ProdukData.Harga = dt.Produk.Harga
                         dt.Jumlah -= qtyHolder
 
                         break

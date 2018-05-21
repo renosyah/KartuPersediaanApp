@@ -64,6 +64,13 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         this.theme = theme
     }
 
+    internal lateinit var FloatingButton : com.melnykov.fab.FloatingActionButton
+
+    fun setFloatingButton(f  : com.melnykov.fab.FloatingActionButton){
+        this.FloatingButton = f
+
+    }
+
     internal lateinit var ListViewKartuPersediaan : ListView
     internal lateinit var refreshLayout: SwipeRefreshLayout
 
@@ -100,7 +107,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
             duplicateListTransaksi.add(trs.CloneTransData())
         }
-
 
 
         if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE && formatLaporan.TypeFormat == FormatLaporan.ACCOUNTING) {
@@ -236,6 +242,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         refreshLayout.setOnRefreshListener(this)
 
         ListViewKartuPersediaan.setOnItemClickListener(this)
+        FloatingButton.attachToListView(ListViewKartuPersediaan)
         SetPeriodeLap.setOnClickListener(this)
         SetMethodeLap.setOnClickListener(this)
         sortInventoryCard.setOnClickListener(this)
@@ -244,7 +251,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         GenerateData(filterSearch)
 
     }
-
 
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -270,15 +276,15 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                 GenerateData(filterSearch)
-                val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
                 GenerateData(filterSearch)
-                val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
                 GenerateData(filterSearch)
-                val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
 
                 AlertDialog.Builder(ctx)
                         .setTitle(lang.laporanMenuLang.exportTitle)

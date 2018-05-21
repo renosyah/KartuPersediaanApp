@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.WindowManager
 import com.example.renosyahputra.kartupersediaan.MenuUtama
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
@@ -30,7 +31,8 @@ class Splash : AppCompatActivity() {
         context = this@Splash
         IntentData = intent
 
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         var dataKosong = false
         var sessionKosong = false

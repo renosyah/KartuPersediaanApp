@@ -2,6 +2,7 @@ package com.example.renosyahputra.kartupersediaan.storage.local
 
 import android.content.Context
 import android.os.Environment
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
@@ -14,6 +15,7 @@ import com.itextpdf.text.pdf.PdfWriter
 import java.io.*
 import java.text.DecimalFormat
 import java.util.*
+
 
 
 class SaveMainData(context: Context,MainData : KartuPersediaanData){
@@ -103,23 +105,25 @@ companion object {
         }
     }
 
-    fun KartuPersediaanToHtml(userData: UserData, tglPeriod : ArrayList<FormatTanggal>, MainData: KartuPersediaanData, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
+    fun KartuPersediaanToHtml(ctx : Context,userData: UserData, tglPeriod : ArrayList<FormatTanggal>, MainData: KartuPersediaanData, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
 
         val formatter = DecimalFormat("##,###")
         val now = Calendar.getInstance()
         val tgl_now = FormatTanggal()
         tgl_now.Hari = now.get(Calendar.DAY_OF_MONTH)
-        tgl_now.Bulan = now.get(Calendar.MONTH)
+        tgl_now.Bulan = (now.get(Calendar.MONTH) + 1)
         tgl_now.Tahun = now.get(Calendar.YEAR)
+
+        val dateInSring = ChangeDateToRelevanString(ctx, langObj)
 
         var opening = ""
         opening += "<p>${tgl_now.toDateString()}</p><br />"
         opening += "<div style='text-align:center;font-size:8px'><h1>${langObj.laporanMenuLang.titleLaporan}</h1>"
         if (tglPeriod.get(0).toDateString() == tglPeriod.get(tglPeriod.size-1).toDateString()){
-            opening += "<h3>${tglPeriod.get(0).toDateString()}</h3>"
+            opening += "<h3>${dateInSring.SetAndGetFormat(tglPeriod.get(0),", "," ")}</h3>"
 
         }else {
-            opening += "<h3>${tglPeriod.get(0).toDateString() + " " +langObj.laporanMenuLang.hinga + " " + tglPeriod.get(tglPeriod.size-1).toDateString() }</h3>"
+            opening += "<h3>${dateInSring.SetAndGetFormat(tglPeriod.get(0),", "," ") + " " +langObj.laporanMenuLang.hinga + " " + dateInSring.SetAndGetFormat(tglPeriod.get(tglPeriod.size-1),", "," ")}</h3>"
 
         }
         opening += "<h3><b>${userData.CompanyName}</b></h3>"
@@ -149,6 +153,15 @@ companion object {
 
             var body = ""
 
+            var StokPemasukan = 0
+            var TotalPemasukan = 0
+
+            var StokPengeluaran = 0
+            var TotalPengeluaran = 0
+
+            var StokPersediaan = 0
+            var TotalPersediaan = 0
+
             for (d in laporanKartuPersediaanObj) {
 
                 if (d.ProdukData.IdProduk == perProduk.IdProduk){
@@ -163,6 +176,8 @@ companion object {
                                 "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n" +
                                 "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n"
 
+                        var totalQtyLocal = 0
+                        var TotalPersediaanLocal = 0
 
                             for (dt in 0..(d.ListPersediaanData.size) - 1) {
                                 if (dt > 0) {
@@ -171,8 +186,17 @@ companion object {
                                 body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
                                 body += "</tr>"
 
-                        }
+                                totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
+                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah
 
+                            }
+
+                        StokPersediaan = totalQtyLocal
+                        TotalPersediaan = TotalPersediaanLocal
+
+
+                        StokPemasukan += d.Quantity
+                        TotalPemasukan += d.ProdukData.Harga * d.Quantity
 
 
                     } else if (d.ProductFlow == TransaksiData.ProductOut) {
@@ -183,6 +207,8 @@ companion object {
                                 "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n"
 
 
+                        var totalQtyLocal = 0
+                        var TotalPersediaanLocal = 0
 
                             for (dt in 0..(d.ListPersediaanData.size) - 1) {
                                 if (dt > 0) {
@@ -191,16 +217,32 @@ companion object {
                                 body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
                                 body += "</tr>"
 
+                                totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
+                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah
                             }
 
+                        StokPersediaan = totalQtyLocal
+                        TotalPersediaan = TotalPersediaanLocal
+
+                        StokPengeluaran += d.Quantity
+                        TotalPengeluaran += d.ProdukData.Harga * d.Quantity
+
                     }
+
                 }
 
             }
 
+            val total = "<tr>\n" +
+                    "<td colspan='2'> <br />Total<br /><br /> </td>\n" +
+                    "<td>${StokPemasukan}</td><td> </td><td>${formatter.format(TotalPemasukan)}</td>\n" +
+                    "<td>${StokPengeluaran}</td><td> </td><td>${formatter.format(TotalPengeluaran)}</td>\n" +
+                    "<td>${StokPersediaan}</td><td> </td><td>${formatter.format(TotalPersediaan)}</td>\n" +
+                    "</tr>"
+
             body += "</tr>"
             val foot = "</table></div><br /><br /><br />"
-            str += header + body + foot
+            str += header + body + total + foot
 
         }
 

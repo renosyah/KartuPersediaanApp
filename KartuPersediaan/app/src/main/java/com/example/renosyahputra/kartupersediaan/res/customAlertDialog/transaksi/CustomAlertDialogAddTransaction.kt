@@ -383,7 +383,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         val productdialog = AlertDialog.Builder(context)
                 .setTitle(lang.addTransDialogLang.addProduct)
-                .setNegativeButton(lang.addTransDialogLang.add, DialogInterface.OnClickListener { dialogInterface, i ->
+                .setNegativeButton(lang.addTransDialogLang.tutup, DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.dismiss()
                 }).create()
 

@@ -26,6 +26,7 @@ import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,SwipeRefreshLayout.OnRefreshListener {
 
 
+
     lateinit var ctx : Context
     lateinit var v : View
 
@@ -58,6 +59,13 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         this.MainData = MainData
     }
 
+    internal lateinit var FloatingButton : com.melnykov.fab.FloatingActionButton
+
+    fun setFloatingButton(f  : com.melnykov.fab.FloatingActionButton){
+        this.FloatingButton = f
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         v = inflater!!.inflate(R.layout.transaksi_menu,container,false)
         InitiationWidget(v)
@@ -82,6 +90,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         CheckTransKosong()
 
         ListViewTransaksi.setOnItemClickListener(this)
+        FloatingButton.attachToListView(ListViewTransaksi)
         CariTransaksi.addTextChangedListener(this)
         refreshTrans.setOnRefreshListener(this)
 
@@ -114,6 +123,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         ListViewTransaksi.adapter = adapter
         ListViewTransaksi.divider =null
     }
+
 
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {

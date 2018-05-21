@@ -22,6 +22,7 @@ class AddTransDialogLang : Serializable {
     lateinit var titleEditDetail : String
     lateinit var save : String
     lateinit var hapus : String
+    lateinit var tutup : String
 
     lateinit var warningProductQtyLow : String
     lateinit var CheckAgain : String

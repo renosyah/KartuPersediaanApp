@@ -4,10 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AlertDialog
@@ -38,7 +37,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
     lateinit var context : Context
     lateinit var IntentData : Intent
-    lateinit var fab : FloatingActionButton
+    lateinit var fab : com.melnykov.fab.FloatingActionButton
     lateinit var Toolbar : android.support.v7.widget.Toolbar
     lateinit var OptionMenu  : Menu
 
@@ -93,7 +92,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         toggle.syncState()
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         nav_view.setNavigationItemSelectedListener(this)
         fab.setOnClickListener(this)
@@ -120,18 +119,21 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         kartuPersediaanMenu.SetMainData(kartuPersediaanData)
         kartuPersediaanMenu.SetUserData(userData)
         kartuPersediaanMenu.setFormatLaporan(formatLaporan)
+        kartuPersediaanMenu.setFloatingButton(fab)
         kartuPersediaanMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
 
         produkMenu = ProdukMenu()
         produkMenu.SetListProduct(kartuPersediaanData.ListProdukData)
         produkMenu.settransDatas(kartuPersediaanData.ListTransaksiData)
+        produkMenu.setFloatingButton(fab)
         produkMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
 
         transaksiMenu =  TransaksiMenu()
         transaksiMenu.SetListTransaksi(kartuPersediaanData.ListTransaksiData)
         transaksiMenu.SetMainData(kartuPersediaanData)
+        transaksiMenu.setFloatingButton(fab)
         transaksiMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
 
@@ -188,8 +190,9 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         background.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
         Toolbar.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
         Toolbar.setTitleTextColor(themeSetting.GetThemeSetting().TextColor)
-        fab.backgroundTintList = ColorStateList.valueOf(themeSetting.GetThemeSetting().BackGroundColor)
-
+        fab.colorNormal = themeSetting.GetThemeSetting().BackGroundColor
+        fab.colorPressed = themeSetting.GetThemeSetting().BackGroundColor
+        fab.setImageDrawable(ResourcesCompat.getDrawable(context.resources,R.drawable.add,null))
     }
 
     internal fun OpenLangAndThemeSetting(){
@@ -394,9 +397,12 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
+        fab.show()
+
         when (item.itemId) {
 
             R.id.LaporanMenu -> {
+
 
                 supportActionBar!!.setTitle(langSetting.GetlangObj().mainMenuLang.subMenu1)
                 FragmentChanger.beginTransaction().replace(R.id.MainMenuFrameLaout,kartuPersediaanMenu).commit()

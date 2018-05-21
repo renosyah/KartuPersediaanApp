@@ -7,10 +7,7 @@ import android.content.Context
 import android.support.design.widget.NavigationView
 import android.support.v7.widget.Toolbar
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
@@ -88,6 +85,10 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
         dialog.show()
     }
 
+    fun CheckDataIfKosong(p : ProdukData) : Boolean{
+        return p.IdProduk == "" || p.Nama == "" || p.Harga == 0
+    }
+
     override fun onClick(p0: View?) {
         if (p0 == tambah){
 
@@ -95,9 +96,16 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
             val id = IdGenerator()
             id.CreateRandomString(10)
 
-            produk.Nama = nama.text.toString()
-            produk.Harga = Integer.parseInt(harga.text.toString())
+            produk.Nama = if (nama.text.toString() == "") "" else nama.text.toString()
+            produk.Harga = Integer.parseInt(if (harga.text.toString() == "") "0" else harga.text.toString())
             produk.IdProduk = id.GetId()
+
+            if (CheckDataIfKosong(produk)){
+
+                Toast.makeText(context,lang.addProdukFormLang.dataEmpty,Toast.LENGTH_SHORT).show()
+
+                return
+            }
 
             ListProduk.add(produk)
 

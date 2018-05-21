@@ -8,6 +8,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginLang.LoginLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
@@ -25,4 +26,5 @@ class LangObj : Serializable {
     lateinit var laporanMenuLang : LaporanMenuLang
     lateinit var printLaporanLang : PrintLaporanLang
     lateinit var loginLang : LoginLang
+    lateinit var monthInString : MonthInString
 }

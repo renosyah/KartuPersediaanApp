@@ -24,7 +24,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Transaksi
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
-class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeRefreshLayout.OnRefreshListener {
+class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeRefreshLayout.OnRefreshListener{
 
 
 
@@ -58,6 +58,12 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         this.theme = theme
     }
 
+    internal lateinit var FloatingButton : com.melnykov.fab.FloatingActionButton
+
+    fun setFloatingButton(f  : com.melnykov.fab.FloatingActionButton){
+        this.FloatingButton = f
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
         v = inflater!!.inflate(R.layout.produk_menu,container,false)
@@ -83,6 +89,7 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         CheckProdukKosong()
 
         ListViewProduk.setOnItemClickListener(this)
+        FloatingButton.attachToListView(ListViewProduk)
         CariProduk.addTextChangedListener(this)
         refreshProduct.setOnRefreshListener(this)
 
@@ -115,6 +122,7 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
             refreshProduct.isRefreshing = !refreshProduct.isRefreshing
         }
     }
+
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 

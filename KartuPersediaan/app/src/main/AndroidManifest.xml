@@ -8,15 +8,15 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:icon="@drawable/icn"
+        android:label="Kartu Persediaan"
+        android:roundIcon="@drawable/icn"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".MenuUtama"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".subMenu.laporanMenu.DetailKartuPersediaan" />
         <activity
             android:name=".loginAndRegister.Splash"
@@ -28,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginAndRegister.Login"></activity>
+        <activity android:name=".loginAndRegister.Login" />
+        <activity android:name=".loginAndRegister.OnBoard"></activity>
     </application>
 
 </manifest>

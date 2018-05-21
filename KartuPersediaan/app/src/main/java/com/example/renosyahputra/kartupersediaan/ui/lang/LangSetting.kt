@@ -12,6 +12,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginLang.LoginLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
@@ -27,6 +28,26 @@ class LangSetting(ctx : Context){
     companion object {
         val SetInglisLang : String = "ENGLISH"
         val SetIdoLang : String = "INDONESIA"
+
+        fun load_data_for_public(nama_file: String, context: Context): String {
+            val stringbufer = StringBuffer()
+            try {
+                val fileinputstream = (context as Activity).openFileInput(nama_file)
+                val reader = InputStreamReader(fileinputstream)
+                val buferreader = BufferedReader(reader)
+
+                for (pesan in buferreader.readLine()) {
+                    stringbufer.append(pesan)
+                }
+
+            } catch (e: FileNotFoundException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            return stringbufer.toString()
+        }
     }
 
     val FilenameLangSetting : String = "Langsetting.txt"
@@ -71,12 +92,14 @@ class LangSetting(ctx : Context){
         subMenuProdukLang.batal = "Cancel"
         subMenuProdukLang.edit = "Edit"
 
+
         val addProdukFormLang = AddProdukFormLang()
         addProdukFormLang.title = "Add Product"
         addProdukFormLang.batal = "Cancel"
         addProdukFormLang.tambah = "Add"
         addProdukFormLang.nameHint = "Product Name..."
         addProdukFormLang.price = "Price..."
+        addProdukFormLang.dataEmpty = "There is some empty form, please fill it!"
 
         val editProdukFormLang = EditProdukFormLang()
         editProdukFormLang.title = "Edit product"
@@ -124,6 +147,8 @@ class LangSetting(ctx : Context){
 
         addTransDialogLang.warningThereIsProductQtyLow = "Warning, there is some Product Stock is below require"
 
+        addTransDialogLang.tutup = "Close"
+
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Supplies Card"
         laporanMenuLang.filterPilihMethod = "Method"
@@ -170,6 +195,21 @@ class LangSetting(ctx : Context){
         loginLang.inputEmpty = "there is some empty form, please check again!"
 
 
+        val monthInString = MonthInString()
+        monthInString.Januari = "January"
+        monthInString.Februari = "February"
+        monthInString.Maret = "March"
+        monthInString.April = "April"
+        monthInString.Mei = "May"
+        monthInString.Juni = "June"
+        monthInString.Juli = "July"
+        monthInString.Agustus = "August"
+        monthInString.September = "September"
+        monthInString.Oktober = "October"
+        monthInString.November = "November"
+        monthInString.Desember = "Desember"
+
+
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
         langObj.mainMenuAddTaskLang = mainMenuAddTaskLang
@@ -181,7 +221,10 @@ class LangSetting(ctx : Context){
         langObj.laporanMenuLang = laporanMenuLang
         langObj.printLaporanLang = printLaporanLang
         langObj.loginLang = loginLang
+        langObj.monthInString = monthInString
     }
+
+
     private fun SetIndo(){
 
         val mainMenuLang = MainMenuLang()
@@ -225,7 +268,7 @@ class LangSetting(ctx : Context){
         addProdukFormLang.tambah = "Tambah"
         addProdukFormLang.nameHint = "Nama Produk..."
         addProdukFormLang.price = "Harga..."
-
+        addProdukFormLang.dataEmpty = "Ada form yang kosong, mohon diisi!"
 
         val editProdukFormLang = EditProdukFormLang()
         editProdukFormLang.title = "Form Edit Produk"
@@ -274,6 +317,8 @@ class LangSetting(ctx : Context){
 
         addTransDialogLang.warningThereIsProductQtyLow = "Perhatian, ada Stok produk yang tidak memenuhi kebutuhan!"
 
+        addTransDialogLang.tutup = "Tutup"
+
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Kartu Persediaan"
         laporanMenuLang.filterPilihMethod = "Metode"
@@ -319,6 +364,21 @@ class LangSetting(ctx : Context){
         loginLang.setting = "Pengaturan"
         loginLang.inputEmpty = "ada form yg kosong, tolong cek kembali!"
 
+        val monthInString = MonthInString()
+        monthInString.Januari = "Januari"
+        monthInString.Februari = "Februari"
+        monthInString.Maret = "Maret"
+        monthInString.April = "April"
+        monthInString.Mei = "Mei"
+        monthInString.Juni = "Juni"
+        monthInString.Juli = "Juli"
+        monthInString.Agustus = "Agustus"
+        monthInString.September = "September"
+        monthInString.Oktober = "Oktober "
+        monthInString.November = "November"
+        monthInString.Desember = "Desember"
+
+
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
         langObj.mainMenuAddTaskLang = mainMenuAddTaskLang
@@ -330,8 +390,8 @@ class LangSetting(ctx : Context){
         langObj.laporanMenuLang = laporanMenuLang
         langObj.printLaporanLang = printLaporanLang
         langObj.loginLang = loginLang
+        langObj.monthInString = monthInString
     }
-
 
     fun ChangeLang(s : String){
         if (s ==  SetInglisLang){
@@ -392,4 +452,6 @@ class LangSetting(ctx : Context){
 
         return stringbufer.toString()
     }
+
+
 }
