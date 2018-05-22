@@ -49,7 +49,7 @@ class GenerateDataInventoryCard {
                 stk.Produk.Harga = d.Produk.Harga
                 stk.Produk.Nama = d.Produk.Nama
                 stk.Produk.IdProduk = d.Produk.IdProduk
-                stk.Total = d.Total
+                stk.Total = stk.Produk.Harga * stk.Jumlah
 
                 newDs.add(stk)
             }
@@ -85,7 +85,7 @@ class GenerateDataInventoryCard {
         }
 
 
-        fun SetToOne(metode : String,trans : TransaksiData,transDetail : DetailTransaksi,product: ProdukData,s: ArrayList<PersediaanData>): ArrayList<PersediaanData> {
+        fun SetToOne(flow :String,itemInDetail : DetailTransaksi,product: ProdukData,s: ArrayList<PersediaanData>): ArrayList<PersediaanData> {
 
             val newDs = ArrayList<PersediaanData>()
             val LastData = PersediaanData()
@@ -100,26 +100,21 @@ class GenerateDataInventoryCard {
                     LastData.TanggalMasuk.Bulan = data.TanggalMasuk.Bulan
                     LastData.TanggalMasuk.Tahun = data.TanggalMasuk.Tahun
 
-                    LastData.Produk.Harga = data.Produk.Harga
+                    LastData.Produk.Harga = 0
                     LastData.Jumlah += data.Jumlah
-                    LastData.Total += data.Total
+                    LastData.Total = 0
 
-                    if (LastData.Jumlah > 0 && LastData.Total > 0){
-                        LastData.Produk.Harga = LastData.Total /  if (metode == TransaksiData.ProductOut) LastData.Jumlah + transDetail.Quantity else LastData.Jumlah
-                    }
-
-                    if (trans.ProductFlow == TransaksiData.ProductOut) {
-                        transDetail.ProdukData.Harga = LastData.Produk.Harga
-                    }
                 }
             }
 
+            if (flow == TransaksiData.ProductOut) {
 
-
+                itemInDetail.Total = 0
+                itemInDetail.ProdukData.Harga = 0
+            }
 
             LastData.Produk.IdProduk = product.IdProduk
             LastData.Produk.Nama = product.Nama
-
 
             newDs.add(LastData)
             return newDs
@@ -142,8 +137,8 @@ class GenerateDataInventoryCard {
                     newStock.TanggalMasuk.Bulan = item.TanggalTransaksi.Bulan
                     newStock.TanggalMasuk.Tahun = item.TanggalTransaksi.Tahun
                     newStock.Total = (itemInDetail.ProdukData.Harga * itemInDetail.Quantity)
-
                     Maindata.ListPersediaanData.add(newStock)
+
 
 
 
@@ -199,7 +194,8 @@ class GenerateDataInventoryCard {
                     }
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
-                        val holder = SetToOne(item.ProductFlow,item,itemInDetail,itemInDetail.ProdukData,newStock)
+                        val holder = SetToOne(item.ProductFlow,itemInDetail,itemInDetail.ProdukData,newStock)
+
                         newStock = holder
                     }
 

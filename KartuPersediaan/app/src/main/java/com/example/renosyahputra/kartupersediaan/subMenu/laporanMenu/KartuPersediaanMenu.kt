@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.GenerateDataForAverage.Companion.FillZeroNumber
 import com.example.renosyahputra.kartupersediaan.res.GenerateDataInventoryCard
 import com.example.renosyahputra.kartupersediaan.res.SortData.Companion.GetAllPeriodeInGroup
 import com.example.renosyahputra.kartupersediaan.res.ValidateOutProduct
@@ -137,6 +138,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
         }
 
+
+
+
         for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
             GenerateDataInventoryCard.GenerateForEachTransaction(MainData, dataTrans)
         }
@@ -160,6 +164,12 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                         AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.Quantity,detail.Total)
                     }
                 }
+            }
+        }
+
+        if (MainData.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
+            for (p in MainData.ListProdukData) {
+                FillZeroNumber(p, LaporanKartuPersediaan)
             }
         }
 

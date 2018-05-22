@@ -183,11 +183,11 @@ companion object {
                                 if (dt > 0) {
                                     body += "<tr>\n"
                                 }
-                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
+                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Total)}</td>\n"
                                 body += "</tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
-                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah
+                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total
 
                             }
 
@@ -214,11 +214,11 @@ companion object {
                                 if (dt > 0) {
                                     body += "<tr>\n"
                                 }
-                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah)}</td>\n"
+                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Total)}</td>\n"
                                 body += "</tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
-                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Produk.Harga * d.ListPersediaanData.get(dt).Jumlah
+                                TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total
                             }
 
                         StokPersediaan = totalQtyLocal
