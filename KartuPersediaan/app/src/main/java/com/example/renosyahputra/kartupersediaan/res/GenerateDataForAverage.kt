@@ -13,14 +13,12 @@ class GenerateDataForAverage{
             for (data in item){
                 if (p.IdProduk == data.ProdukData.IdProduk){
 
-
-
                     for (kartu in data.ListPersediaanData){
 
                         if (data.ProductFlow == TransaksiData.ProductIn) {
 
-                            data.Total = data.ProdukData.Harga * data.Quantity
-                            TotalHolder += data.Total
+                            data.SetTotalAll(data.ProdukData.Harga,data.GetKuantitas())
+                            TotalHolder += data.GetTotalListKuantitas()
                             HargaHolder = TotalHolder / kartu.Jumlah
 
                             kartu.Total = TotalHolder
@@ -33,9 +31,10 @@ class GenerateDataForAverage{
                             kartu.Total = TotalHolder
 
                             data.ProdukData.Harga = HargaHolder
-                            data.Total = data.ProdukData.Harga * data.Quantity
+                            data.SetHargaAll(HargaHolder)
+                            data.SetTotalAll(data.ProdukData.Harga,data.GetKuantitas())
 
-                            TotalHolder -= data.Total
+                            TotalHolder -= data.GetTotalListKuantitas()
                             kartu.Total = TotalHolder
                         }
 

@@ -11,9 +11,9 @@ class AlterAllProductInTrans{
             var total = 0
             for (a in d){
                 if (t.ProductFlow == TransaksiData.ProductIn){
-                    total += a.Quantity * a.ProdukData.Harga
+                    total += a.GetTotalListKuantitas()
                 }else if (t.ProductFlow == TransaksiData.ProductOut) {
-                    total -= a.Quantity * a.ProdukData.Harga
+                    total -= a.GetTotalListKuantitas()
                 }
             }
             if (total < 0){

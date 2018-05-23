@@ -170,10 +170,20 @@ companion object {
 
                     if (d.ProductFlow == TransaksiData.ProductIn) {
 
+                        var ListKuantitas = ""
+                        var ListHarga = ""
+                        var ListTotal = ""
+
+                        for (popKuantitas in d.ListKuantitas){
+                            ListKuantitas += "${popKuantitas.Quantity}<br />"
+                            ListHarga += "${formatter.format(popKuantitas.Harga)}<br />"
+                            ListTotal += "${formatter.format(popKuantitas.Total)}<br />"
+                        }
+
                         body += "<tr>\n" +
                                 "<td rowspan='$sizeStok'>${d.TanggalTransaksi.toDateString()}</td>\n" +
                                 "<td rowspan='$sizeStok'>${d.Keterangan}</td>\n" +
-                                "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n" +
+                                "<td rowspan='$sizeStok'>${ListKuantitas}</td><td rowspan='$sizeStok'>${ListHarga}</td><td rowspan='$sizeStok'>${ListTotal}</td>\n" +
                                 "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n"
 
                         var totalQtyLocal = 0
@@ -183,7 +193,11 @@ companion object {
                                 if (dt > 0) {
                                     body += "<tr>\n"
                                 }
-                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Total)}</td>\n"
+                                val qtyPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else d.ListPersediaanData.get(dt).Jumlah.toString()
+                                val HargaPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)
+                                val TotalPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else  formatter.format(d.ListPersediaanData.get(dt).Total)
+
+                                body += "<td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td>\n"
                                 body += "</tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
@@ -195,16 +209,30 @@ companion object {
                         TotalPersediaan = TotalPersediaanLocal
 
 
-                        StokPemasukan += d.Quantity
-                        TotalPemasukan += d.ProdukData.Harga * d.Quantity
+                        StokPemasukan += d.GetKuantitas()
+                        TotalPemasukan += d.GetTotalListKuantitas()
 
 
                     } else if (d.ProductFlow == TransaksiData.ProductOut) {
+
+                        var ListKuantitas = "<table border=0>"
+                        var ListHarga = "<table border=0>"
+                        var ListTotal = "<table border=0>"
+
+                        for (popKuantitas in d.ListKuantitas){
+                            ListKuantitas += "<tr><td>${popKuantitas.Quantity}</td></tr>"
+                            ListHarga += "<tr><td>${formatter.format(popKuantitas.Harga)}</td></tr>"
+                            ListTotal += "<tr><td>${formatter.format(popKuantitas.Total)}</td></tr>"
+                        }
+                        ListKuantitas += "</table>"
+                        ListHarga += "</table>"
+                        ListTotal += "</table>"
+
                         body += "<tr>\n" +
                                 "<td rowspan='$sizeStok'>${d.TanggalTransaksi.toDateString()}</td>\n" +
                                 "<td rowspan='$sizeStok'>${d.Keterangan}</td>\n" +
                                 "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n" +
-                                "<td rowspan='$sizeStok'>${d.Quantity}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga)}</td><td rowspan='$sizeStok'>${formatter.format(d.ProdukData.Harga * d.Quantity)}</td>\n"
+                                "<td rowspan='$sizeStok'>${ListKuantitas}</td><td rowspan='$sizeStok'>${ListHarga}</td><td rowspan='$sizeStok'>${ListTotal}</td>\n"
 
 
                         var totalQtyLocal = 0
@@ -214,7 +242,11 @@ companion object {
                                 if (dt > 0) {
                                     body += "<tr>\n"
                                 }
-                                body += "<td>${d.ListPersediaanData.get(dt).Jumlah}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)}</td><td>${formatter.format(d.ListPersediaanData.get(dt).Total)}</td>\n"
+                                val qtyPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else d.ListPersediaanData.get(dt).Jumlah.toString()
+                                val HargaPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)
+                                val TotalPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "<br />" else  formatter.format(d.ListPersediaanData.get(dt).Total)
+
+                                body += "<td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td>\n"
                                 body += "</tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
@@ -224,8 +256,8 @@ companion object {
                         StokPersediaan = totalQtyLocal
                         TotalPersediaan = TotalPersediaanLocal
 
-                        StokPengeluaran += d.Quantity
-                        TotalPengeluaran += d.ProdukData.Harga * d.Quantity
+                        StokPengeluaran += d.GetKuantitas()
+                        TotalPengeluaran += d.GetTotalListKuantitas()
 
                     }
 
@@ -234,7 +266,7 @@ companion object {
             }
 
             val total = "<tr>\n" +
-                    "<td colspan='2'> <br />Total<br /><br /> </td>\n" +
+                    "<td colspan='2'><h3>Total</h3></td>\n" +
                     "<td>${StokPemasukan}</td><td> </td><td>${formatter.format(TotalPemasukan)}</td>\n" +
                     "<td>${StokPengeluaran}</td><td> </td><td>${formatter.format(TotalPengeluaran)}</td>\n" +
                     "<td>${StokPersediaan}</td><td> </td><td>${formatter.format(TotalPersediaan)}</td>\n" +

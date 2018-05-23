@@ -6,8 +6,35 @@ import java.io.Serializable
 
 class DetailTransaksi : Serializable {
     lateinit var IdTransaksiData : String
+    lateinit var IdDetailTransaksiData : String
     lateinit var ProdukData : ProdukData
     lateinit var ListPersediaanData : ArrayList<PersediaanData>
-    var Quantity: Int = 0
-    var Total: Int = 0
+    lateinit var ListKuantitas : ArrayList<KuantitasTransaksi>
+
+
+    fun GetTotalListKuantitas() : Int{
+        var total = 0
+        for (i in this.ListKuantitas){
+            total += i.Harga * i.Quantity
+        }
+
+        return total
+    }
+
+    fun GetKuantitas() : Int{
+        var qty = 0
+        for (i in this.ListKuantitas){
+            qty += i.Quantity
+        }
+
+        return qty
+    }
+
+    fun SetHargaAll(h : Int){
+        for (i in this.ListKuantitas.listIterator()){
+            i.Harga = h
+            i.Total = i.Harga * i.Quantity
+        }
+
+    }
 }

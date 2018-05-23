@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterDetailTransaction
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterTransaksi
@@ -17,6 +18,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatWaktu
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -319,7 +321,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
 
         val qty : EditText = v.findViewById(R.id.editQtyDetail)
-        qty.setText(detail.get(pos).Quantity.toString())
+        qty.setText(detail.get(pos).GetKuantitas().toString())
 
         val dialogEditQty = android.support.v7.app.AlertDialog.Builder(context)
                 .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.qty)
@@ -333,7 +335,21 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
                     }else {
 
-                        detail.get(pos).Quantity = Integer.parseInt(qty.text.toString())
+                        val ListKuantitas = ArrayList<KuantitasTransaksi>()
+                        val KuantitasData = KuantitasTransaksi()
+
+                        val id = IdGenerator()
+                        id.CreateRandomString(15)
+                        detail.get(pos).IdDetailTransaksiData = id.GetId()
+
+                        KuantitasData.IdDetailTransaksiData = detail.get(pos).IdDetailTransaksiData
+                        KuantitasData.Quantity = Integer.parseInt(qty.text.toString())
+                        KuantitasData.Harga = detail.get(pos).ProdukData.Harga
+                        KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
+                        ListKuantitas.add(KuantitasData)
+
+                        detail.get(pos).ListKuantitas = ListKuantitas
+
                         setDetailAdapter(ListDetail,newTrans.ListDetail)
                         dialogInterface.dismiss()
 
@@ -361,6 +377,8 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
                 .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
 
                     detail.get(pos).ProdukData.Harga = Integer.parseInt(qty.text.toString())
+                    detail.get(pos).SetHargaAll(Integer.parseInt(qty.text.toString()))
+
                     setDetailAdapter(ListDetail,newTrans.ListDetail)
 
                     dialogInterface.dismiss()
@@ -410,10 +428,23 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
             productAdded.Nama = MainData.ListProdukData.get(i).Nama
             productAdded.Harga = MainData.ListProdukData.get(i).Harga
 
+            val id = IdGenerator()
+            id.CreateRandomString(15)
+            detailAdded.IdDetailTransaksiData = id.GetId()
+
             detailAdded.IdTransaksiData = newTrans.IdTransaksiData
+
             detailAdded.ProdukData = productAdded
-            detailAdded.Quantity = 1
-            detailAdded.Total = (productAdded.Harga * detailAdded.Quantity)
+
+            val ListKuantitas = ArrayList<KuantitasTransaksi>()
+            val KuantitasData = KuantitasTransaksi()
+            KuantitasData.IdDetailTransaksiData = detailAdded.IdDetailTransaksiData
+            KuantitasData.Quantity = 1
+            KuantitasData.Harga = detailAdded.ProdukData.Harga
+            KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
+            ListKuantitas.add(KuantitasData)
+
+            detailAdded.ListKuantitas = ListKuantitas
 
             if (CheckAndAddQtyIfSame(newTrans.ListDetail,detailAdded)){
                 newTrans.ListDetail.add(detailAdded)

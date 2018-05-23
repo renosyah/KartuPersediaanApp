@@ -90,8 +90,8 @@ class DetailKartuPersediaan : AppCompatActivity(),View.OnClickListener {
         title.setText(dt.Keterangan)
         name.setText(lang.laporanMenuLang.namaProductDetail + " : " +dt.ProdukData.Nama)
         price.setText(lang.laporanMenuLang.price + " : " +formatter.format(dt.ProdukData.Harga))
-        qty.setText(lang.laporanMenuLang.qty + " : " +dt.Quantity.toString())
-        total.setText(lang.laporanMenuLang.total + " : " +formatter.format(dt.Quantity * dt.ProdukData.Harga))
+        qty.setText(lang.laporanMenuLang.qty + " : " +dt.GetKuantitas())
+        total.setText(lang.laporanMenuLang.total + " : " +formatter.format(dt.ProdukData.Harga * dt.GetKuantitas()))
         total.setTextColor(if (dt.ProductFlow == TransaksiData.ProductIn) ResourcesCompat.getColor(context.resources, R.color.greenMoney,null) else ResourcesCompat.getColor(context.resources, R.color.red,null))
         bar.setBackgroundColor(theme.BackGroundColor)
 

@@ -48,7 +48,7 @@ class CustomAdapterLaporanKartuPersediaan(ctx : Context,res : Int,objek : ArrayL
         holder.name.setText(item.ProdukData.Nama)
         holder.name.setTextColor(theme.BackGroundColor)
 
-        holder.qty.setText(lang.printLaporanLang.qtyP + " : " +item.Quantity.toString())
+        holder.qty.setText(lang.printLaporanLang.qtyP + " : " +item.GetKuantitas())
         holder.date.setText(item.TanggalTransaksi.toDateString())
         holder.image.setBackgroundResource(if (item.ProductFlow == TransaksiData.ProductIn) R.drawable.arrowin else R.drawable.arrowout)
 

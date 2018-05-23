@@ -12,32 +12,34 @@ class GenerateDataInventoryCard {
 
         fun InventoryFifoLifoMethod(product: ProdukData, s: ArrayList<PersediaanData>, detail : DetailTransaksi): ArrayList<PersediaanData> {
 
-            var qtyHolder = detail.Quantity
+
+           var qtyHolder = detail.GetKuantitas()
             val newDs = ArrayList<PersediaanData>()
 
-            for (pos in 0..(s.size) - 1) {
-                val dt = s.get(pos)
-                if (dt.Produk.IdProduk == product.IdProduk) {
+                for (pos in 0..(s.size) - 1) {
+                    val dt = s.get(pos)
+                    if (dt.Produk.IdProduk == product.IdProduk) {
 
-                    if (dt.Jumlah - qtyHolder < 0) {
+                        if (dt.Jumlah - qtyHolder < 0) {
 
-                        qtyHolder = qtyHolder - dt.Jumlah
-                        s.get(pos).Jumlah = 0
+                            qtyHolder = qtyHolder - dt.Jumlah
+                            s.get(pos).Jumlah = 0
 
-                    }else if (dt.Jumlah - qtyHolder > 0) {
+                        } else if (dt.Jumlah - qtyHolder > 0) {
 
-                        s.get(pos).Jumlah = dt.Jumlah - qtyHolder
+                            s.get(pos).Jumlah = dt.Jumlah - qtyHolder
 
-                        break
-                    } else if (dt.Jumlah - qtyHolder >= 0) {
+                            break
+                        } else if (dt.Jumlah - qtyHolder >= 0) {
 
-                        s.get(pos).Jumlah = dt.Jumlah - qtyHolder
+                            s.get(pos).Jumlah = dt.Jumlah - qtyHolder
 
-                        break
+                            break
+                        }
                     }
+
                 }
 
-            }
             for (d in s) {
                 val stk = PersediaanData()
                 stk.Produk = ProdukData()
@@ -109,7 +111,6 @@ class GenerateDataInventoryCard {
 
             if (flow == TransaksiData.ProductOut) {
 
-                itemInDetail.Total = 0
                 itemInDetail.ProdukData.Harga = 0
             }
 
@@ -132,11 +133,11 @@ class GenerateDataInventoryCard {
                     newStock.Produk.IdProduk = itemInDetail.ProdukData.IdProduk
                     newStock.Produk.Nama = itemInDetail.ProdukData.Nama
                     newStock.Produk.Harga = itemInDetail.ProdukData.Harga
-                    newStock.Jumlah = itemInDetail.Quantity
+                    newStock.Jumlah = itemInDetail.GetKuantitas()
                     newStock.TanggalMasuk.Hari = item.TanggalTransaksi.Hari
                     newStock.TanggalMasuk.Bulan = item.TanggalTransaksi.Bulan
                     newStock.TanggalMasuk.Tahun = item.TanggalTransaksi.Tahun
-                    newStock.Total = (itemInDetail.ProdukData.Harga * itemInDetail.Quantity)
+                    newStock.Total = (itemInDetail.ProdukData.Harga * itemInDetail.GetKuantitas())
                     Maindata.ListPersediaanData.add(newStock)
 
 
@@ -178,20 +179,20 @@ class GenerateDataInventoryCard {
 
                     }
 
-                    if (Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
-
-                        val intPosWhenNolFound = ArrayList<Int>()
-                        for (finNol in 0..(newStock.size) - 1) {
-                            if (newStock.get(finNol).Jumlah == 0) {
-                                intPosWhenNolFound.add(finNol)
-                            }
-                        }
-
-
-                        for (getRidNol in 0..(intPosWhenNolFound.size) - 1) {
-                            newStock.removeAt(intPosWhenNolFound.get(getRidNol))
-                        }
-                    }
+//                    if (Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
+//
+//                        val intPosWhenNolFound = ArrayList<Int>()
+//                        for (finNol in 0..(newStock.size) - 1) {
+//                            if (newStock.get(finNol).Jumlah == 0) {
+//                                intPosWhenNolFound.add(finNol)
+//                            }
+//                        }
+//
+//
+//                        for (getRidNol in 0..(intPosWhenNolFound.size) - 1) {
+//                            newStock.removeAt(intPosWhenNolFound.get(getRidNol))
+//                        }
+//                    }
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
                         val holder = SetToOne(item.ProductFlow,itemInDetail,itemInDetail.ProdukData,newStock)

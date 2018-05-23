@@ -13,81 +13,72 @@ class ValidateOutProduct {
 
     companion object {
 
-        fun InventoryFifoLifoMethod(TransData : TransaksiData,detail : DetailTransaksi,product: ProdukData, s: ArrayList<PersediaanData>,qty : Int,transData  : ArrayList<TransaksiData>): ArrayList<PersediaanData> {
+        fun InventoryFifoLifoMethod(detail : DetailTransaksi,product: ProdukData, s: ArrayList<PersediaanData>): ArrayList<PersediaanData> {
 
-            var qtyHolder = qty
             val newS = RefreshClone(s)
-            var addNumber = 1
+
+            for (detailKuantitas in detail.ListKuantitas) {
+                var qtyHolder = detailKuantitas.Quantity
+
+                for (dt in newS) {
+
+                    if (dt.Produk.IdProduk == product.IdProduk) {
+
+                        if (dt.Jumlah - qtyHolder < 0 && dt.Jumlah > 0 && dt.Jumlah != qtyHolder) {
 
 
-            for (dt in newS) {
+                            val clone = detailKuantitas.CloneKuantitas()
+                            clone.Quantity = qtyHolder - dt.Jumlah
+                            clone.Harga = dt.Produk.Harga
+                            clone.Total = clone.Harga * clone.Quantity
+                            detail.ListKuantitas.add(clone)
 
-                if (dt.Produk.IdProduk == product.IdProduk) {
-
-                    if (dt.Jumlah - qtyHolder < 0 && dt.Jumlah > 0 && dt.Jumlah != qtyHolder) {
-
-                            addNumber++
-
-                            val id = IdGenerator()
-                            id.CreateRandomString(15)
-
-                            val clone = TransData.CloneTransData()
-                            clone.Jam.Menit += addNumber
-                            clone.IdTransaksiData += "Clone" + id.GetId()
-                            clone.ListDetail.clear()
-
-                            val newDetail = DetailTransaksi()
-                            val Cloneproduct = ProdukData()
-
-                            Cloneproduct.IdProduk = product.IdProduk
-                            Cloneproduct.Nama = product.Nama
-                            Cloneproduct.Harga = product.Harga
-
-                            newDetail.IdTransaksiData = clone.IdTransaksiData
-                            newDetail.ProdukData = Cloneproduct
-                            newDetail.ListPersediaanData = ArrayList()
-
-                            newDetail.Quantity = qtyHolder - dt.Jumlah
-                            newDetail.Total = (newDetail.Quantity * newDetail.ProdukData.Harga)
-                            clone.ListDetail.add(newDetail)
-
-                            transData.add(clone)
-
-                            detail.Quantity = dt.Jumlah
-                            detail.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Quantity = dt.Jumlah
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
 
                             dt.Jumlah = 0
 
                             break
 
+                        }
+
+                        if (dt.Jumlah > 0 && dt.Jumlah == qtyHolder) {
+
+                            detail.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            qtyHolder -= dt.Jumlah
+                            dt.Jumlah = 0
+
+                            break
+
+                        } else if (dt.Jumlah - qtyHolder > 0) {
+
+                            detail.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            dt.Jumlah -= qtyHolder
+
+                            break
+
+                        } else if (dt.Jumlah - qtyHolder >= 0) {
+
+                            detail.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            dt.Jumlah -= qtyHolder
+
+                            break
+                        }
+
+
                     }
-
-                    if (dt.Jumlah > 0 && dt.Jumlah == qtyHolder){
-
-                        detail.ProdukData.Harga = dt.Produk.Harga
-                        qtyHolder -= dt.Jumlah
-                        dt.Jumlah = 0
-
-                        break
-
-                    }else if (dt.Jumlah - qtyHolder> 0) {
-
-                        detail.ProdukData.Harga = dt.Produk.Harga
-                        dt.Jumlah -= qtyHolder
-
-                        break
-
-                    }else if (dt.Jumlah - qtyHolder>= 0) {
-
-                        detail.ProdukData.Harga = dt.Produk.Harga
-                        dt.Jumlah -= qtyHolder
-
-                        break
-                    }
-
 
                 }
-
             }
 
             val newDs = ArrayList<PersediaanData>()
@@ -171,11 +162,11 @@ class ValidateOutProduct {
                     newStock.Produk.IdProduk = itemInDetail.ProdukData.IdProduk
                     newStock.Produk.Nama = itemInDetail.ProdukData.Nama
                     newStock.Produk.Harga = itemInDetail.ProdukData.Harga
-                    newStock.Jumlah = itemInDetail.Quantity
+                    newStock.Jumlah = itemInDetail.GetKuantitas()
                     newStock.TanggalMasuk.Hari = item.TanggalTransaksi.Hari
                     newStock.TanggalMasuk.Bulan = item.TanggalTransaksi.Bulan
                     newStock.TanggalMasuk.Tahun = item.TanggalTransaksi.Tahun
-                    newStock.Total = itemInDetail.Total
+                    newStock.Total = itemInDetail.GetKuantitas()
 
                     Maindata.ListPersediaanData.add(newStock)
 
@@ -189,7 +180,7 @@ class ValidateOutProduct {
                     }
 
 
-                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(item, itemInDetail, itemInDetail.ProdukData, Maindata.ListPersediaanData, itemInDetail.Quantity, transData)
+                    Maindata.ListPersediaanData = InventoryFifoLifoMethod(itemInDetail, itemInDetail.ProdukData, Maindata.ListPersediaanData)
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)

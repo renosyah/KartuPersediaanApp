@@ -26,6 +26,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
@@ -150,18 +151,18 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             if (filter.tahun > 0 && (dataTrans.TanggalTransaksi.Tahun == filter.tahun)){
                 for (detail in dataTrans.ListDetail){
                     if (filter.p != null && (filter.p!!.IdProduk == detail.ProdukData.IdProduk)){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.Quantity,detail.Total)
+                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
                     }else if (filter.p == null){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.Quantity,detail.Total)
+                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
                     }
 
                 }
             }else if (filter.tahun == 0){
                 for (detail in dataTrans.ListDetail){
                     if (filter.p != null && (filter.p!!.IdProduk == detail.ProdukData.IdProduk)){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.Quantity,detail.Total)
+                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
                     }else if (filter.p == null){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.Quantity,detail.Total)
+                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
                     }
                 }
             }
@@ -177,7 +178,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         SetAdapter(LaporanKartuPersediaan)
     }
 
-    internal fun AppendToCartuPersediaan(IdTransaksiData : String, TanggalTransaksi : FormatTanggal, ProdukData : ProdukData, Keterangan : String, ProductFlow :String, ListPersediaanData : ArrayList<PersediaanData>, qty : Int, Total: Int){
+    internal fun AppendToCartuPersediaan(IdTransaksiData : String, TanggalTransaksi : FormatTanggal, ProdukData : ProdukData, Keterangan : String, ProductFlow :String, ListPersediaanData : ArrayList<PersediaanData>,listKuantitas : ArrayList<KuantitasTransaksi>){
         val laporanKartuPersediaanObj = LaporanKartuPersediaanObj()
         laporanKartuPersediaanObj.IdTransaksiData = IdTransaksiData
         laporanKartuPersediaanObj.TanggalTransaksi = TanggalTransaksi
@@ -185,22 +186,21 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         laporanKartuPersediaanObj.Keterangan = Keterangan
         laporanKartuPersediaanObj.ProductFlow = ProductFlow
         laporanKartuPersediaanObj.ListPersediaanData = ListPersediaanData
-        laporanKartuPersediaanObj.Quantity = qty
-        laporanKartuPersediaanObj.Total = Total
+        laporanKartuPersediaanObj.ListKuantitas = listKuantitas
         LaporanKartuPersediaan.add(laporanKartuPersediaanObj)
     }
 
     fun SetAdapter(l : ArrayList<LaporanKartuPersediaanObj>){
 
-        val intPosWhenNolFound = ArrayList<Int>()
-        for (finNol in 0..(l.size)-1){
-            if (l.get(finNol).Quantity == 0){
-                intPosWhenNolFound.add(finNol)
-            }
-        }
-        for (getRidNol in 0..(intPosWhenNolFound.size)-1){
-            l.removeAt(intPosWhenNolFound.get(getRidNol))
-        }
+//        val intPosWhenNolFound = ArrayList<Int>()
+//        for (finNol in 0..(l.size)-1){
+//            if (l.get(finNol).GetKuantitas() == 0){
+//                intPosWhenNolFound.add(finNol)
+//            }
+//        }
+//        for (getRidNol in 0..(intPosWhenNolFound.size)-1){
+//            l.removeAt(intPosWhenNolFound.get(getRidNol))
+//        }
 
 
         val adapter = CustomAdapterLaporanKartuPersediaan(ctx,R.layout.custom_adapter_laporan_kartu_persediaan,l)

@@ -51,7 +51,7 @@ class CustomAdapterDetailTransaction(context: Context, resource: Int, objects: M
         holder.name.setTextColor(theme.BackGroundColor)
 
         holder.price.setText(formatter.format(item.ProdukData.Harga))
-        holder.qty.setText(item.Quantity.toString())
+        holder.qty.setText(item.GetKuantitas().toString())
 
 
         return row!!
