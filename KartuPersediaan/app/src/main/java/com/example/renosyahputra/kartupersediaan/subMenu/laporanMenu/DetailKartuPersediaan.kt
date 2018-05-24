@@ -12,6 +12,7 @@ import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
+import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -95,14 +96,15 @@ class DetailKartuPersediaan : AppCompatActivity(),View.OnClickListener {
         total.setTextColor(if (dt.ProductFlow == TransaksiData.ProductIn) ResourcesCompat.getColor(context.resources, R.color.greenMoney,null) else ResourcesCompat.getColor(context.resources, R.color.red,null))
         bar.setBackgroundColor(theme.BackGroundColor)
 
-        SetAdapter()
+        SetAdapter(dt.ListPersediaanData)
     }
     
-    fun SetAdapter(){
-        val adapter = CustomAdapterPersediaanData(context,R.layout.custom_adapter_persediaan,dt.ListPersediaanData)
+    fun SetAdapter(l : ArrayList<PersediaanData>){
+
+        val adapter = CustomAdapterPersediaanData(context,R.layout.custom_adapter_persediaan,l)
         adapter.SetLangTheme(lang,theme)
         ListPersediaan.adapter = adapter
-        ListPersediaan.divider =null
+        ListPersediaan.divider = null
         layoutList.layoutParams.height = GetListViewTotalHeight.getListViewTotalHeight(ListPersediaan)
     }
 

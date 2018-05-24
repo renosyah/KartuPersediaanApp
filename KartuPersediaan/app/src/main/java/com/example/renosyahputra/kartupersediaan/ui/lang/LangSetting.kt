@@ -161,8 +161,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.total = "Total"
         laporanMenuLang.stokKe = "Stock Number"
         laporanMenuLang.exportTitle = "Print Document"
-        laporanMenuLang.toPDF = "Save as .PDF"
-        laporanMenuLang.toHTML = "Save as .HTML"
+        laporanMenuLang.toPDF = "PDF (Potrait)"
+        laporanMenuLang.toPDFLANDSCAPE = "PDF (Landscape)"
         laporanMenuLang.save = "Save"
         laporanMenuLang.cancel = "Cancel"
         laporanMenuLang.saved = "File Hass been saved in Folder KartuPersediaan"
@@ -170,6 +170,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.dateAwalLap = "From"
         laporanMenuLang.dateAkhirLap = ""
         laporanMenuLang.hinga = "To"
+        laporanMenuLang.WarningInvalidProduckInTrans = "Warning, there is some transaction with invalid product quantity, please check!"
+        laporanMenuLang.WarningInvalidProduckInTransTitle = "Warning!"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Product In"
@@ -331,8 +333,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.total = "Total"
         laporanMenuLang.stokKe = "Nomor Stock"
         laporanMenuLang.exportTitle = "Cetak Dokumen"
-        laporanMenuLang.toPDF = "Simpan Sebagai .PDF"
-        laporanMenuLang.toHTML = "Simpan Sebagai .HTML"
+        laporanMenuLang.toPDF = "PDF (Potret)"
+        laporanMenuLang.toPDFLANDSCAPE = "PDF (Mendatar)"
         laporanMenuLang.save = "Simpan"
         laporanMenuLang.cancel = "Batal"
         laporanMenuLang.saved = "File Tersimpan di Folder KartuPersediaan"
@@ -340,6 +342,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.dateAwalLap = "Dari"
         laporanMenuLang.dateAkhirLap = ""
         laporanMenuLang.hinga = "Hingga"
+        laporanMenuLang.WarningInvalidProduckInTrans = "Perhatian, ada beberapa data transaksi yang kuantitas produknya tidak valid, mohon dicek!"
+        laporanMenuLang.WarningInvalidProduckInTransTitle = "Perhatian"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Produk Masuk"

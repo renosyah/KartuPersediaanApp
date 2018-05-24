@@ -21,7 +21,7 @@ class LaporanMenuLang : Serializable {
 
     lateinit var exportTitle : String
     lateinit var toPDF :String
-    lateinit var toHTML : String
+    lateinit var toPDFLANDSCAPE : String
 
     lateinit var save : String
     lateinit var cancel : String
@@ -33,5 +33,8 @@ class LaporanMenuLang : Serializable {
     lateinit var dateAwalLap : String
     lateinit var dateAkhirLap : String
     lateinit var hinga : String
+
+    lateinit var WarningInvalidProduckInTrans : String
+    lateinit var WarningInvalidProduckInTransTitle : String
 
 }

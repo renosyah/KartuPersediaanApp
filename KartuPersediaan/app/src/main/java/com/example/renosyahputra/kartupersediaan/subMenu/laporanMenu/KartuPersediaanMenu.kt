@@ -111,7 +111,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         }
 
 
-        if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE && formatLaporan.TypeFormat == FormatLaporan.ACCOUNTING) {
+        if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
 
             duplicateListTransaksi.clear()
 
@@ -206,7 +206,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         val adapter = CustomAdapterLaporanKartuPersediaan(ctx,R.layout.custom_adapter_laporan_kartu_persediaan,l)
         adapter.SetLangTheme(lang,theme)
         ListViewKartuPersediaan.adapter = adapter
-        ListViewKartuPersediaan.divider =null
+        ListViewKartuPersediaan.divider = null
 
         if (l.size < 1){
             KartuPersediaanKosongStatus.setText(lang.laporanMenuLang.KartuPersediaanKosong)
@@ -258,7 +258,13 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         sortInventoryCard.setOnClickListener(this)
         PrintNowButton.setOnClickListener(this)
 
-        GenerateData(filterSearch)
+        SetAdapter(ArrayList())
+
+        if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+            GenerateData(filterSearch)
+        }
+
+
 
     }
 
@@ -278,46 +284,50 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 filterSearch.p = null
                 filterSearch.tahun = 0
 
-                val option = arrayOf<CharSequence>(lang.laporanMenuLang.toPDF,lang.laporanMenuLang.toHTML)
+                val option = arrayOf<CharSequence>(lang.laporanMenuLang.toPDF,lang.laporanMenuLang.toPDFLANDSCAPE)
                 val allTgl = ArrayList<FormatTanggal>()
                 for (tgl in LaporanKartuPersediaan){
                     allTgl.add(tgl.TanggalTransaksi)
                 }
+                if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
 
-                MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
-                GenerateData(filterSearch)
-                val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                    MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
+                    GenerateData(filterSearch)
+                    val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
-                MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
-                GenerateData(filterSearch)
-                val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                    MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
+                    GenerateData(filterSearch)
+                    val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
-                MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
-                GenerateData(filterSearch)
-                val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx,user,allTgl,MainData,MainData.metodePersediaan.MetodeUse,LaporanKartuPersediaan,lang)
+                    MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
+                    GenerateData(filterSearch)
+                    val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
-                AlertDialog.Builder(ctx)
-                        .setTitle(lang.laporanMenuLang.exportTitle)
-                        .setNegativeButton(lang.laporanMenuLang.cancel, DialogInterface.OnClickListener { dialogInterface, i ->
-                            dialogInterface.dismiss()
-                        }).setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
-                            when (i){
-                                0 ->{
-                                    SaveMainData.SaveAsPdf("KartuPersediaanFIFO.pdf",dataStringFIFO)
-                                    SaveMainData.SaveAsPdf("KartuPersediaanLIFO.pdf",dataStringLIFO)
-                                    SaveMainData.SaveAsPdf("KartuPersediaanAVERAGE.pdf",dataStringAVERAGE)
+                    AlertDialog.Builder(ctx)
+                            .setTitle(lang.laporanMenuLang.exportTitle)
+                            .setNegativeButton(lang.laporanMenuLang.cancel, DialogInterface.OnClickListener { dialogInterface, i ->
+                                dialogInterface.dismiss()
+                            }).setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
+                                when (i) {
+                                    0 -> {
+                                        SaveMainData.SaveAsPdf(false,"KartuPersediaanFIFO.pdf", dataStringFIFO)
+                                        SaveMainData.SaveAsPdf(false,"KartuPersediaanLIFO.pdf", dataStringLIFO)
+                                        SaveMainData.SaveAsPdf(false,"KartuPersediaanAVERAGE.pdf", dataStringAVERAGE)
+                                    }
+                                    1 -> {
+                                        SaveMainData.SaveAsPdf(true,"KartuPersediaanFIFO.pdf", dataStringFIFO)
+                                        SaveMainData.SaveAsPdf(true,"KartuPersediaanLIFO.pdf", dataStringLIFO)
+                                        SaveMainData.SaveAsPdf(true,"KartuPersediaanAVERAGE.pdf", dataStringAVERAGE)
+                                    }
                                 }
-                                1 ->{
-                                    SaveMainData.generateNoteOnSD("KartuPersediaanFIFO.html",dataStringFIFO)
-                                    SaveMainData.generateNoteOnSD("KartuPersediaanLIFO.html",dataStringLIFO)
-                                    SaveMainData.generateNoteOnSD("KartuPersediaanAVERAGE.html",dataStringAVERAGE)
+                                Toast.makeText(ctx, lang.laporanMenuLang.saved, Toast.LENGTH_SHORT).show()
+                                MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
+                                if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                                    GenerateData(filterSearch)
                                 }
-                            }
-                            Toast.makeText(ctx,lang.laporanMenuLang.saved,Toast.LENGTH_SHORT).show()
-                            MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
-                            GenerateData(filterSearch)
 
-                        }).create().show()
+                            }).create().show()
+                }
 
             }
             SetMethodeLap -> {
@@ -337,7 +347,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                             }
                             SetMethodeLap.setText(MainData.metodePersediaan.MetodeUse)
 
-                            GenerateData(filterSearch)
+                            if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                                GenerateData(filterSearch)
+                            }
                             dialogInterface.dismiss()
                         })
                         .setNegativeButton(lang.subMenuTransLang.batal, DialogInterface.OnClickListener { dialogInterface, i ->
@@ -374,7 +386,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 list.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
                     SetPeriodeLap.setText(Allperiode.get(i).toString())
                     filterSearch.tahun = Allperiode.get(i)
-                    GenerateData(filterSearch)
+                    if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                        GenerateData(filterSearch)
+                    }
                     dialog.dismiss()
                 })
 
@@ -410,7 +424,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                     sortInventoryCard.setText(MainData.ListProdukData.get(i).Nama)
                     filterSearch.p = MainData.ListProdukData.get(i)
-                    GenerateData(filterSearch)
+                    if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                        GenerateData(filterSearch)
+                    }
 
                     productdialog.dismiss()
                 }
@@ -423,8 +439,38 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
     }
 
+    fun CheckValidQuantityProductInAllTransaction(l : ArrayList<TransaksiData>) : Boolean {
+        var isThisInValid = false
+        for (t in l.listIterator()){
+            for (d in t.ListDetail.listIterator()){
+                if (d.IsThisValidDetailTransaction ==  isThisInValid){
+                    isThisInValid = true
+                    break
+                }
+
+            }
+            if (isThisInValid){
+                break
+            }
+        }
+        if (isThisInValid){
+            AlertDialog.Builder(ctx).setTitle(lang.laporanMenuLang.WarningInvalidProduckInTransTitle)
+                    .setMessage(lang.laporanMenuLang.WarningInvalidProduckInTrans)
+                    .setIcon(R.drawable.warning)
+                    .setPositiveButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                        dialogInterface.dismiss()
+                    })
+                    .create()
+                    .show()
+        }
+
+        return !isThisInValid
+    }
+
     override fun onRefresh() {
-        GenerateData(filterSearch)
+        if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+            GenerateData(filterSearch)
+        }
         if (refreshLayout.isRefreshing){
             refreshLayout.isRefreshing = !refreshLayout.isRefreshing
         }

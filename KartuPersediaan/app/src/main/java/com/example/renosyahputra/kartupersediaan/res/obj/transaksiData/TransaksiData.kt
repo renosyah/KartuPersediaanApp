@@ -17,6 +17,8 @@ class TransaksiData : Serializable {
     lateinit var ProductFlow :String
     var SubTotal : Int = 0
 
+    var IsThisValidTransaction = true
+
 
     fun CloneTransData() : TransaksiData {
         val newData = TransaksiData()

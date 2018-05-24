@@ -2,9 +2,11 @@ package com.example.renosyahputra.kartupersediaan.res.customAdapter
 
 import android.app.Activity
 import android.content.Context
+import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
@@ -40,6 +42,7 @@ class CustomAdapterDetailTransaction(context: Context, resource: Int, objects: M
             holder.name = row.findViewById(R.id.nameProductDetailTrans)
             holder.price= row.findViewById(R.id.priceProductDetailTrans)
             holder.qty = row.findViewById(R.id.qtyProductDetailTrans)
+            holder.image = row.findViewById(R.id.imageDetailTrans)
 
             row.setTag(holder)
         } else {
@@ -53,11 +56,13 @@ class CustomAdapterDetailTransaction(context: Context, resource: Int, objects: M
         holder.price.setText(formatter.format(item.ProdukData.Harga))
         holder.qty.setText(item.GetKuantitas().toString())
 
+        holder.image.setImageDrawable(if (!item.IsThisValidDetailTransaction) ResourcesCompat.getDrawable(context.resources,R.drawable.warning,null) else ResourcesCompat.getDrawable(context.resources,R.drawable.list,null))
 
         return row!!
     }
 
     class DataList {
+        lateinit var image : ImageView
         lateinit var name : TextView
         lateinit var price : TextView
         lateinit var qty : TextView

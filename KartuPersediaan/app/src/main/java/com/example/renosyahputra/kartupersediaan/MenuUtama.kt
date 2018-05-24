@@ -198,8 +198,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
     internal fun OpenLangAndThemeSetting(){
         val optionLang = arrayOf<CharSequence>(
                 langSetting.GetlangObj().mainMenuSettingLang.OpenSetting1,
-                langSetting.GetlangObj().mainMenuSettingLang.OpenSetting2,
-                langSetting.GetlangObj().mainMenuSettingLang.typeLaporan
+                langSetting.GetlangObj().mainMenuSettingLang.OpenSetting2
         )
         AlertDialog.Builder(context)
                 .setTitle(langSetting.GetlangObj().mainMenuLang.MenuSetting1)
@@ -212,38 +211,11 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
                         OpenThemeSetting()
 
-                    } else if (i == 2){
-
-                        OpenTypeLaporanSetting()
                     }
                     dialogInterface.dismiss()
                 })
                 .setNegativeButton(langSetting.GetlangObj().mainMenuSettingLang.Cancel, DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.dismiss()
-                })
-                .create().show()
-    }
-
-    internal fun OpenTypeLaporanSetting(){
-        val optionLang = arrayOf<CharSequence>(FormatLaporan.BIASA,FormatLaporan.ACCOUNTING)
-        AlertDialog.Builder(context)
-                .setTitle(langSetting.GetlangObj().mainMenuSettingLang.typeLaporan)
-                .setItems(optionLang, DialogInterface.OnClickListener { dialogInterface, i ->
-                    if (i == 0){
-
-                        formatLaporan.TypeFormat = FormatLaporan.BIASA
-
-                    }else if (i == 1){
-
-                        formatLaporan.TypeFormat = FormatLaporan.ACCOUNTING
-                    }
-
-                    RefreshChangeSetting()
-                    dialogInterface.dismiss()
-                })
-                .setNegativeButton(langSetting.GetlangObj().mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
-                    dialogInterface.dismiss()
-                    OpenLangAndThemeSetting()
                 })
                 .create().show()
     }

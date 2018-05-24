@@ -18,6 +18,7 @@ import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterTransaksi
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.CustomAlertDialogEditTrans
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
@@ -118,10 +119,11 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         }
     }
     internal fun SetAdapter(l : ArrayList<TransaksiData>){
-        val adapter = CustomAdapterTransaksi(ctx,R.layout.custom_adapter_transaksi,l)
+        val newL = CheckAndMarkTransactionWithNonValidQty(l)
+        val adapter = CustomAdapterTransaksi(ctx,R.layout.custom_adapter_transaksi,newL)
         adapter.SetLangTheme(lang,theme)
         ListViewTransaksi.adapter = adapter
-        ListViewTransaksi.divider =null
+        ListViewTransaksi.divider = null
     }
 
 
@@ -240,5 +242,17 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
             }
             SetAdapter(ListTransaksiCari)
         }
+    }
+
+    fun CheckAndMarkTransactionWithNonValidQty(l : ArrayList<TransaksiData>) : ArrayList<TransaksiData>{
+        for (t in l.listIterator()){
+            for (d in t.ListDetail.listIterator()){
+                val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(t,d.ProdukData, l))
+                t.IsThisValidTransaction = !((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)
+                d.IsThisValidDetailTransaction = !((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)
+            }
+
+        }
+        return l
     }
 }

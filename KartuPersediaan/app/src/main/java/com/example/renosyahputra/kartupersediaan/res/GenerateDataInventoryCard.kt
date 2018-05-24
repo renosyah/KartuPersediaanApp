@@ -121,10 +121,38 @@ class GenerateDataInventoryCard {
             return newDs
         }
 
+        fun RefreshListPersediaan(s : ArrayList<PersediaanData>) : ArrayList<PersediaanData>{
+            val newDs = ArrayList<PersediaanData>()
+
+            for (i in 0..(s.size) - 1) {
+
+                if (s.get(i).Jumlah != 0) {
+                    val stk = PersediaanData()
+                    stk.Produk = ProdukData()
+
+                    stk.TanggalMasuk.Hari = s.get(i).TanggalMasuk.Hari
+                    stk.TanggalMasuk.Bulan = s.get(i).TanggalMasuk.Bulan
+                    stk.TanggalMasuk.Tahun = s.get(i).TanggalMasuk.Tahun
+                    stk.Jumlah = s.get(i).Jumlah
+                    stk.Produk.Harga = s.get(i).Produk.Harga
+                    stk.Produk.Nama = s.get(i).Produk.Nama
+                    stk.Produk.IdProduk = s.get(i).Produk.IdProduk
+                    stk.Total = s.get(i).Total
+
+                    newDs.add(stk)
+                }
+            }
+            return newDs
+        }
+
 
         fun GenerateForEachTransaction(Maindata: KartuPersediaanData, item: TransaksiData) {
 
-            for (itemInDetail in item.ListDetail){
+            if (Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
+                Maindata.ListPersediaanData = RefreshListPersediaan(Maindata.ListPersediaanData)
+            }
+
+            for (itemInDetail in item.ListDetail) {
 
                 if (item.ProductFlow == TransaksiData.ProductIn) {
 
@@ -141,8 +169,6 @@ class GenerateDataInventoryCard {
                     Maindata.ListPersediaanData.add(newStock)
 
 
-
-
                 } else if (item.ProductFlow == TransaksiData.ProductOut) {
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
@@ -157,6 +183,7 @@ class GenerateDataInventoryCard {
                         Maindata.ListPersediaanData = ReverseData(Maindata.ListPersediaanData)
                     }
                 }
+
 
                 var newStock = ArrayList<PersediaanData>()
 
@@ -178,21 +205,6 @@ class GenerateDataInventoryCard {
                         newStock.add(stk)
 
                     }
-
-//                    if (Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
-//
-//                        val intPosWhenNolFound = ArrayList<Int>()
-//                        for (finNol in 0..(newStock.size) - 1) {
-//                            if (newStock.get(finNol).Jumlah == 0) {
-//                                intPosWhenNolFound.add(finNol)
-//                            }
-//                        }
-//
-//
-//                        for (getRidNol in 0..(intPosWhenNolFound.size) - 1) {
-//                            newStock.removeAt(intPosWhenNolFound.get(getRidNol))
-//                        }
-//                    }
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
                         val holder = SetToOne(item.ProductFlow,itemInDetail,itemInDetail.ProdukData,newStock)

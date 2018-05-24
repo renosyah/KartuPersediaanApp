@@ -10,7 +10,7 @@ class DetailTransaksi : Serializable {
     lateinit var ProdukData : ProdukData
     lateinit var ListPersediaanData : ArrayList<PersediaanData>
     lateinit var ListKuantitas : ArrayList<KuantitasTransaksi>
-
+    var IsThisValidDetailTransaction = true
 
     fun GetTotalListKuantitas() : Int{
         var total = 0
