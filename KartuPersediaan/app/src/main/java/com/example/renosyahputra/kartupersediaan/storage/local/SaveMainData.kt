@@ -175,8 +175,7 @@ companion object {
             for (d in laporanKartuPersediaanObj) {
 
                 if (d.ProdukData.IdProduk == perProduk.IdProduk){
-
-                    val sizeStok = d.ListPersediaanData.size
+                    
 
                     if (d.ProductFlow == TransaksiData.ProductIn) {
 
@@ -191,29 +190,33 @@ companion object {
                         }
 
                         body += "<tr>\n" +
-                                "<td rowspan='$sizeStok'>${d.TanggalTransaksi.toDateString()}</td>\n" +
-                                "<td rowspan='$sizeStok'>${d.Keterangan}</td>\n" +
-                                "<td rowspan='$sizeStok'>${ListKuantitas}</td><td rowspan='$sizeStok'>${ListHarga}</td><td rowspan='$sizeStok'>${ListTotal}</td>\n" +
-                                "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n"
+                                "<td >${d.TanggalTransaksi.toDateString()}</td>\n" +
+                                "<td >${d.Keterangan}</td>\n" +
+                                "<td >${ListKuantitas}</td><td >${ListHarga}</td><td >${ListTotal}</td>\n" +
+                                "<td > </td><td > </td><td > </td>\n"
 
                         var totalQtyLocal = 0
                         var TotalPersediaanLocal = 0
 
-                            for (dt in 0..(d.ListPersediaanData.size) - 1) {
-                                if (dt > 0) {
-                                    body += "<tr>\n"
-                                }
-                                val qtyPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString()
-                                val HargaPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)
-                                val TotalPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)
+                        var qtyPersediaanToPrint = "<table border=0>"
+                        var HargaPersediaanToPrint = "<table border=0>"
+                        var TotalPersediaanToPrint = "<table border=0>"
 
-                                body += "<td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td>\n"
-                                body += "</tr>"
+                            for (dt in 0..(d.ListPersediaanData.size) - 1) {
+
+                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
+                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
+                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
                                 TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total
 
                             }
+                        qtyPersediaanToPrint += "</table>"
+                        HargaPersediaanToPrint += "</table>"
+                        TotalPersediaanToPrint += "</table>"
+
+                        body += "<tr><td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td></tr>\n"
 
                         StokPersediaan = totalQtyLocal
                         TotalPersediaan = TotalPersediaanLocal
@@ -240,30 +243,35 @@ companion object {
                         ListTotal+= "</table>"
 
                         body += "<tr>\n" +
-                                "<td rowspan='$sizeStok'>${d.TanggalTransaksi.toDateString()}</td>\n" +
-                                "<td rowspan='$sizeStok'>${d.Keterangan}</td>\n" +
-                                "<td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td><td rowspan='$sizeStok'> </td>\n" +
-                                "<td rowspan='$sizeStok'>${ListKuantitas}</td><td rowspan='$sizeStok'>${ListHarga}</td><td rowspan='$sizeStok'>${ListTotal}</td>\n"
+                                "<td >${d.TanggalTransaksi.toDateString()}</td>\n" +
+                                "<td >${d.Keterangan}</td>\n" +
+                                "<td > </td><td > </td><td > </td>\n" +
+                                "<td >${ListKuantitas}</td><td >${ListHarga}</td><td >${ListTotal}</td>\n"
 
 
                         var totalQtyLocal = 0
                         var TotalPersediaanLocal = 0
 
+                        var qtyPersediaanToPrint = "<table border=0>"
+                        var HargaPersediaanToPrint = "<table border=0>"
+                        var TotalPersediaanToPrint = "<table border=0>"
+
                             for (dt in 0..(d.ListPersediaanData.size) - 1) {
-                                if (dt > 0) {
-                                    body += "<tr>\n"
-                                }
-                                val qtyPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString()
-                                val HargaPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)
-                                val TotalPersediaanToPrint = if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)
 
-                                body += "<td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td>\n"
-                                body += "</tr>"
-
+                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
+                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
+                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
                                 TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total
                             }
+
+                        qtyPersediaanToPrint += "</table>"
+                        HargaPersediaanToPrint += "</table>"
+                        TotalPersediaanToPrint += "</table>"
+
+                        body += "<tr><td>${qtyPersediaanToPrint}</td><td>${HargaPersediaanToPrint}</td><td>${TotalPersediaanToPrint}</td></tr>\n"
+
 
                         StokPersediaan = totalQtyLocal
                         TotalPersediaan = TotalPersediaanLocal
