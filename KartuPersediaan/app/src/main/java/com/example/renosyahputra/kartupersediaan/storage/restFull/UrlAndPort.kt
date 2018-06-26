@@ -6,8 +6,6 @@ class UrlAndPort{
         val PORT = 7890
         val FullURL = URL + ":"+ PORT.toString()
 
-        val LoginUrl = FullURL + "/login"
-        val RegisterUrl = FullURL + "/register"
         val DataUrl = FullURL + "/getData"
         val SaveDataUrl = FullURL + "/saveData"
     }

@@ -4,10 +4,6 @@ import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import java.io.Serializable
 
 class TransaksiData : Serializable {
-    companion object {
-        val ProductOut = "OUT"
-        val ProductIn = "IN"
-    }
 
     lateinit var IdTransaksiData : String
     lateinit var TanggalTransaksi : FormatTanggal
@@ -16,9 +12,13 @@ class TransaksiData : Serializable {
     lateinit var Keterangan : String
     lateinit var ProductFlow :String
     var SubTotal : Int = 0
-
     var IsThisValidTransaction = true
 
+
+    companion object {
+        val ProductOut = "OUT"
+        val ProductIn = "IN"
+    }
 
     fun CloneTransData() : TransaksiData {
         val newData = TransaksiData()

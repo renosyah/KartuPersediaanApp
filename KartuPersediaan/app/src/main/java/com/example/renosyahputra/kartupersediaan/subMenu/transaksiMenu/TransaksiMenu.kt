@@ -87,7 +87,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         CariTransaksi.setHint(lang.subMenuTransLang.CariTrans)
         TransaksiKosong.setTextColor(theme.BackGroundColor)
 
-        SetAdapter(ListTransaksi)
+        SetAdapter(true,ListTransaksi)
         CheckTransKosong()
 
         ListViewTransaksi.setOnItemClickListener(this)
@@ -113,17 +113,26 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
     }
 
     override fun onRefresh() {
-        SetAdapter(ListTransaksi)
+        CariTransaksi.setText("")
+        SetAdapter(true,ListTransaksi)
         if (refreshTrans.isRefreshing){
             refreshTrans.isRefreshing = !refreshTrans.isRefreshing
         }
     }
-    internal fun SetAdapter(l : ArrayList<TransaksiData>){
-        val newL = CheckAndMarkTransactionWithNonValidQty(l)
-        val adapter = CustomAdapterTransaksi(ctx,R.layout.custom_adapter_transaksi,newL)
+    internal fun SetAdapter(IsThisNotSearch  :Boolean,l : ArrayList<TransaksiData>){
+
+        if (IsThisNotSearch ){
+            CheckAndMarkTransactionWithNonValidQty(l)
+        }
+
+        val adapter = CustomAdapterTransaksi(ctx,R.layout.custom_adapter_transaksi,l)
         adapter.SetLangTheme(lang,theme)
         ListViewTransaksi.adapter = adapter
         ListViewTransaksi.divider = null
+
+        if (CheckValidQuantityProductInAllTransaction(l) && IsThisNotSearch ){
+            dialogTransNotValid(ctx,lang)
+        }
     }
 
 
@@ -183,7 +192,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
 
         if (ketemu){
             ListTransaksi.removeAt(pos)
-            SetAdapter(ListTransaksi)
+            SetAdapter(true,ListTransaksi)
         }
     }
 
@@ -240,19 +249,62 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
                 TransaksiKosong.visibility = View.GONE
                 ListViewTransaksi.visibility = View.VISIBLE
             }
-            SetAdapter(ListTransaksiCari)
+            SetAdapter(false,ListTransaksiCari)
         }
     }
+companion object {
+    fun dialogTransNotValid(ctx : Context,lang: LangObj){
 
-    fun CheckAndMarkTransactionWithNonValidQty(l : ArrayList<TransaksiData>) : ArrayList<TransaksiData>{
+        AlertDialog.Builder(ctx).setTitle(lang.laporanMenuLang.WarningInvalidProduckInTransTitle)
+                .setMessage(lang.laporanMenuLang.WarningInvalidProduckInTrans)
+                .setIcon(R.drawable.warning)
+                .setPositiveButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .create()
+                .show()
+    }
+
+    fun CheckValidQuantityProductInAllTransaction(l : ArrayList<TransaksiData>) : Boolean {
+        var isThisInValid = false
         for (t in l.listIterator()){
             for (d in t.ListDetail.listIterator()){
-                val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(t,d.ProdukData, l))
-                t.IsThisValidTransaction = !((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)
-                d.IsThisValidDetailTransaction = !((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)
-            }
+                if (d.IsThisValidDetailTransaction ==  false || t.IsThisValidTransaction == false){
+                    isThisInValid = true
+                    break
+                }
 
+            }
+            if (isThisInValid){
+                break
+            }
         }
-        return l
+        return isThisInValid
     }
+
+    fun CheckAndMarkTransactionWithNonValidQty(l: ArrayList<TransaksiData>) {
+        for (t in l) {
+            var IsThisValid = true
+
+            for (d in t.ListDetail) {
+
+                val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(t, d.ProdukData, l))
+                if (((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)) {
+                    IsThisValid = false
+                }
+
+                d.IsThisValidDetailTransaction = IsThisValid
+
+                if (!IsThisValid) {
+                    break
+                }
+
+            }
+            t.IsThisValidTransaction = IsThisValid
+        }
+
+    }
+}
+
+
 }

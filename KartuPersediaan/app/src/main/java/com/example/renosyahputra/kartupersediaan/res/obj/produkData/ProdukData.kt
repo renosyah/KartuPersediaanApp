@@ -6,4 +6,5 @@ class ProdukData : Serializable {
     lateinit var IdProduk : String
     lateinit var Nama : String
     var Harga : Int = 0
+    var Satuan = "Unit"
 }

@@ -1,4 +1,4 @@
-package com.example.renosyahputra.kartupersediaan.loginAndRegister
+package com.example.renosyahputra.kartupersediaan.register
 
 import android.app.Activity
 import android.content.Context
@@ -80,6 +80,8 @@ class Splash : AppCompatActivity() {
                 userData.Name = session.LoadSession()!!.Name
                 userData.Email = session.LoadSession()!!.Email
                 userData.CompanyName = session.LoadSession()!!.CompanyName
+                userData.UserName = session.LoadSession()!!.UserName
+                userData.Password = session.LoadSession()!!.Password
             }
 
 
@@ -95,7 +97,7 @@ class Splash : AppCompatActivity() {
 
             } else {
 
-                val intent = Intent(context, Login::class.java)
+                val intent = Intent(context, Register::class.java)
                 context.startActivity(intent)
                 (context as Activity).finish()
             }

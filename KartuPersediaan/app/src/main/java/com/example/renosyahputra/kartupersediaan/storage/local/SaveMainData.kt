@@ -1,11 +1,16 @@
 package com.example.renosyahputra.kartupersediaan.storage.local
 
+import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
+import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
@@ -17,7 +22,6 @@ import com.itextpdf.text.pdf.PdfWriter
 import java.io.*
 import java.text.DecimalFormat
 import java.util.*
-
 
 
 class SaveMainData(context: Context,MainData : KartuPersediaanData){
@@ -44,6 +48,7 @@ class SaveMainData(context: Context,MainData : KartuPersediaanData){
 
         return save
     }
+
 
 
     fun Load() : KartuPersediaanData? {
@@ -88,6 +93,7 @@ companion object {
     }
 
     fun SaveAsPdf(landscape : Boolean,sFileName: String, sBody: String){
+
         try {
             val root = File(Environment.getExternalStorageDirectory(), "KartuPersediaan")
             if (!root.exists()) {
@@ -115,7 +121,28 @@ companion object {
         }
     }
 
-    fun KartuPersediaanToHtml(ctx : Context,userData: UserData, tglPeriod : ArrayList<FormatTanggal>, MainData: KartuPersediaanData, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
+    fun OpenFileKartuPersediaan(ctx : Context,langObj: LangObj){
+        android.support.v7.app.AlertDialog.Builder(ctx)
+                .setTitle(langObj.laporanMenuLang.titleOpenFile)
+                .setMessage(langObj.laporanMenuLang.messageOpenFile)
+                .setPositiveButton(langObj.laporanMenuLang.ok, DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    val intent = Intent()
+                    intent.setAction(Intent.ACTION_VIEW)
+                    intent.setDataAndType(Uri.parse(Environment.getExternalStorageDirectory().absolutePath + "/KartuPersediaan"),"*/*")
+                    ctx.startActivity(intent)
+                    (ctx as Activity).finish()
+
+                })
+                .setNegativeButton(langObj.laporanMenuLang.no, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .create()
+                .show()
+
+    }
+
+    fun KartuPersediaanToHtml(ctx : Context,userData: UserData, tglPeriod : ArrayList<FormatTanggal>,ProductDataToPrint : ArrayList<ProdukData>, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
 
         val formatter = DecimalFormat("##,###")
         val now = Calendar.getInstance()
@@ -127,7 +154,7 @@ companion object {
         val dateInSring = ChangeDateToRelevanString(ctx, langObj)
 
         var opening = ""
-        opening += "<p>${tgl_now.toDateString()}</p><br />"
+        opening += "<p>${dateInSring.SetAndGetFormat(tgl_now,", "," ")}</p><br />"
         opening += "<div style='text-align:center;font-size:7px'><h1>${langObj.laporanMenuLang.titleLaporan}</h1>"
         if (tglPeriod.get(0).toDateString() == tglPeriod.get(tglPeriod.size-1).toDateString()){
             opening += "<h3>${dateInSring.SetAndGetFormat(tglPeriod.get(0),", "," ")}</h3>"
@@ -143,10 +170,13 @@ companion object {
 
         var str = ""
 
-        for (perProduk in MainData.ListProdukData){
+        for (perProduk in ProductDataToPrint){
 
             val header = "" +
-                    "<h3>${langObj.printLaporanLang.namaP +" : "+perProduk.Nama}</h3><br /><br />" +
+                    "<h3>${langObj.printLaporanLang.namaP +" : "+perProduk.Nama}</h3>" +
+                    "<h3>${langObj.printLaporanLang.defaultHargaP +" : "+formatter.format(perProduk.Harga)}</h3>" +
+                    "<h3>${langObj.printLaporanLang.unitP +" : "+perProduk.Satuan}</h3>" +
+                    "<br /><br />" +
                     "<div  style='text-align:center;font-size:8px'>" +
                     "<table border='1' id='MainTable'>\n" +
                     "<tr>\n" +
@@ -190,7 +220,7 @@ companion object {
                         }
 
                         body += "<tr>\n" +
-                                "<td >${d.TanggalTransaksi.toDateString()}</td>\n" +
+                                "<td >${dateInSring.SetAndGetFormatSimple(d.TanggalTransaksi,"/","/")}</td>\n" +
                                 "<td >${d.Keterangan}</td>\n" +
                                 "<td >${ListKuantitas}</td><td >${ListHarga}</td><td >${ListTotal}</td>\n" +
                                 "<td > </td><td > </td><td > </td>\n"
@@ -204,9 +234,9 @@ companion object {
 
                             for (dt in 0..(d.ListPersediaanData.size) - 1) {
 
-                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
-                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
-                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
+                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && methode != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
+                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && methode != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
+                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && methode != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
                                 TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total
@@ -258,9 +288,9 @@ companion object {
 
                             for (dt in 0..(d.ListPersediaanData.size) - 1) {
 
-                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
-                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
-                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
+                                qtyPersediaanToPrint += "<tr><td>" + if(d.ListPersediaanData.get(dt).Jumlah == 0 && methode!= MetodePersediaan.AVERAGE) "&nbsp;" else d.ListPersediaanData.get(dt).Jumlah.toString() + "</td></tr>"
+                                HargaPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && methode != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Produk.Harga)+ "</td></tr>"
+                                TotalPersediaanToPrint +=  "<tr><td>" + if (d.ListPersediaanData.get(dt).Jumlah == 0 && methode != MetodePersediaan.AVERAGE) "&nbsp;" else  formatter.format(d.ListPersediaanData.get(dt).Total)+ "</td></tr>"
 
                                 totalQtyLocal += d.ListPersediaanData.get(dt).Jumlah
                                 TotalPersediaanLocal += d.ListPersediaanData.get(dt).Total

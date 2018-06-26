@@ -20,6 +20,8 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTra
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatWaktu
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
+import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu.Companion.CheckAndMarkTransactionWithNonValidQty
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.example.renosyahputra.quicktrans.ui.GetListViewTotalHeight
@@ -368,7 +370,6 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
         val inflater = (context as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_edit_qty,null)
 
-
         val qty : EditText = v.findViewById(R.id.editQtyDetail)
         qty.setText(detail.get(pos).ProdukData.Harga.toString())
 
@@ -376,8 +377,8 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
                 .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.price)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    detail.get(pos).ProdukData.Harga = Integer.parseInt(qty.text.toString())
-                    detail.get(pos).SetHargaAll(Integer.parseInt(qty.text.toString()))
+                    detail.get(pos).ProdukData.Harga = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
+                    detail.get(pos).SetHargaAll(Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString()))
 
                     setDetailAdapter(ListDetail,newTrans.ListDetail)
 
@@ -462,6 +463,15 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
     }
 
     fun setDetailAdapter(l : ListView, datas : ArrayList<DetailTransaksi>){
+
+        for (d in datas) {
+            d.IsThisValidDetailTransaction = true
+            val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(newTrans,d.ProdukData, MainData.ListTransaksiData))
+            if (((checkDuluQty - d.GetKuantitas()) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut)) {
+                d.IsThisValidDetailTransaction = false
+            }
+        }
+
         val adapter = CustomAdapterDetailTransaction(context, R.layout.custom_adapter_detail_trans,datas)
         adapter.SetLangTheme(lang,theme)
         l.adapter = adapter
@@ -470,8 +480,12 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
     }
 
     internal fun SetAdapter(){
+        CheckAndMarkTransactionWithNonValidQty(listViewTransactionDatas)
         val adapter = CustomAdapterTransaksi(context,R.layout.custom_adapter_transaksi,listViewTransactionDatas)
         adapter.SetLangTheme(lang,theme)
         listViewTransaction.adapter = adapter
+        if (TransaksiMenu.CheckValidQuantityProductInAllTransaction(listViewTransactionDatas)){
+            TransaksiMenu.dialogTransNotValid(context, lang)
+        }
     }
 }

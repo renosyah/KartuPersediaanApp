@@ -15,6 +15,38 @@ class ChangeDateToRelevanString(ctx : Context,lang : LangObj){
        val MMddyyyy = "MMddyyyy"
    }
 
+    fun SetAndGetFormatSimple(d : FormatTanggal,firstCharSeperate : String,secondCharSeperate  :String) : String{
+        var date = ""
+
+        var format = ddMMyyyy
+
+        when (LangSetting.load_data_for_public("Langsetting.txt",context)){
+            LangSetting.SetInglisLang -> {
+                format = MMddyyyy
+            }
+
+            LangSetting.SetIdoLang -> {
+                format = ddMMyyyy
+            }
+        }
+
+
+        when (format) {
+            yyyyMMdd -> {
+                date = d.Tahun.toString() + firstCharSeperate + d.Bulan.toString() + secondCharSeperate + d.Hari.toString()
+            }
+
+            ddMMyyyy -> {
+                date = d.Hari.toString() + firstCharSeperate + d.Bulan.toString() + secondCharSeperate + d.Tahun.toString()
+            }
+
+            MMddyyyy -> {
+                date = d.Bulan.toString() + firstCharSeperate + d.Hari.toString() + secondCharSeperate +  d.Tahun.toString()
+            }
+        }
+        return date
+    }
+
     fun SetAndGetFormat(d : FormatTanggal,firstCharSeperate : String,secondCharSeperate  :String) : String{
         var date = ""
         var montInString = ""

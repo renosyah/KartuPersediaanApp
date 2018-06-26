@@ -8,6 +8,8 @@ class PrintLaporanLang : Serializable {
     lateinit var Pembelian : String
     lateinit var Penjualan : String
     lateinit var namaP : String
+    lateinit var unitP : String
+    lateinit var defaultHargaP : String
     lateinit var hargaP : String
     lateinit var qtyP : String
     lateinit var total : String

@@ -31,7 +31,7 @@
             android:id="@+id/ProdukNameForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="Nama Produk..."
             android:inputType="textPersonName" />
@@ -40,13 +40,22 @@
             android:id="@+id/ProdukPriceForm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="Harga.."
             android:inputType="number" />
 
+        <EditText
+            android:layout_marginTop="10dp"
+            android:id="@+id/ProductUnitForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:hint="Unit" />
+
         <LinearLayout
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">

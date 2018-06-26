@@ -1,8 +1,8 @@
-package com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginLang
+package com.example.renosyahputra.kartupersediaan.ui.lang.obj.registerLang
 
 import java.io.Serializable
 
-class LoginLang : Serializable {
+class RegisterLang : Serializable {
     lateinit var title : String
     lateinit var name : String
     lateinit var email : String

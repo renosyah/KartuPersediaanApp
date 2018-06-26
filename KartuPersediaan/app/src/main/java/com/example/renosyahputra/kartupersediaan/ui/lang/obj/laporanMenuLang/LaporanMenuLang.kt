@@ -18,6 +18,10 @@ class LaporanMenuLang : Serializable {
     lateinit var total :String
 
     lateinit var stokKe :String
+    lateinit var KuantitasKe :String
+
+    lateinit var titleTransForListQty : String
+    lateinit var titleStockForListStock : String
 
     lateinit var exportTitle : String
     lateinit var toPDF :String
@@ -36,5 +40,10 @@ class LaporanMenuLang : Serializable {
 
     lateinit var WarningInvalidProduckInTrans : String
     lateinit var WarningInvalidProduckInTransTitle : String
+
+    lateinit var titleOpenFile : String
+    lateinit var messageOpenFile : String
+    lateinit var ok  :String
+    lateinit var no : String
 
 }

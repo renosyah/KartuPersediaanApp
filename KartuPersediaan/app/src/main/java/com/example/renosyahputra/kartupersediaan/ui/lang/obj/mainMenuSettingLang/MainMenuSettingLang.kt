@@ -5,6 +5,7 @@ import java.io.Serializable
 class MainMenuSettingLang :Serializable {
     lateinit var OpenSetting1 : String
     lateinit var OpenSetting2 : String
+    lateinit var OpenSetting3 : String
     lateinit var Cancel : String
 
     lateinit var TitleOpenSetting1 : String

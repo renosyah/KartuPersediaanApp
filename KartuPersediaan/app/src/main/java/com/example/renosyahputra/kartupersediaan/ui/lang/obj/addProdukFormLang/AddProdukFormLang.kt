@@ -6,6 +6,7 @@ class AddProdukFormLang : Serializable {
     lateinit var title : String
     lateinit var nameHint : String
     lateinit var price : String
+    lateinit var unitProduct : String
     lateinit var tambah : String
     lateinit var batal : String
 

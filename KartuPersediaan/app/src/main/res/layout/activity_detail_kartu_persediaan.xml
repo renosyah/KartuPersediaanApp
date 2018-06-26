@@ -129,10 +129,53 @@
 
             </LinearLayout>
 
-
             <LinearLayout
+                android:layout_marginBottom="10dp"
                 android:paddingRight="12dp"
                 android:paddingLeft="12dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="18sp"
+                    android:id="@+id/TitleListQuantityTransaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAlignment="center" />
+
+            <LinearLayout
+                android:id="@+id/LayoutListKuantitasTrans"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/ListKuantitasTrans"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:paddingRight="12dp"
+            android:paddingLeft="12dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="18sp"
+                android:id="@+id/TitleListInventoryCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textAlignment="center" />
+
+            <LinearLayout
                 android:id="@+id/LayoutlistDetailLap"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
@@ -143,6 +186,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </LinearLayout>
+
+        </LinearLayout>
+
+
+
         </LinearLayout>
     </ScrollView>
 

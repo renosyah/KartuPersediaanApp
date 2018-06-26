@@ -7,6 +7,23 @@
         android:title="Pengaturan"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/SaveDataToCloud"
+        android:orderInCategory="100"
+        android:title="Simpan Online"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/LoadDataFromCloud"
+        android:orderInCategory="100"
+        android:title="Login"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/GuidesApp"
+        android:orderInCategory="100"
+        android:title="Panduan"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_Exit"

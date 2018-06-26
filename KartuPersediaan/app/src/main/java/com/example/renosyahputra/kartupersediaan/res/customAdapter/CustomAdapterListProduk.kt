@@ -41,6 +41,7 @@ class CustomAdapterListProduk(context: Context,resource: Int,objects: MutableLis
             holder.NameProduct = row.findViewById(R.id.NamaProdukAdapter)
             holder.Price = row.findViewById(R.id.HargaProdukAdapter)
             holder.Image = row.findViewById(R.id.GambarProdukAdapter)
+            holder.unit = row.findViewById(R.id.UnitProductAdapter)
 
             row.setTag(holder)
         } else {
@@ -50,6 +51,7 @@ class CustomAdapterListProduk(context: Context,resource: Int,objects: MutableLis
 
         holder.NameProduct.setText(item.Nama)
         holder.Price.setText(formatter.format(item.Harga))
+        holder.unit.setText(item.Satuan.toString())
 
 
         holder.NameProduct.setTextColor(theme.BackGroundColor)
@@ -62,5 +64,6 @@ class CustomAdapterListProduk(context: Context,resource: Int,objects: MutableLis
         lateinit var NameProduct : TextView
         lateinit var Price : TextView
         lateinit var Image : ImageView
+        lateinit var unit : TextView
     }
 }

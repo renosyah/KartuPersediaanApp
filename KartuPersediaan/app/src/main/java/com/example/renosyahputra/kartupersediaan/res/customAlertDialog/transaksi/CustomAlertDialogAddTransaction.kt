@@ -374,8 +374,8 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                 .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.price)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    detail.get(pos).ProdukData.Harga = Integer.parseInt(qty.text.toString())
-                    detail.get(pos).SetHargaAll(Integer.parseInt(qty.text.toString()))
+                    detail.get(pos).ProdukData.Harga = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
+                    detail.get(pos).SetHargaAll(Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString()))
 
                     setDetailAdapter(ListDetail,newTrans.ListDetail)
 

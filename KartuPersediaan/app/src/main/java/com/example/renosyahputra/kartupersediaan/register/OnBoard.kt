@@ -1,4 +1,4 @@
-package com.example.renosyahputra.kartupersediaan.loginAndRegister
+package com.example.renosyahputra.kartupersediaan.register
 
 import android.app.Activity
 import android.content.Context

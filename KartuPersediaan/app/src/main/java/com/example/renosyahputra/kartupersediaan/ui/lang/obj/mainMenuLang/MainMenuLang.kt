@@ -10,4 +10,12 @@ class MainMenuLang : Serializable {
 
     lateinit var MenuSetting1 : String
     lateinit var MenuSetting2 : String
+    lateinit var MenuSetting3 : String
+    lateinit var MenuSetting4 : String
+    lateinit var MenuSetting5 : String
+
+    lateinit var SaveDataOnlineButAccountNotValid : String
+    lateinit var Saving : String
+    lateinit var SavingComplete : String
+    lateinit var SavingFail : String
 }

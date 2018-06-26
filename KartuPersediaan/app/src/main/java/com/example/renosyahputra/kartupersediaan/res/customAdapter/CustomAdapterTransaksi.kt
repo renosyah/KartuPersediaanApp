@@ -51,7 +51,7 @@ class CustomAdapterTransaksi(context: Context,resource: Int,objects: MutableList
         val item = getItem(position)
 
 
-        holder.ImageTransaksi.setImageDrawable(if (!item.IsThisValidTransaction) ResourcesCompat.getDrawable(context.resources, R.drawable.warning, null) else ResourcesCompat.getDrawable(context.resources, R.drawable.transactionicon, null))
+        holder.ImageTransaksi.setImageDrawable(if (item.IsThisValidTransaction) ResourcesCompat.getDrawable(context.resources, R.drawable.transactionicon, null) else  ResourcesCompat.getDrawable(context.resources, R.drawable.warning, null))
 
 
         var color_jumlah = 0

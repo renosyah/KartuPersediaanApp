@@ -20,7 +20,6 @@ import com.example.renosyahputra.kartupersediaan.res.ValidateOutProduct
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterLaporanKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
-import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.FormatLaporan
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
@@ -30,6 +29,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Kuantitas
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
+import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData.Companion.OpenFileKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -42,11 +42,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
     lateinit var LaporanKartuPersediaan : ArrayList<LaporanKartuPersediaanObj>
 
-    internal lateinit var formatLaporan : FormatLaporan
-
-    fun setFormatLaporan(formatLaporan : FormatLaporan){
-        this.formatLaporan = formatLaporan
-    }
 
     fun SetMainData(MainData : KartuPersediaanData){
         this.MainData = MainData
@@ -192,17 +187,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
     fun SetAdapter(l : ArrayList<LaporanKartuPersediaanObj>){
 
-//        val intPosWhenNolFound = ArrayList<Int>()
-//        for (finNol in 0..(l.size)-1){
-//            if (l.get(finNol).GetKuantitas() == 0){
-//                intPosWhenNolFound.add(finNol)
-//            }
-//        }
-//        for (getRidNol in 0..(intPosWhenNolFound.size)-1){
-//            l.removeAt(intPosWhenNolFound.get(getRidNol))
-//        }
-
-
         val adapter = CustomAdapterLaporanKartuPersediaan(ctx,R.layout.custom_adapter_laporan_kartu_persediaan,l)
         adapter.SetLangTheme(lang,theme)
         ListViewKartuPersediaan.adapter = adapter
@@ -261,12 +245,15 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         SetAdapter(ArrayList())
 
         if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+            dialogTransNotValid()
+        }else {
             GenerateData(filterSearch)
         }
 
 
 
     }
+
 
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -281,27 +268,41 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     return
                 }
 
-                filterSearch.p = null
-                filterSearch.tahun = 0
+                var ProductToPrint = ArrayList<ProdukData>()
+                if (filterSearch.p != null){
+                    ProductToPrint.add(filterSearch.p!!)
+                }else {
+                    ProductToPrint = MainData.ListProdukData
+                }
 
-                val option = arrayOf<CharSequence>(lang.laporanMenuLang.toPDF,lang.laporanMenuLang.toPDFLANDSCAPE)
+
                 val allTgl = ArrayList<FormatTanggal>()
                 for (tgl in LaporanKartuPersediaan){
-                    allTgl.add(tgl.TanggalTransaksi)
+                    if (filterSearch.tahun !=0 && tgl.TanggalTransaksi.Tahun == filterSearch.tahun){
+                        allTgl.add(tgl.TanggalTransaksi)
+                    }else if (filterSearch.tahun == 0){
+                        allTgl.add(tgl.TanggalTransaksi)
+                    }
                 }
+
+
+                val option = arrayOf<CharSequence>(lang.laporanMenuLang.toPDF,lang.laporanMenuLang.toPDFLANDSCAPE)
+
                 if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                    dialogTransNotValid()
+                }else {
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                     GenerateData(filterSearch)
-                    val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
                     GenerateData(filterSearch)
-                    val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
                     GenerateData(filterSearch)
-                    val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, MainData, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     AlertDialog.Builder(ctx)
                             .setTitle(lang.laporanMenuLang.exportTitle)
@@ -320,7 +321,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                                         SaveMainData.SaveAsPdf(true,"KartuPersediaanAVERAGE.pdf", dataStringAVERAGE)
                                     }
                                 }
-                                Toast.makeText(ctx, lang.laporanMenuLang.saved, Toast.LENGTH_SHORT).show()
+                                OpenFileKartuPersediaan(ctx,lang)
+
                                 MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                                 if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
                                     GenerateData(filterSearch)
@@ -348,6 +350,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                             SetMethodeLap.setText(MainData.metodePersediaan.MetodeUse)
 
                             if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                                dialogTransNotValid()
+                            }else {
                                 GenerateData(filterSearch)
                             }
                             dialogInterface.dismiss()
@@ -387,6 +391,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     SetPeriodeLap.setText(Allperiode.get(i).toString())
                     filterSearch.tahun = Allperiode.get(i)
                     if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                        dialogTransNotValid()
+                    }else {
                         GenerateData(filterSearch)
                     }
                     dialog.dismiss()
@@ -425,6 +431,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     sortInventoryCard.setText(MainData.ListProdukData.get(i).Nama)
                     filterSearch.p = MainData.ListProdukData.get(i)
                     if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+                        dialogTransNotValid()
+                    }else {
                         GenerateData(filterSearch)
                     }
 
@@ -443,7 +451,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         var isThisInValid = false
         for (t in l.listIterator()){
             for (d in t.ListDetail.listIterator()){
-                if (d.IsThisValidDetailTransaction ==  isThisInValid){
+                if (d.IsThisValidDetailTransaction ==  false || t.IsThisValidTransaction == false){
                     isThisInValid = true
                     break
                 }
@@ -453,22 +461,25 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 break
             }
         }
-        if (isThisInValid){
-            AlertDialog.Builder(ctx).setTitle(lang.laporanMenuLang.WarningInvalidProduckInTransTitle)
-                    .setMessage(lang.laporanMenuLang.WarningInvalidProduckInTrans)
-                    .setIcon(R.drawable.warning)
-                    .setPositiveButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
-                        dialogInterface.dismiss()
-                    })
-                    .create()
-                    .show()
-        }
+        return isThisInValid
+    }
 
-        return !isThisInValid
+    fun dialogTransNotValid(){
+
+        AlertDialog.Builder(ctx).setTitle(lang.laporanMenuLang.WarningInvalidProduckInTransTitle)
+                .setMessage(lang.laporanMenuLang.WarningInvalidProduckInTrans)
+                .setIcon(R.drawable.warning)
+                .setPositiveButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .create()
+                .show()
     }
 
     override fun onRefresh() {
         if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+            dialogTransNotValid()
+        }else {
             GenerateData(filterSearch)
         }
         if (refreshLayout.isRefreshing){

@@ -30,6 +30,7 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
     internal lateinit var title : TextView
     internal lateinit var nama : EditText
     internal lateinit var harga : EditText
+    internal lateinit var unit : EditText
     internal lateinit var tambah : Button
     internal lateinit var batal : Button
     internal lateinit var Toolbar: Toolbar
@@ -60,11 +61,13 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
         title = v.findViewById(R.id.titleAddProduk)
         nama = v.findViewById(R.id.ProdukNameForm)
         harga = v.findViewById(R.id.ProdukPriceForm)
+        unit = v.findViewById(R.id.ProductUnitForm)
 
         bar.setBackgroundColor(theme.BackGroundColor)
         title.setText(lang.addProdukFormLang.title)
         nama.setHint(lang.addProdukFormLang.nameHint)
         harga.setHint(lang.addProdukFormLang.price)
+        unit.setHint(lang.addProdukFormLang.unitProduct)
 
         tambah = v.findViewById(R.id.buttonAddProduk)
         batal = v.findViewById(R.id.buttonCancelAddProduk)
@@ -86,7 +89,7 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
     }
 
     fun CheckDataIfKosong(p : ProdukData) : Boolean{
-        return p.IdProduk == "" || p.Nama == "" || p.Harga == 0
+        return p.IdProduk == "" || p.Nama == "" || p.Harga == 0 || p.Satuan == ""
     }
 
     override fun onClick(p0: View?) {
@@ -98,6 +101,7 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
 
             produk.Nama = if (nama.text.toString() == "") "" else nama.text.toString()
             produk.Harga = Integer.parseInt(if (harga.text.toString() == "") "0" else harga.text.toString())
+            produk.Satuan = if (unit.text.toString() == "") "" else unit.text.toString()
             produk.IdProduk = id.GetId()
 
             if (CheckDataIfKosong(produk)){

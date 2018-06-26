@@ -29,6 +29,7 @@ class CustomAlertDialogEditProduk(ctx : Context, res : Int, List : ArrayList<Pro
     internal lateinit var title: TextView
     internal lateinit var nama: EditText
     internal lateinit var harga: EditText
+    internal lateinit var unit : EditText
     internal lateinit var tambah: Button
     internal lateinit var batal: Button
 
@@ -67,15 +68,18 @@ class CustomAlertDialogEditProduk(ctx : Context, res : Int, List : ArrayList<Pro
         title = v.findViewById(R.id.titleAddProduk)
         nama = v.findViewById(R.id.ProdukNameForm)
         harga = v.findViewById(R.id.ProdukPriceForm)
+        unit = v.findViewById(R.id.ProductUnitForm)
 
         bar.setBackgroundColor(theme.BackGroundColor)
         title.setText(lang.editProdukFormLang.title)
         nama.setHint(lang.editProdukFormLang.nameHint)
         harga.setHint(lang.editProdukFormLang.price)
+        unit.setHint(lang.addProdukFormLang.unitProduct)
 
 
         nama.setText(produk.Nama)
         harga.setText(produk.Harga.toString())
+        unit.setText(produk.Satuan.toString())
 
         tambah = v.findViewById(R.id.buttonAddProduk)
         batal = v.findViewById(R.id.buttonCancelAddProduk)
@@ -96,6 +100,10 @@ class CustomAlertDialogEditProduk(ctx : Context, res : Int, List : ArrayList<Pro
         dialog.show()
     }
 
+    fun CheckDataIfKosong(p : ProdukData) : Boolean{
+        return p.Nama == "" || p.Harga == 0 || p.Satuan == ""
+    }
+
     override fun onClick(p0: View?) {
         if (p0 == tambah) {
 
@@ -110,16 +118,27 @@ class CustomAlertDialogEditProduk(ctx : Context, res : Int, List : ArrayList<Pro
                 pos++
             }
 
-            if (ketemu){
-                val editP = ListProduk.get(pos)
-                editP.Nama = nama.text.toString()
-                editP.Harga = Integer.parseInt(harga.text.toString())
+            if (ketemu) {
+                val editP = ProdukData()
+                editP.Nama = if (nama.text.toString() == "") "" else nama.text.toString()
+                editP.Harga = Integer.parseInt(if (harga.text.toString() == "") "0" else harga.text.toString())
+                editP.Satuan = if (unit.text.toString() == "") "" else unit.text.toString()
 
-                AlterAllProductInTrans.AlterAll(transDatas,editP)
+                if (CheckDataIfKosong(editP)) {
+
+                    Toast.makeText(context, lang.addProdukFormLang.dataEmpty, Toast.LENGTH_SHORT).show()
+
+                } else {
+                    val editProduct = ListProduk.get(pos)
+                    editProduct.Nama = editP.Nama
+                    editProduct.Harga = editP.Harga
+                    editProduct.Satuan = editP.Satuan
+                    AlterAllProductInTrans.AlterAll(transDatas, editProduct)
+
+                    SetAdapter()
+                    dialog.dismiss()
+                }
             }
-
-            SetAdapter()
-            dialog.dismiss()
 
         } else if (p0 == batal) {
 

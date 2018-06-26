@@ -19,7 +19,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".subMenu.laporanMenu.DetailKartuPersediaan" />
         <activity
-            android:name=".loginAndRegister.Splash"
+            android:name=".register.Splash"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -28,8 +28,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginAndRegister.Login" />
-        <activity android:name=".loginAndRegister.OnBoard"></activity>
+        <activity android:name=".register.Register" />
+        <activity android:name=".register.OnBoard" />
+        <activity android:name=".ui.guide.GuideAndAbout"></activity>
     </application>
 
 </manifest>

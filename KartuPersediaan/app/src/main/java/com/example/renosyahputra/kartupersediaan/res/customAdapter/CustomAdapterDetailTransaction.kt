@@ -56,7 +56,7 @@ class CustomAdapterDetailTransaction(context: Context, resource: Int, objects: M
         holder.price.setText(formatter.format(item.ProdukData.Harga))
         holder.qty.setText(item.GetKuantitas().toString())
 
-        holder.image.setImageDrawable(if (!item.IsThisValidDetailTransaction) ResourcesCompat.getDrawable(context.resources,R.drawable.warning,null) else ResourcesCompat.getDrawable(context.resources,R.drawable.list,null))
+        holder.image.setImageDrawable(if (item.IsThisValidDetailTransaction) ResourcesCompat.getDrawable(context.resources,R.drawable.list,null) else ResourcesCompat.getDrawable(context.resources,R.drawable.warning,null))
 
         return row!!
     }

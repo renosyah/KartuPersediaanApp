@@ -1,4 +1,4 @@
-package com.example.renosyahputra.kartupersediaan.loginAndRegister
+package com.example.renosyahputra.kartupersediaan.register
 
 import android.app.Activity
 import android.content.Context
@@ -11,11 +11,13 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.IdGenerator
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.login.LoginDialog
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.ui.lang.LangSetting
 import com.example.renosyahputra.kartupersediaan.ui.theme.ThemeSetting
 
-class Login : AppCompatActivity(),View.OnClickListener {
+class Register : AppCompatActivity(),View.OnClickListener {
 
 
     lateinit var context : Context
@@ -38,12 +40,12 @@ class Login : AppCompatActivity(),View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.activity_register)
         InitiationWidget()
     }
 
     internal fun InitiationWidget(){
-        context = this@Login
+        context = this@Register
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -61,32 +63,32 @@ class Login : AppCompatActivity(),View.OnClickListener {
 
         title = findViewById(R.id.TitleFormRegister)
         title.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        title.setText(langSetting.GetlangObj().loginLang.title)
+        title.setText(langSetting.GetlangObj().registerLang.title)
 
         login = findViewById(R.id.OpenLoginMenu)
         login.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        login.setText(langSetting.GetlangObj().loginLang.login)
+        login.setText(langSetting.GetlangObj().registerLang.login)
 
         setting = findViewById(R.id.OpenSettingMenu)
         setting.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        setting.setText(langSetting.GetlangObj().loginLang.setting)
+        setting.setText(langSetting.GetlangObj().registerLang.setting)
 
         inputNama = findViewById(R.id.NameUserTextInput)
         inputNama.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputNama.setHint(langSetting.GetlangObj().loginLang.name)
+        inputNama.setHint(langSetting.GetlangObj().registerLang.name)
 
         inputEmail  = findViewById(R.id.EmailUserTextInput)
         inputEmail.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputEmail.setHint(langSetting.GetlangObj().loginLang.email)
+        inputEmail.setHint(langSetting.GetlangObj().registerLang.email)
 
         inputCompanyName  = findViewById(R.id.CompanyUserTextInput)
         inputCompanyName.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputCompanyName.setHint(langSetting.GetlangObj().loginLang.company)
+        inputCompanyName.setHint(langSetting.GetlangObj().registerLang.company)
 
         register  = findViewById(R.id.buttonRegister)
         register.setTextColor(themeSetting.GetThemeSetting().TextColor)
         register.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
-        register.setText(langSetting.GetlangObj().loginLang.register)
+        register.setText(langSetting.GetlangObj().registerLang.register)
 
         login.setOnClickListener(this)
         register.setOnClickListener(this)
@@ -99,13 +101,20 @@ class Login : AppCompatActivity(),View.OnClickListener {
             register -> {
 
                 if (inputCompanyName.text.toString() == "" ||inputEmail.text.toString() == "" ||inputCompanyName.text.toString() == ""){
-                    Toast.makeText(context,langSetting.GetlangObj().loginLang.inputEmpty,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,langSetting.GetlangObj().registerLang.inputEmpty,Toast.LENGTH_SHORT).show()
                     return
                 }
 
+                val id = IdGenerator()
+                id.CreateRandomString(15)
+
+                userData.IdUser = id.GetId()
                 userData.Name = inputNama.text.toString()
                 userData.Email = inputEmail.text.toString()
                 userData.CompanyName = inputCompanyName.text.toString()
+
+                userData.UserName = ""
+                userData.Password = ""
 
 
                 val intent = Intent(context, Splash::class.java)
@@ -115,6 +124,10 @@ class Login : AppCompatActivity(),View.OnClickListener {
                 (context as Activity).finish()
             }
             login -> {
+
+                val login = LoginDialog(context)
+                login.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
+                login.InitiationDialog()
 
             }
             setting -> {
@@ -235,31 +248,31 @@ class Login : AppCompatActivity(),View.OnClickListener {
 
 
         title.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        title.setText(langSetting.GetlangObj().loginLang.title)
+        title.setText(langSetting.GetlangObj().registerLang.title)
 
 
         login.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        login.setText(langSetting.GetlangObj().loginLang.login)
+        login.setText(langSetting.GetlangObj().registerLang.login)
 
 
         setting.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        setting.setText(langSetting.GetlangObj().loginLang.setting)
+        setting.setText(langSetting.GetlangObj().registerLang.setting)
 
 
         inputNama.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputNama.setHint(langSetting.GetlangObj().loginLang.name)
+        inputNama.setHint(langSetting.GetlangObj().registerLang.name)
 
 
         inputEmail.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputEmail.setHint(langSetting.GetlangObj().loginLang.email)
+        inputEmail.setHint(langSetting.GetlangObj().registerLang.email)
 
 
         inputCompanyName.setTextColor(themeSetting.GetThemeSetting().BackGroundColor)
-        inputCompanyName.setHint(langSetting.GetlangObj().loginLang.company)
+        inputCompanyName.setHint(langSetting.GetlangObj().registerLang.company)
 
 
         register.setTextColor(themeSetting.GetThemeSetting().TextColor)
         register.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
-        register.setText(langSetting.GetlangObj().loginLang.register)
+        register.setText(langSetting.GetlangObj().registerLang.register)
     }
 }
