@@ -7,8 +7,7 @@
     <RelativeLayout
         android:id="@+id/titleBarAddProduk"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/blue">
+        android:layout_height="50dp">
 
         <TextView
             android:id="@+id/titleAddProduk"
@@ -16,7 +15,6 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="Tambah Produk"
-            android:textColor="@color/whiteText"
             android:textSize="18sp" />
 
     </RelativeLayout>

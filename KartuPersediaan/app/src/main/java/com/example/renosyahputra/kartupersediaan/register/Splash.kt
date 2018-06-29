@@ -77,6 +77,7 @@ class Splash : AppCompatActivity() {
             val session = SaveUserData(context, userData)
             sessionKosong = session.LoadSession() == null
             if (!sessionKosong) {
+                userData.IdUser = session.LoadSession()!!.IdUser
                 userData.Name = session.LoadSession()!!.Name
                 userData.Email = session.LoadSession()!!.Email
                 userData.CompanyName = session.LoadSession()!!.CompanyName

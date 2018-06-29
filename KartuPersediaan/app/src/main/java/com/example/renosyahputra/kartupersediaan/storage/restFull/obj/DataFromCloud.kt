@@ -1,4 +1,4 @@
-package com.example.renosyahputra.kartupersediaan.storage.restFull.getAllData.obj
+package com.example.renosyahputra.kartupersediaan.storage.restFull.obj
 
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData

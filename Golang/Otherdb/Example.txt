@@ -1,0 +1,198 @@
+package main
+
+import (
+	"fmt"
+)
+
+type Trans struct {
+	Type string
+	Product string
+	Qty int
+	Stocks []DataStock
+}
+
+type DataStock struct {
+	Stock int
+}
+
+func InventoryAverageMethod(){
+
+	qty := 15
+	s := []DataStock{{15},{25},{30},{36},{80},{30}}
+	
+	oneQty := 0
+	
+	for _,d := range s {
+		oneQty += d.Stock
+	}
+	
+	s = []DataStock{{oneQty}}
+	
+
+	for pos, dt := range s {
+		if (dt.Stock - qty) < 0 {
+	
+			qty = qty - dt.Stock
+			s[pos].Stock = 0
+			
+		}else if (dt.Stock - qty) >= 0 {
+		
+			s[pos].Stock = dt.Stock - qty
+			break
+		}
+		
+	}
+	
+	fmt.Println(s)
+
+}
+
+
+func InventoryFifoLifoMethod(s []DataStock,qty int) []DataStock {
+
+	var qtyHolder = qty
+	var newDs []DataStock
+	
+	for pos, dt := range s {
+		if (dt.Stock - qtyHolder) < 0 {
+	
+			qtyHolder  = qtyHolder  - dt.Stock
+			s[pos].Stock = 0
+			
+		}else if (dt.Stock - qtyHolder ) >= 0 {
+		
+			s[pos].Stock = dt.Stock - qtyHolder 
+			break
+		}
+		
+	}
+	for _,d := range s {
+		newDs = append(newDs,d)
+	}
+	
+	return newDs
+
+}
+
+
+func ReverseData(s []DataStock) []DataStock {
+
+	var newDs []DataStock
+	
+   	for i:=len(s)-1;i>=0;i-- {
+		newDs = append(newDs,s[i])
+	}
+	
+	return newDs
+}
+
+
+func SetToOne(s []DataStock) []DataStock {
+	var newDs []DataStock
+	newDs = append(newDs,DataStock{0})
+	
+	for _,d := range s {
+		newDs[0].Stock += d.Stock
+	}
+	return newDs
+}
+
+func ExampleTest(){
+
+	methode := "LIFO" // "FIFO","LIFO" & "AVERAGE"
+
+	data := []Trans{
+		{
+			Type : "Buy",
+			Product : "produk a",
+			Qty : 20,
+		},
+		{
+			Type : "Buy",
+			Product : "produk a",
+			Qty : 80,
+		},
+		{
+			Type : "Sell",
+			Product : "produk a",
+			Qty : 10,
+		},
+		{
+			Type : "Buy",
+			Product : "produk a",
+			Qty : 80,
+		},
+		{
+			Type : "Sell",
+			Product : "produk a",
+			Qty : 40,
+		},
+		
+	}
+	
+	var globalStock []DataStock
+	
+	for pos,_ := range data {
+		 if (data[pos].Type == "Buy") {
+			
+				if (methode == "LIFO"){
+				
+					globalStock = ReverseData(globalStock)
+					
+				}
+				globalStock = append(globalStock,DataStock{data[pos].Qty})
+				if (methode == "AVERAGE"){
+				
+					globalStock = SetToOne(globalStock)
+					
+				}
+				
+				var newData []DataStock
+				for _,d := range globalStock {
+					newData = append(newData,d)
+				}
+				
+				data[pos].Stocks = newData
+			
+				
+				
+				
+
+		
+		} else if (data[pos].Type == "Sell") {
+			
+				if (methode == "LIFO"){
+				
+					globalStock = ReverseData(globalStock)
+					
+				}else if (methode == "AVERAGE"){
+				
+				}
+			
+				globalStock = InventoryFifoLifoMethod(globalStock,data[pos].Qty)
+				
+			
+				var newData []DataStock
+				for _,d := range globalStock {
+					newData = append(newData,d)
+				}
+				if (methode == "LIFO"){
+				
+					newData = ReverseData(newData)
+					
+				}else if (methode == "AVERAGE"){
+				
+				}
+				data[pos].Stocks = newData
+				
+		}
+		
+	} 
+
+	fmt.Println(data)
+}
+
+func main() {
+	ExampleTest()
+	
+}

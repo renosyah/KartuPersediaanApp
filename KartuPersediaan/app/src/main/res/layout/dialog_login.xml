@@ -7,8 +7,7 @@
     <RelativeLayout
         android:id="@+id/barDialogLogin"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/green">
+        android:layout_height="50dp">
 
         <TextView
             android:id="@+id/titleBarDialogLogin"
@@ -17,7 +16,6 @@
             android:gravity="center"
             android:text="Login"
             android:textAlignment="center"
-            android:textColor="@color/whiteText"
             android:textSize="18sp" />
 
     </RelativeLayout>
@@ -66,22 +64,18 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:background="@color/green"
                 android:text="Login"
-                android:textAllCaps="false"
-                android:textColor="@color/whiteText" />
+                android:textAllCaps="false" />
 
             <Button
-                android:layout_marginLeft="5dp"
                 android:id="@+id/buttonCancelDialogLogin"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="15dp"
                 android:layout_weight="1"
-                android:background="@color/green"
                 android:text="Batal"
-                android:textAllCaps="false"
-                android:textColor="@color/whiteText" />
+                android:textAllCaps="false" />
 
         </LinearLayout>
 

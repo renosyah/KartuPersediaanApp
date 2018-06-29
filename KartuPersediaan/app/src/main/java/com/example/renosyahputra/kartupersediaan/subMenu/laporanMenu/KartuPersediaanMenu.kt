@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.FindHowMuchGapBetweenTrans
 import com.example.renosyahputra.kartupersediaan.res.GenerateDataForAverage.Companion.FillZeroNumber
 import com.example.renosyahputra.kartupersediaan.res.GenerateDataInventoryCard
 import com.example.renosyahputra.kartupersediaan.res.SortData.Companion.GetAllPeriodeInGroup
@@ -105,6 +106,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             duplicateListTransaksi.add(trs.CloneTransData())
         }
 
+        val GapInTransaction = FindHowMuchGapBetweenTrans.FindGap(duplicateListTransaksi)
+
 
         if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
 
@@ -119,7 +122,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 }else {
 
                     duplicateListTransaksi.add(trs.CloneTransData())
-                    for (i in 0..10) {
+                    for (i in 0..GapInTransaction) {
                         for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
                             ValidateOutProduct.GenerateForEachTransaction(MainData, duplicateListTransaksi, dataTrans)
                         }
@@ -128,14 +131,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     }
 
                 }
-
             }
-
-
         }
-
-
-
 
         for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
             GenerateDataInventoryCard.GenerateForEachTransaction(MainData, dataTrans)
@@ -216,7 +213,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
         SetPeriodeLap = v.findViewById(R.id.SetPeriode)
         SetPeriodeLap.setTextColor(theme.BackGroundColor)
-        SetPeriodeLap.setText(if (filterSearch.tahun == 0) lang.laporanMenuLang.filterPilihPeriode else filterSearch.tahun.toString())
+        SetPeriodeLap.setText(lang.laporanMenuLang.filterPilihPeriode)
 
         SetMethodeLap = v.findViewById(R.id.setMethod)
         SetMethodeLap.setTextColor(theme.BackGroundColor)
@@ -224,7 +221,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
         sortInventoryCard = v.findViewById(R.id.sortInventoryCard)
         sortInventoryCard.setTextColor(theme.BackGroundColor)
-        sortInventoryCard.setText(if (filterSearch.p == null) lang.laporanMenuLang.filterPilihProduk else filterSearch.p!!.Nama)
+        sortInventoryCard.setText(lang.laporanMenuLang.filterPilihProduk)
 
         PrintNowButton = v.findViewById(R.id.PrintNowButton)
 
@@ -349,11 +346,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                             }
                             SetMethodeLap.setText(MainData.metodePersediaan.MetodeUse)
 
-                            if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
-                                dialogTransNotValid()
-                            }else {
-                                GenerateData(filterSearch)
-                            }
+                            GenerateAfterFilterChoose()
+
                             dialogInterface.dismiss()
                         })
                         .setNegativeButton(lang.subMenuTransLang.batal, DialogInterface.OnClickListener { dialogInterface, i ->
@@ -367,9 +361,20 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                 val dialog = AlertDialog.Builder(ctx)
                         .setTitle(lang.laporanMenuLang.filterPilihPeriode)
-                        .setNegativeButton(lang.addTransDialogLang.cancel, DialogInterface.OnClickListener { dialogInterface, i ->
+                        .setNeutralButton(lang.laporanMenuLang.FiterChooseAllPeriod, DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            SetPeriodeLap.setText(lang.laporanMenuLang.filterPilihPeriode)
+                            filterSearch.tahun = 0
+
+                            GenerateAfterFilterChoose()
+
                             dialogInterface.dismiss()
-                        }).create()
+                        })
+                        .setNegativeButton(lang.addTransDialogLang.tutup, DialogInterface.OnClickListener { dialogInterface, i ->
+
+                            dialogInterface.dismiss()
+                        })
+                        .create()
                 val inflater = (ctx as Activity).layoutInflater
                 val v = inflater.inflate(R.layout.custom_alert_dialog_add_product_trans, null)
 
@@ -390,11 +395,9 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 list.setOnItemClickListener(AdapterView.OnItemClickListener { adapterView, view, i, l ->
                     SetPeriodeLap.setText(Allperiode.get(i).toString())
                     filterSearch.tahun = Allperiode.get(i)
-                    if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
-                        dialogTransNotValid()
-                    }else {
-                        GenerateData(filterSearch)
-                    }
+
+                    GenerateAfterFilterChoose()
+
                     dialog.dismiss()
                 })
 
@@ -405,9 +408,19 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                 val productdialog = AlertDialog.Builder(ctx)
                         .setTitle(lang.laporanMenuLang.filterPilihProduk)
-                        .setNegativeButton(lang.addTransDialogLang.add, DialogInterface.OnClickListener { dialogInterface, i ->
+                        .setNeutralButton(lang.laporanMenuLang.FilterChooseAllProduct, DialogInterface.OnClickListener { dialogInterface, i ->
+                            sortInventoryCard.setText(lang.laporanMenuLang.filterPilihProduk)
+
+                            filterSearch.p = null
+
+                            GenerateAfterFilterChoose()
+
                             dialogInterface.dismiss()
-                        }).create()
+                        })
+                        .setNegativeButton(lang.addTransDialogLang.tutup, DialogInterface.OnClickListener { dialogInterface, i ->
+                            dialogInterface.dismiss()
+                        })
+                        .create()
 
                 val inflater = (ctx as Activity).layoutInflater
                 val v = inflater.inflate(R.layout.custom_alert_dialog_add_product_trans,null)
@@ -430,11 +443,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                     sortInventoryCard.setText(MainData.ListProdukData.get(i).Nama)
                     filterSearch.p = MainData.ListProdukData.get(i)
-                    if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
-                        dialogTransNotValid()
-                    }else {
-                        GenerateData(filterSearch)
-                    }
+
+                    GenerateAfterFilterChoose()
 
                     productdialog.dismiss()
                 }
@@ -445,6 +455,14 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             }
         }
 
+    }
+
+    internal fun GenerateAfterFilterChoose(){
+        if (CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
+            dialogTransNotValid()
+        }else {
+            GenerateData(filterSearch)
+        }
     }
 
     fun CheckValidQuantityProductInAllTransaction(l : ArrayList<TransaksiData>) : Boolean {

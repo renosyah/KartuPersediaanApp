@@ -41,20 +41,23 @@ class TransaksiData : Serializable {
             product.Harga = d.ProdukData.Harga
 
             newDetail.IdTransaksiData = this.IdTransaksiData
-            newDetail.ProdukData = product
+            newDetail.IdDetailTransaksiData = d.IdDetailTransaksiData
             newDetail.ListPersediaanData = ArrayList()
 
             val ListKuantitas = ArrayList<KuantitasTransaksi>()
             for (lk in d.ListKuantitas) {
+
                 val KuantitasData = KuantitasTransaksi()
                 KuantitasData.Quantity = lk.Quantity
                 KuantitasData.Harga = lk.Harga
+                product.Harga = lk.Harga
                 KuantitasData.Total = lk.Total
                 KuantitasData.IdDetailTransaksiData = lk.IdDetailTransaksiData
                 ListKuantitas.add(KuantitasData)
             }
 
             newDetail.ListKuantitas = ListKuantitas
+            newDetail.ProdukData = product
 
             detail.add(newDetail)
         }

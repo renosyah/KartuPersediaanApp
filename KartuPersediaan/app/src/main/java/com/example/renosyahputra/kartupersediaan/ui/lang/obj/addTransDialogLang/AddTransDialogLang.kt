@@ -15,6 +15,8 @@ class AddTransDialogLang : Serializable {
     lateinit var nameProduct : String
     lateinit var price : String
     lateinit var qty : String
+    lateinit var StokTersedia : String
+    lateinit var Stok : String
 
     lateinit var add : String
     lateinit var cancel : String

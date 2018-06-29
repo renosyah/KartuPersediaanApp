@@ -12,13 +12,16 @@ import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.DataDevMod
 import com.example.renosyahputra.kartupersediaan.storage.local.DevMod
-import com.example.renosyahputra.kartupersediaan.storage.restFull.getAllData.obj.DataFromCloud
+import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
+import com.example.renosyahputra.kartupersediaan.storage.local.SaveUserData
+import com.example.renosyahputra.kartupersediaan.storage.restFull.obj.DataFromCloud
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
+import java.io.Serializable
 
 class GetAllData : AsyncTask<Void,Void,String>{
 
@@ -34,7 +37,50 @@ class GetAllData : AsyncTask<Void,Void,String>{
     var dataDevMod : DataDevMod
     var devMod: DevMod? = null
 
-    var dataFromCloud = DataFromCloud()
+    class LoadResponseObj : Serializable {
+        var Response : Boolean = false
+        lateinit var Message : String
+        lateinit var Data : DataFromCloud
+    }
+
+    internal fun MakeNewData(dataFromCloud : DataFromCloud){
+
+        val userFromCloud = dataFromCloud.User
+        val kartuPersediaanDataFromCloud = KartuPersediaanData()
+        kartuPersediaanDataFromCloud.ListTransaksiData = ArrayList()
+        kartuPersediaanDataFromCloud.ListProdukData = ArrayList()
+        kartuPersediaanDataFromCloud.ListPersediaanData = ArrayList()
+
+        val metode = MetodePersediaan()
+        metode.MetodeUse = MetodePersediaan.FIFO
+        kartuPersediaanDataFromCloud.metodePersediaan = metode
+
+        for (data in dataFromCloud.Transaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
+            kartuPersediaanDataFromCloud.ListTransaksiData.add(data.CloneTransData())
+        }
+        kartuPersediaanDataFromCloud.ListProdukData = dataFromCloud.Produk
+
+        SaveDataAndGoToMainMenu(context,userFromCloud,kartuPersediaanDataFromCloud)
+    }
+
+
+    internal fun GoToMainMenu(context: Context,userData: UserData,kartuPersediaanData: KartuPersediaanData){
+        val intent = Intent(context, MenuUtama::class.java)
+        intent.putExtra("data", kartuPersediaanData)
+        intent.putExtra("user", userData)
+        context.startActivity(intent)
+        (context as Activity).finish()
+    }
+
+    internal fun SaveDataAndGoToMainMenu(context: Context,userData: UserData,kartuPersediaanData: KartuPersediaanData){
+        val saveSession = SaveUserData(context,userData)
+        saveSession.SaveSession()
+
+        val savedata = SaveMainData(context,kartuPersediaanData)
+        savedata.Save()
+
+        GoToMainMenu(context,saveSession.LoadSession()!!,savedata.Load()!!)
+    }
 
 
     constructor(context: Context, userData: UserData,dialog : AlertDialog,lang  : LangObj) : super() {
@@ -82,29 +128,22 @@ class GetAllData : AsyncTask<Void,Void,String>{
 
         if (result !=""){
 
+            val ResponseWithDataValid = gson.fromJson(result,LoadResponseObj::class.java)
 
+            if (ResponseWithDataValid.Response){
 
-            dataFromCloud = gson.fromJson(result,DataFromCloud::class.java)
-            val userFromCloud = dataFromCloud.User
-            val kartuPersediaanDataFromCloud = KartuPersediaanData()
+                MakeNewData(ResponseWithDataValid.Data)
 
-            val metode = MetodePersediaan()
-            metode.MetodeUse = MetodePersediaan.FIFO
+            }else {
+                Toast.makeText(context,ResponseWithDataValid.Message,Toast.LENGTH_SHORT).show()
+            }
 
-            kartuPersediaanDataFromCloud.ListTransaksiData = dataFromCloud.Transaksi
-            kartuPersediaanDataFromCloud.ListProdukData = dataFromCloud.Produk
-            kartuPersediaanDataFromCloud.ListPersediaanData = ArrayList()
-            kartuPersediaanDataFromCloud.metodePersediaan = metode
-
-            val intent = Intent(context, MenuUtama::class.java)
-            intent.putExtra("data", kartuPersediaanDataFromCloud)
-            intent.putExtra("user", userFromCloud)
-            context.startActivity(intent)
-            (context as Activity).finish()
 
         }else {
             Toast.makeText(context,lang.loginDialogLang.failLogin,Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
 }

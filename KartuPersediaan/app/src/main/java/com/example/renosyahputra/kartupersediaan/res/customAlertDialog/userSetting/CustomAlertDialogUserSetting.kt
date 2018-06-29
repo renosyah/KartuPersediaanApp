@@ -26,8 +26,8 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
     lateinit var email : EditText
 
     lateinit var username : EditText
-    lateinit var password : EditText
-    lateinit var konfirmPassword : EditText
+    lateinit var OldPassword : EditText
+    lateinit var NewPassword : EditText
 
     lateinit var simpan : Button
     lateinit var batal : Button
@@ -75,8 +75,8 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
         email = v.findViewById(R.id.FormUserSettingEditEmail)
 
         username = v.findViewById(R.id.FormUserSettingEditUserNama)
-        password = v.findViewById(R.id.FormUserSettingEditPassword)
-        konfirmPassword = v.findViewById(R.id.FormUserSettingConfirmPassword)
+        OldPassword = v.findViewById(R.id.FormUserSettingEditPassword)
+        NewPassword = v.findViewById(R.id.FormUserSettingConfirmPassword)
 
         simpan = v.findViewById(R.id.buttonUserSettingSave)
         batal = v.findViewById(R.id.buttonUserSettingBatal)
@@ -91,6 +91,8 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
     }
 
     internal fun SetThemeAndLang(){
+
+
         bar.setBackgroundColor(theme.BackGroundColor)
         title.setTextColor(theme.TextColor)
         title.setText(lang.userDataSettingLang.Title)
@@ -104,10 +106,10 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
 
         username.setTextColor(theme.BackGroundColor)
         username.setHint(lang.userDataSettingLang.EditUsername)
-        password.setTextColor(theme.BackGroundColor)
-        password.setHint(lang.userDataSettingLang.EditPassword)
-        konfirmPassword.setTextColor(theme.BackGroundColor)
-        konfirmPassword.setHint(lang.userDataSettingLang.KonfirmEditPassword)
+        OldPassword.setTextColor(theme.BackGroundColor)
+        OldPassword.setHint(lang.userDataSettingLang.EditPassword)
+        NewPassword.setTextColor(theme.BackGroundColor)
+        NewPassword.setHint(lang.userDataSettingLang.KonfirmEditPassword)
 
         simpan.setBackgroundColor(theme.BackGroundColor)
         simpan.setText(lang.userDataSettingLang.Simpan)
@@ -128,7 +130,7 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
     }
 
     fun ValidasiPassword() : Boolean {
-        return konfirmPassword.text.toString() == password.text.toString()
+        return OldPassword.text.toString() == userData.Password
     }
 
     override fun onClick(p0: View?) {
@@ -139,19 +141,25 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
 
                     Toast.makeText(context, lang.userDataSettingLang.DataKosong, Toast.LENGTH_SHORT).show()
 
+                }else if (OldPassword.text.toString() == "" && userData.Password != ""){
 
-                } else if (!ValidasiPassword()){
+                    Toast.makeText(context, lang.userDataSettingLang.KonfirmasiDeanganMengisisPassword, Toast.LENGTH_SHORT).show()
+
+                } else if (!ValidasiPassword() && userData.Password != ""){
 
                     Toast.makeText(context, lang.userDataSettingLang.GagalValidasiPassword, Toast.LENGTH_SHORT).show()
 
-                } else if (!CheckYangKosong() && ValidasiPassword()) {
+                }  else if (!CheckYangKosong() && ValidasiPassword()) {
 
                     userData.Name = name.text.toString()
                     userData.CompanyName = namePerusahaan.text.toString()
                     userData.Email = email.text.toString()
 
                     userData.UserName = username.text.toString()
-                    userData.Password = password.text.toString()
+
+                    if (NewPassword.text.toString() != ""){
+                        userData.Password = NewPassword.text.toString()
+                    }
 
                     val saveSession = SaveUserData(context,userData)
                     saveSession.SaveSession()

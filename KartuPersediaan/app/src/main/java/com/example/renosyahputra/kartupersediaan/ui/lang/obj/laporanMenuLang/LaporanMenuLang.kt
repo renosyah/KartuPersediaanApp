@@ -46,4 +46,8 @@ class LaporanMenuLang : Serializable {
     lateinit var ok  :String
     lateinit var no : String
 
+
+    lateinit var FilterChooseAllProduct : String
+    lateinit var FiterChooseAllPeriod : String
+
 }

@@ -91,6 +91,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
         title = v.findViewById(R.id.titleAddTrans)
         title.setText(lang.addTransDialogLang.titleForEdit)
+        title.setTextColor(theme.TextColor)
 
         butttonChooseType = v.findViewById(R.id.buttonSellectTypeTrans)
         butttonChooseType.setText(newTrans.ProductFlow)
@@ -321,15 +322,14 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
         val inflater = (context as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_edit_qty,null)
 
+        val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(newTrans, detail.get(pos).ProdukData, MainData.ListTransaksiData))
 
         val qty : EditText = v.findViewById(R.id.editQtyDetail)
         qty.setText(detail.get(pos).GetKuantitas().toString())
 
         val dialogEditQty = android.support.v7.app.AlertDialog.Builder(context)
-                .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.qty)
+                .setTitle(lang.addTransDialogLang.Stok + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
-
-                    val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(newTrans,detail.get(pos).ProdukData, MainData.ListTransaksiData))
 
                     if ((checkDuluQty - Integer.parseInt(qty.text.toString())) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
 
@@ -342,9 +342,11 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
                         val id = IdGenerator()
                         id.CreateRandomString(15)
-                        detail.get(pos).IdDetailTransaksiData = id.GetId()
+                        val idDetail = id.GetId()
 
-                        KuantitasData.IdDetailTransaksiData = detail.get(pos).IdDetailTransaksiData
+                        detail.get(pos).IdDetailTransaksiData = idDetail
+
+                        KuantitasData.IdDetailTransaksiData = idDetail
                         KuantitasData.Quantity = Integer.parseInt(qty.text.toString())
                         KuantitasData.Harga = detail.get(pos).ProdukData.Harga
                         KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
@@ -431,7 +433,9 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
             val id = IdGenerator()
             id.CreateRandomString(15)
-            detailAdded.IdDetailTransaksiData = id.GetId()
+            val idDetail = id.GetId()
+
+            detailAdded.IdDetailTransaksiData = idDetail
 
             detailAdded.IdTransaksiData = newTrans.IdTransaksiData
 
@@ -439,7 +443,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
             val ListKuantitas = ArrayList<KuantitasTransaksi>()
             val KuantitasData = KuantitasTransaksi()
-            KuantitasData.IdDetailTransaksiData = detailAdded.IdDetailTransaksiData
+            KuantitasData.IdDetailTransaksiData = idDetail
             KuantitasData.Quantity = 1
             KuantitasData.Harga = detailAdded.ProdukData.Harga
             KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity

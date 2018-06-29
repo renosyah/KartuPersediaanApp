@@ -103,6 +103,7 @@ class DetailKartuPersediaan : AppCompatActivity(),View.OnClickListener {
         titleListInventoryCard.setText(lang.laporanMenuLang.titleStockForListStock)
         titleImage.setBackgroundResource(if (dt.ProductFlow == TransaksiData.ProductIn) R.drawable.arrowin else R.drawable.arrowout)
         title.setText(dt.Keterangan)
+        title.setTextColor(theme.TextColor)
         name.setText(lang.laporanMenuLang.namaProductDetail + " : " +dt.ProdukData.Nama)
         price.setText(lang.laporanMenuLang.price + " : " + if (dt.ProductFlow == TransaksiData.ProductOut) "-" else  formatter.format(dt.ProdukData.Harga))
         qty.setText(lang.laporanMenuLang.qty + " : " +dt.GetKuantitas())

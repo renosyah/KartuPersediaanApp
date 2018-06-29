@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.json.JSONObject
 import java.io.IOException
 
 
@@ -80,9 +81,21 @@ class SaveAllData : AsyncTask<Void,Void,String>{
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
         if (result != ""){
-            Toast.makeText(context,lang.mainMenuLang.SavingComplete,Toast.LENGTH_SHORT).show()
-        }else {
+            val jsonResponse = JSONObject(result)
+            if (jsonResponse.getBoolean("Response")){
+                Toast.makeText(context,jsonResponse.getString("Message"),Toast.LENGTH_SHORT).show()
+            }else {
+                Toast.makeText(context,jsonResponse.getString("Message"),Toast.LENGTH_SHORT).show()
+            }
+
+        }else if(data.ListTransaksiData.size >= 10){
+
+            Toast.makeText(context,lang.mainMenuLang.SavingButDataIsTooBig,Toast.LENGTH_SHORT).show()
+
+        }else if (result == "") {
+
             Toast.makeText(context,lang.mainMenuLang.SavingFail,Toast.LENGTH_SHORT).show()
+
         }
     }
 }

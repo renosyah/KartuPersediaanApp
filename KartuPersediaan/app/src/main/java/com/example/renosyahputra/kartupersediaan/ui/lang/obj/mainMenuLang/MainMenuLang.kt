@@ -18,4 +18,6 @@ class MainMenuLang : Serializable {
     lateinit var Saving : String
     lateinit var SavingComplete : String
     lateinit var SavingFail : String
+
+    lateinit var SavingButDataIsTooBig : String
 }

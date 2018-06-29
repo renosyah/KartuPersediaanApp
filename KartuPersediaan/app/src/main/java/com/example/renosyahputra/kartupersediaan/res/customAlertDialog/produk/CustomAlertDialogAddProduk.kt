@@ -65,6 +65,7 @@ class CustomAlertDialogAddProduk(ctx : Context,res : Int,List : ArrayList<Produk
 
         bar.setBackgroundColor(theme.BackGroundColor)
         title.setText(lang.addProdukFormLang.title)
+        title.setTextColor(theme.TextColor)
         nama.setHint(lang.addProdukFormLang.nameHint)
         harga.setHint(lang.addProdukFormLang.price)
         unit.setHint(lang.addProdukFormLang.unitProduct)

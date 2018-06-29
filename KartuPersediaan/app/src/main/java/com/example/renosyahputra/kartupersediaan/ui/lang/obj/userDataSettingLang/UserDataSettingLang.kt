@@ -14,4 +14,5 @@ class UserDataSettingLang : Serializable {
     lateinit var Batal : String
     lateinit var DataKosong : String
     lateinit var GagalValidasiPassword : String
+    lateinit var KonfirmasiDeanganMengisisPassword : String
 }

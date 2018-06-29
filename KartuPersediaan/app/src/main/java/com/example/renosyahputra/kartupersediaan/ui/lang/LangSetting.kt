@@ -75,6 +75,7 @@ class LangSetting(ctx : Context){
         mainMenuLang.SavingComplete = "Saving Complete!"
         mainMenuLang.SavingFail = "Saving Fail!"
         mainMenuLang.SaveDataOnlineButAccountNotValid = "Fail to save, please check your account setting, some data is missing!"
+        mainMenuLang.SavingButDataIsTooBig = "Saving.., but data is too big!"
 
         val mainMenuSettingLang = MainMenuSettingLang()
         mainMenuSettingLang.OpenSetting1 = "Language Setting"
@@ -146,6 +147,8 @@ class LangSetting(ctx : Context){
         addTransDialogLang.nameProduct = "Product Name"
         addTransDialogLang.price = "Price"
         addTransDialogLang.qty = "Quantity"
+        addTransDialogLang.StokTersedia = "Stock Left"
+        addTransDialogLang.Stok = "Stock"
 
         addTransDialogLang.add = "Ok"
         addTransDialogLang.cancel = "Cancel"
@@ -191,6 +194,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.messageOpenFile = "File Hass been saved in Folder KartuPersediaan,would you like to open it?"
         laporanMenuLang.ok = "Open"
         laporanMenuLang.no = "No"
+        laporanMenuLang.FilterChooseAllProduct = "All Product"
+        laporanMenuLang.FiterChooseAllPeriod = "All Period"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Product In"
@@ -238,16 +243,17 @@ class LangSetting(ctx : Context){
         userDataSettingLang.EditNamaPerusahaan = "Edit Company Name"
         userDataSettingLang.EditEmail = "Edit Email"
         userDataSettingLang.EditUsername = "Edit Username"
-        userDataSettingLang.EditPassword = "Edit Password"
-        userDataSettingLang.KonfirmEditPassword = "Confirm Password"
+        userDataSettingLang.EditPassword = "Old Password"
+        userDataSettingLang.KonfirmEditPassword = "New Password"
         userDataSettingLang.Simpan = "Save"
         userDataSettingLang.Batal = "Cancel"
         userDataSettingLang.DataKosong = "there is some user data need to be fill!"
         userDataSettingLang.GagalValidasiPassword = "Fail to validate your password!"
+        userDataSettingLang.KonfirmasiDeanganMengisisPassword = "Konfirm save with password fill!"
 
         val loginDialogLang = LoginDialogLang()
         loginDialogLang.title = "Login Form"
-        loginDialogLang.username = "Input Username"
+        loginDialogLang.username = "Username or Email"
         loginDialogLang.password = "Input Password"
         loginDialogLang.login = "Login"
         loginDialogLang.cancel = "Cancel"
@@ -258,7 +264,22 @@ class LangSetting(ctx : Context){
         guideLang.appName = "Kartu Persediaan"
         guideLang.appVer = "Version 1.6"
         guideLang.title = "Guide"
-        guideLang.guides = "not yet avaliable"
+        guideLang.guides = "Supplicard Cards are Cards used to record Inventory of goods, Inventory Cards can be used to record Merchandise Inventory in a trading company, recording Supplies of Raw Materials and Substituents for manufacturing companies.\n" +
+                "\n" +
+                "This inventory card application makes it easy for users to be able to compile inventory card statements, just by inputting product data and transactions, automatically the application will compile all inventory card statements with 3 recording methods at once, so users can easily see the comparison of each report .\n" +
+                "\n" +
+                "here are the usage guidelines for this app:\n" +
+                "\n" +
+                "1). after registering, you will be in the main menu, the main menu consists of 3 menus, product menu, transactions, and card supplies.\n" +
+                "\n" +
+                "2). add some product data by pressing the button in the bottom right corner, and select product added menu, input name, standard price and unit.\n" +
+                "\n" +
+                "3). when done, add some transaction data. by pressing the same button, and select the add transaction menu, enter transaction time, date, description, IN transaction type for OUT product transaction type and OUT for outgoing product transaction type, and add some products into transaction and specify quantity dah respective price product.\n" +
+                "\n" +
+                "4). when done, select the menu of the inventory card, and automatically report will be displayed\n" +
+                "\n" +
+                "contact hp: 081214038236\n" +
+                "facebook: https://facebook.com/renosyah975"
 
 
         langObj.mainMenuLang = mainMenuLang
@@ -295,6 +316,7 @@ class LangSetting(ctx : Context){
         mainMenuLang.Saving = "Menyimpan.."
         mainMenuLang.SavingComplete = "Berhasil Menyimpan!"
         mainMenuLang.SavingFail = "Gagal Menyimpan!"
+        mainMenuLang.SavingButDataIsTooBig = "Menyimpan.., namun data yang dikirim terlalu besar!"
 
         val mainMenuSettingLang = MainMenuSettingLang()
         mainMenuSettingLang.OpenSetting1 = "Pengaturan Bahasa"
@@ -367,6 +389,8 @@ class LangSetting(ctx : Context){
         addTransDialogLang.nameProduct = "Nama Produk"
         addTransDialogLang.price = "Harga"
         addTransDialogLang.qty = "Kuantitas"
+        addTransDialogLang.StokTersedia = "Stok Tersedia"
+        addTransDialogLang.Stok = "Stok"
 
         addTransDialogLang.add = "Ok"
         addTransDialogLang.cancel = "Batal"
@@ -412,6 +436,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.messageOpenFile = "File Tersimpan di Folder KartuPersediaan,apakah anda ingin membukanya?"
         laporanMenuLang.ok = "Buka"
         laporanMenuLang.no = "Tidak"
+        laporanMenuLang.FilterChooseAllProduct = "Semua Produk"
+        laporanMenuLang.FiterChooseAllPeriod = "Semua Periode"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Produk Masuk"
@@ -459,16 +485,17 @@ class LangSetting(ctx : Context){
         userDataSettingLang.EditNamaPerusahaan = "Edit Nama Perusahaan"
         userDataSettingLang.EditEmail = "Edit Email"
         userDataSettingLang.EditUsername = "Edit Username"
-        userDataSettingLang.EditPassword = "Edit Password"
-        userDataSettingLang.KonfirmEditPassword = "Konfirmasi Password"
+        userDataSettingLang.EditPassword = "Password Lama"
+        userDataSettingLang.KonfirmEditPassword = "Password Baru"
         userDataSettingLang.Simpan = "Simpan"
         userDataSettingLang.Batal = "Batal"
         userDataSettingLang.DataKosong = "Ada Data pengguna Yang Perluh diisi!"
-        userDataSettingLang.GagalValidasiPassword = "Gagal memvalidasi password anda!"
+        userDataSettingLang.GagalValidasiPassword = "Gagal validasi password anda!"
+        userDataSettingLang.KonfirmasiDeanganMengisisPassword = "Konfirmasi Dengan Mengisi Password!"
 
         val loginDialogLang = LoginDialogLang()
         loginDialogLang.title = "Form Login"
-        loginDialogLang.username = "Input Username"
+        loginDialogLang.username = "Username atau Email"
         loginDialogLang.password = "Input Password"
         loginDialogLang.login = "Login"
         loginDialogLang.cancel = "Batal"
@@ -480,7 +507,22 @@ class LangSetting(ctx : Context){
         guideLang.appName = "Kartu Persediaan"
         guideLang.appVer = "Versi 1.6"
         guideLang.title = "Panduan"
-        guideLang.guides = "Belum Tersedia"
+        guideLang.guides = "Kartu Persediaan adalah Kartu yang digunakan untuk mencatat Persediaan barang, Kartu Persediaan bisa digunakan untuk mencatat Persediaan Barang Dagangan dalam perusahaan dagang, mencatat Persediaan Bahan Baku dan Bahan Pembantu untuk perusahaan manufaktur.\n" +
+                "\n" +
+                "Aplikasi kartu persediaan ini memberikan kemudahan bagi pengguna untuk dapat menyusun laporan kartu persediaan, hanya dengan menginputkan data produk dan transaksi, secara otomatis aplikasi akan menyusun semua laporan kartu persediaan dengan 3 metode pencatatan sekaligus, sehingga pengguna dapat dengan mudah melihat perbandingan dari masing - masing laporan. \n" +
+                "\n" +
+                "berikut adalah panduan penggunaan untuk aplikasi ini : \n" +
+                "\n" +
+                "1). setelah melakukan register, anda akan berada pada menu utama, menu utama tersebut terdiri dari 3 menu, menu produk, transaksi, dan kartu persediaan.\n" +
+                "\n" +
+                "2). tambahkan beberapa data produk dengan menekan tombol di sudut kanan bawah, dan pilih menu tambah produk,masukan nama, harga standar dan satuan.\n" +
+                "\n" +
+                "3). setelah selesai, tambahkan beberapa data transaksi. dengan menekan tombol yang sama, dan pilih menu tambah transaksi, masukan waktu transaksi, tanggal, keterangan, tipe transaksi IN untuk tipe transaksi produk masuk dan OUT untuk tipe transaksi produk keluar, serta menambahkan beberapa produk kedalam transaksi dan menentukan kuantitas dah harga masing-masing produk.\n" +
+                "\n" +
+                "4). setelah selesai, pilih menu kartu persediaan, dan secara otomatis laporan akan ditampilkan\n" +
+                "\n" +
+                "kontak hp : 081214038236\n" +
+                "facebook : https://facebook.com/renosyah975\n"
 
 
         langObj.mainMenuLang = mainMenuLang

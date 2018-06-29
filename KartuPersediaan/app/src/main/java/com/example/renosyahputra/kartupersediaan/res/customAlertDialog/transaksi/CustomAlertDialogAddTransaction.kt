@@ -15,7 +15,6 @@ import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapter
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CheckAndAddQtyIfSame
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.FinalQtyCheckInNewTrans
-import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.GetTotalQtyProductFromAllTrans
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.getTotalFromDetail
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
@@ -98,6 +97,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         title = v.findViewById(R.id.titleAddTrans)
         title.setText(lang.addTransDialogLang.title)
+        title.setTextColor(theme.TextColor)
 
         butttonChooseType = v.findViewById(R.id.buttonSellectTypeTrans)
         butttonChooseType.setText(lang.addTransDialogLang.chooseType)
@@ -318,15 +318,15 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
         val inflater = (context as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_edit_qty,null)
 
+        val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(newTrans, detail.get(pos).ProdukData, MainData.ListTransaksiData))
+
 
         val qty : EditText = v.findViewById(R.id.editQtyDetail)
         qty.setText(detail.get(pos).GetKuantitas().toString())
 
         val dialogEditQty = AlertDialog.Builder(context)
-                .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.qty)
+                .setTitle(lang.addTransDialogLang.Stok + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
                 .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
-
-                    val checkDuluQty = (GetTotalQtyProductFromAllTrans(newTrans,detail.get(pos).ProdukData,MainData.ListTransaksiData))
 
                     if ((checkDuluQty - Integer.parseInt(qty.text.toString())) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
 
@@ -339,9 +339,11 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
                         val id = IdGenerator()
                         id.CreateRandomString(15)
-                        detail.get(pos).IdDetailTransaksiData = id.GetId()
+                        val idDetail = id.GetId()
 
-                        KuantitasData.IdDetailTransaksiData = detail.get(pos).IdDetailTransaksiData
+                        detail.get(pos).IdDetailTransaksiData = idDetail
+
+                        KuantitasData.IdDetailTransaksiData = idDetail
                         KuantitasData.Quantity = Integer.parseInt(qty.text.toString())
                         KuantitasData.Harga = detail.get(pos).ProdukData.Harga
                         KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
@@ -428,15 +430,16 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
             val id = IdGenerator()
             id.CreateRandomString(15)
+            val idDetail = id.GetId()
 
             detailAdded.IdTransaksiData = newTrans.IdTransaksiData
-            detailAdded.IdDetailTransaksiData = id.GetId()
+            detailAdded.IdDetailTransaksiData = idDetail
 
             detailAdded.ProdukData = productAdded
 
             val ListKuantitas = ArrayList<KuantitasTransaksi>()
             val KuantitasData = KuantitasTransaksi()
-            KuantitasData.IdDetailTransaksiData = detailAdded.IdDetailTransaksiData
+            KuantitasData.IdDetailTransaksiData = idDetail
             KuantitasData.Quantity = 1
             KuantitasData.Harga = detailAdded.ProdukData.Harga
             KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity

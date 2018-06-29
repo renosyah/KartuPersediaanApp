@@ -20,6 +20,7 @@ class ValidateOutProduct {
             for (detailKuantitas in detail.ListKuantitas) {
                 var qtyHolder = detailKuantitas.Quantity
 
+
                 for (dt in newS) {
 
                     if (dt.Produk.IdProduk == product.IdProduk) {
