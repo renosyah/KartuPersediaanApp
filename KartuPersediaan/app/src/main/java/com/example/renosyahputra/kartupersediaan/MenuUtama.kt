@@ -370,6 +370,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
                 if (userData.UserName == "" || userData.Password == ""){
 
                     Toast.makeText(context,langSetting.GetlangObj().mainMenuLang.SaveDataOnlineButAccountNotValid,Toast.LENGTH_SHORT).show()
+                    OpenUserProfilSetting()
 
                 } else {
 
@@ -438,6 +439,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
             }
             R.id.SideSettingMenu -> {
                 OpenLangAndThemeSetting()
+                nav_view.menu.getItem(0).setChecked(true)
 
             }
 

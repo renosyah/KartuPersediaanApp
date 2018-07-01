@@ -19,6 +19,7 @@ import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.*
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -42,6 +43,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
     internal lateinit var transMenu : TransaksiMenu
     internal lateinit var nav_view : NavigationView
 
+    lateinit var dateInSring : ChangeDateToRelevanString
 
     lateinit var LinearLayoutListViewDetailAddTrans : LinearLayout
 
@@ -77,6 +79,8 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
     }
 
     internal fun InitiationWidget(v : View){
+
+        dateInSring = ChangeDateToRelevanString(context,lang)
 
         val randId = IdGenerator()
         randId.CreateRandomString(15)
@@ -192,7 +196,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                             newTrans.TanggalTransaksi.Bulan = (monthOfYear + 1)
                             newTrans.TanggalTransaksi.Tahun = year
 
-                            chooseDate.setText(newTrans.TanggalTransaksi.toDateString())
+                            chooseDate.setText(dateInSring.SetAndGetFormatSimple(newTrans.TanggalTransaksi,"/","/"))
 
                         },
                         now.get(Calendar.YEAR),
@@ -205,21 +209,23 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
             }
             butttonChooseType -> {
 
-                val option = arrayOf<CharSequence>(TransaksiData.ProductIn,TransaksiData.ProductOut)
+                val option = arrayOf<CharSequence>(lang.addTransDialogLang.TypeIn,lang.addTransDialogLang.TypeOUT)
                 android.support.v7.app.AlertDialog.Builder(context)
                         .setTitle(lang.addTransDialogLang.chooseType)
                         .setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
                             if (i == 0){
 
                                 newTrans.ProductFlow = TransaksiData.ProductIn
+                                butttonChooseType.setText(lang.addTransDialogLang.TypeIn)
+
 
                             }else if (i == 1){
 
                                 newTrans.ProductFlow = TransaksiData.ProductOut
-
+                                butttonChooseType.setText(lang.addTransDialogLang.TypeOUT)
                             }
 
-                            butttonChooseType.setText(newTrans.ProductFlow)
+                            butttonChooseType.setBackgroundColor(ResFunction.SetBackgroundColor(context,newTrans))
 
                             dialogInterface.dismiss()
                         })
@@ -326,7 +332,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         val dialogEditQty = AlertDialog.Builder(context)
                 .setTitle(lang.addTransDialogLang.Stok + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
+                .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
                     if ((checkDuluQty - Integer.parseInt(qty.text.toString())) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
 
@@ -374,7 +380,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         val dialogEditQty = AlertDialog.Builder(context)
                 .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.price)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
+                .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
                     detail.get(pos).ProdukData.Harga = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
                     detail.get(pos).SetHargaAll(Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString()))

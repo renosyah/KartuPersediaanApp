@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import java.text.DecimalFormat
@@ -49,7 +50,7 @@ class CustomAdapterTransaksi(context: Context,resource: Int,objects: MutableList
             holder = (row.getTag() as DataList)
         }
         val item = getItem(position)
-
+        val dateInSring = ChangeDateToRelevanString(context,lang)
 
         holder.ImageTransaksi.setImageDrawable(if (item.IsThisValidTransaction) ResourcesCompat.getDrawable(context.resources, R.drawable.transactionicon, null) else  ResourcesCompat.getDrawable(context.resources, R.drawable.warning, null))
 
@@ -68,7 +69,7 @@ class CustomAdapterTransaksi(context: Context,resource: Int,objects: MutableList
 
         holder.Keterangan.setText(item.Keterangan)
         holder.SubTotal.setText(formatter.format(item.SubTotal))
-        holder.Tgl.setText(item.TanggalTransaksi.Hari.toString() +"-" + item.TanggalTransaksi.Bulan.toString() + "-" + item.TanggalTransaksi.Tahun.toString())
+        holder.Tgl.setText(dateInSring.SetAndGetFormatSimple(item.TanggalTransaksi,"/","/"))
 
         holder.SubTotal.setTextColor(color_jumlah)
 

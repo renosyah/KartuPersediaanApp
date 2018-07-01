@@ -22,7 +22,7 @@ func (sr *RestfullServer) SaveDataFromClient(res http.ResponseWriter, req *http.
 
 	var response = &SaveResponse{
 		Response:true,
-		Message:"Data Save!",
+		Message:"OK",
 	}
 
 	errUser := json.Unmarshal([]byte(UserJson),&User)

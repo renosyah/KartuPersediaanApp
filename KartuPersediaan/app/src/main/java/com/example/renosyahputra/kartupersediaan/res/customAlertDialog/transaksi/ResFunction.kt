@@ -1,5 +1,8 @@
 package com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 
+import android.content.Context
+import android.support.v4.content.res.ResourcesCompat
+import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
@@ -7,6 +10,20 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Transaksi
 
 class ResFunction {
     companion object {
+        fun SetBackgroundColor(context: Context,item : TransaksiData) : Int{
+            var color_jumlah = 0
+            if (item.ProductFlow == TransaksiData.ProductIn){
+
+                color_jumlah = ResourcesCompat.getColor(context.resources, R.color.greenMoney,null)
+
+            }else if (item.ProductFlow == TransaksiData.ProductOut){
+
+                color_jumlah = ResourcesCompat.getColor(context.resources, R.color.red,null)
+            }
+
+            return color_jumlah
+        }
+
         fun CheckAndAddQtyIfSame(l : ArrayList<DetailTransaksi>, dt : DetailTransaksi) : Boolean{
             var ketemu = false
             var pos = 0

@@ -7,4 +7,5 @@ class GuideLang : Serializable {
     lateinit var appName : String
     lateinit var appVer : String
     lateinit var guides  :String
+    lateinit var titleForSocialMediaPages : String
 }

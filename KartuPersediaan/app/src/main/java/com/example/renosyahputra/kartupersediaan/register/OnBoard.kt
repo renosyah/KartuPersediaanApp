@@ -40,6 +40,7 @@ class OnBoard : AppCompatActivity() {
         circleIndicator = findViewById(R.id.ViewPagerOnboardCircleIdicator)
 
         if (CheckIfUserHaveSeeingThis()){
+            // move  to splash activity
             (context as Activity).finish()
         }
 

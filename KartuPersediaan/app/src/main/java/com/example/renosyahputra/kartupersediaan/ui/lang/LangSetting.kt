@@ -67,7 +67,7 @@ class LangSetting(ctx : Context){
         mainMenuLang.MenuSetting3 = "Save Online"
         mainMenuLang.MenuSetting4 = "Login"
         mainMenuLang.MenuSetting5 = "Guide"
-        mainMenuLang.subMenu1 = "Supplies Card"
+        mainMenuLang.subMenu1 = "Stock Card"
         mainMenuLang.subMenu2 = "Transaction Menu"
         mainMenuLang.subMenu3 = "Product Menu"
         mainMenuLang.subMenu4 = "Logout"
@@ -141,8 +141,10 @@ class LangSetting(ctx : Context){
         addTransDialogLang.chooseData = "Choose Date"
         addTransDialogLang.addInformation = "Add Information ..."
         addTransDialogLang.inputInformation = "Input Information ..."
-        addTransDialogLang.addProduct = "Add Product"
+        addTransDialogLang.addProduct = "Add Product To Detail"
         addTransDialogLang.chooseTime = "Choose Time"
+        addTransDialogLang.TypeIn = "Product In"
+        addTransDialogLang.TypeOUT = "Product Out"
 
         addTransDialogLang.nameProduct = "Product Name"
         addTransDialogLang.price = "Price"
@@ -151,6 +153,7 @@ class LangSetting(ctx : Context){
         addTransDialogLang.Stok = "Stock"
 
         addTransDialogLang.add = "Ok"
+        addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Cancel"
 
         addTransDialogLang.titleEditDetail = "Edit Detail Transaction"
@@ -165,11 +168,11 @@ class LangSetting(ctx : Context){
         addTransDialogLang.tutup = "Close"
 
         val laporanMenuLang =  LaporanMenuLang()
-        laporanMenuLang.Kartupersediaan = "Supplies Card"
+        laporanMenuLang.Kartupersediaan = "Stock Card"
         laporanMenuLang.filterPilihMethod = "Method"
         laporanMenuLang.filterPilihPeriode = "Period"
         laporanMenuLang.filterPilihProduk = "Product"
-        laporanMenuLang.KartuPersediaanKosong = "Supplies Card Is Empty"
+        laporanMenuLang.KartuPersediaanKosong = "Stock Card Is Empty"
         laporanMenuLang.namaProductDetail = "Product Name"
         laporanMenuLang.price = "Price"
         laporanMenuLang.qty = "Total Quantity"
@@ -184,7 +187,7 @@ class LangSetting(ctx : Context){
         laporanMenuLang.save = "Save"
         laporanMenuLang.cancel = "Cancel"
         laporanMenuLang.saved = "File Hass been saved in Folder KartuPersediaan"
-        laporanMenuLang.titleLaporan = "Supplies Card"
+        laporanMenuLang.titleLaporan = "Stock Card"
         laporanMenuLang.dateAwalLap = "From"
         laporanMenuLang.dateAkhirLap = ""
         laporanMenuLang.hinga = "-"
@@ -264,7 +267,8 @@ class LangSetting(ctx : Context){
         guideLang.appName = "Kartu Persediaan"
         guideLang.appVer = "Version 1.6"
         guideLang.title = "Guide"
-        guideLang.guides = "Supplicard Cards are Cards used to record Inventory of goods, Inventory Cards can be used to record Merchandise Inventory in a trading company, recording Supplies of Raw Materials and Substituents for manufacturing companies.\n" +
+        guideLang.titleForSocialMediaPages = "Visit My Social media's Page on : "
+        guideLang.guides = "Stock Card Cards are Cards used to record Inventory of goods, Inventory Cards can be used to record Merchandise Inventory in a trading company, recording Supplies of Raw Materials and Substituents for manufacturing companies.\n" +
                 "\n" +
                 "This inventory card application makes it easy for users to be able to compile inventory card statements, just by inputting product data and transactions, automatically the application will compile all inventory card statements with 3 recording methods at once, so users can easily see the comparison of each report .\n" +
                 "\n" +
@@ -278,8 +282,7 @@ class LangSetting(ctx : Context){
                 "\n" +
                 "4). when done, select the menu of the inventory card, and automatically report will be displayed\n" +
                 "\n" +
-                "contact hp: 081214038236\n" +
-                "facebook: https://facebook.com/renosyah975"
+                ""
 
 
         langObj.mainMenuLang = mainMenuLang
@@ -380,10 +383,12 @@ class LangSetting(ctx : Context){
         addTransDialogLang.titleForEdit = "Form Edit Transaksi"
         addTransDialogLang.title = "Form Tambah Transaksi"
         addTransDialogLang.chooseType = "Pilih Tipe Transaksi"
+        addTransDialogLang.TypeIn = "Produk Masuk"
+        addTransDialogLang.TypeOUT = "Produk Keluar"
         addTransDialogLang.chooseData = "Pilih Tanggal"
         addTransDialogLang.addInformation = "Tambah Keterangan ..."
         addTransDialogLang.inputInformation = "Input Keterangan ..."
-        addTransDialogLang.addProduct = "Tambah Produk"
+        addTransDialogLang.addProduct = "Tambah Produk Ke Detail"
         addTransDialogLang.chooseTime = "Pilih Jam"
 
         addTransDialogLang.nameProduct = "Nama Produk"
@@ -393,6 +398,7 @@ class LangSetting(ctx : Context){
         addTransDialogLang.Stok = "Stok"
 
         addTransDialogLang.add = "Ok"
+        addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Batal"
 
         addTransDialogLang.titleEditDetail = "Edit Detail Transaksi"
@@ -507,6 +513,7 @@ class LangSetting(ctx : Context){
         guideLang.appName = "Kartu Persediaan"
         guideLang.appVer = "Versi 1.6"
         guideLang.title = "Panduan"
+        guideLang.titleForSocialMediaPages = "Kunjungi Halaman Sosial Media Saya Di : "
         guideLang.guides = "Kartu Persediaan adalah Kartu yang digunakan untuk mencatat Persediaan barang, Kartu Persediaan bisa digunakan untuk mencatat Persediaan Barang Dagangan dalam perusahaan dagang, mencatat Persediaan Bahan Baku dan Bahan Pembantu untuk perusahaan manufaktur.\n" +
                 "\n" +
                 "Aplikasi kartu persediaan ini memberikan kemudahan bagi pengguna untuk dapat menyusun laporan kartu persediaan, hanya dengan menginputkan data produk dan transaksi, secara otomatis aplikasi akan menyusun semua laporan kartu persediaan dengan 3 metode pencatatan sekaligus, sehingga pengguna dapat dengan mudah melihat perbandingan dari masing - masing laporan. \n" +
@@ -521,8 +528,7 @@ class LangSetting(ctx : Context){
                 "\n" +
                 "4). setelah selesai, pilih menu kartu persediaan, dan secara otomatis laporan akan ditampilkan\n" +
                 "\n" +
-                "kontak hp : 081214038236\n" +
-                "facebook : https://facebook.com/renosyah975\n"
+                ""
 
 
         langObj.mainMenuLang = mainMenuLang

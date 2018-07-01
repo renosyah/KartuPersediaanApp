@@ -8,7 +8,7 @@
     android:focusable="true"
     android:focusedByDefault="true"
     android:focusableInTouchMode="true"
-    tools:context=".subMenu.laporanMenu.DetailKartuPersediaan">
+    tools:context=".subMenu.laporanMenu.detailKartuPersediaan.DetailKartuPersediaan">
 
 
     <RelativeLayout

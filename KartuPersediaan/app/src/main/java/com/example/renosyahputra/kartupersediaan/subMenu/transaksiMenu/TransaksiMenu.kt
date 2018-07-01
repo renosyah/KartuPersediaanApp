@@ -113,6 +113,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
     }
 
     override fun onRefresh() {
+        ListTransaksiCari.clear()
         CariTransaksi.setText("")
         SetAdapter(true,ListTransaksi)
         if (refreshTrans.isRefreshing){

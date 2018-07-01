@@ -13,24 +13,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
-import com.example.renosyahputra.kartupersediaan.res.FindHowMuchGapBetweenTrans
-import com.example.renosyahputra.kartupersediaan.res.GenerateDataForAverage.Companion.FillZeroNumber
-import com.example.renosyahputra.kartupersediaan.res.GenerateDataInventoryCard
-import com.example.renosyahputra.kartupersediaan.res.SortData.Companion.GetAllPeriodeInGroup
-import com.example.renosyahputra.kartupersediaan.res.ValidateOutProduct
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterLaporanKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
-import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
-import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData.Companion.OpenFileKartuPersediaan
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.detailKartuPersediaan.DetailKartuPersediaan
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.FunctionForKartuPersediaanMenu
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.SortData.Companion.GetAllPeriodeInGroup
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -106,81 +102,18 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             duplicateListTransaksi.add(trs.CloneTransData())
         }
 
-        val GapInTransaction = FindHowMuchGapBetweenTrans.FindGap(duplicateListTransaksi)
+        FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(MainData,duplicateListTransaksi)
 
+        FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData,duplicateListTransaksi)
 
-        if (MainData.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE) {
+        FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter,duplicateListTransaksi,LaporanKartuPersediaan)
 
-            duplicateListTransaksi.clear()
-
-            for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
-                if (trs.ProductFlow == TransaksiData.ProductIn){
-
-                    duplicateListTransaksi.add(trs.CloneTransData())
-
-
-                }else {
-
-                    duplicateListTransaksi.add(trs.CloneTransData())
-                    for (i in 0..GapInTransaction) {
-                        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
-                            ValidateOutProduct.GenerateForEachTransaction(MainData, duplicateListTransaksi, dataTrans)
-                        }
-
-                        MainData.ListPersediaanData.clear()
-                    }
-
-                }
-            }
-        }
-
-        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))) {
-            GenerateDataInventoryCard.GenerateForEachTransaction(MainData, dataTrans)
-        }
-
-
-        for (dataTrans in duplicateListTransaksi.sortedWith(compareBy({it.TanggalTransaksi.Tahun},{it.TanggalTransaksi.Bulan},{it.TanggalTransaksi.Hari},{it.Jam.Jam},{it.Jam.Menit}))){
-            if (filter.tahun > 0 && (dataTrans.TanggalTransaksi.Tahun == filter.tahun)){
-                for (detail in dataTrans.ListDetail){
-                    if (filter.p != null && (filter.p!!.IdProduk == detail.ProdukData.IdProduk)){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
-                    }else if (filter.p == null){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
-                    }
-
-                }
-            }else if (filter.tahun == 0){
-                for (detail in dataTrans.ListDetail){
-                    if (filter.p != null && (filter.p!!.IdProduk == detail.ProdukData.IdProduk)){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
-                    }else if (filter.p == null){
-                        AppendToCartuPersediaan(dataTrans.IdTransaksiData,dataTrans.TanggalTransaksi,detail.ProdukData,dataTrans.Keterangan,dataTrans.ProductFlow,detail.ListPersediaanData,detail.ListKuantitas)
-                    }
-                }
-            }
-        }
-
-        if (MainData.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
-            for (p in MainData.ListProdukData) {
-                FillZeroNumber(p, LaporanKartuPersediaan)
-            }
-        }
-
+        FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
 
         SetAdapter(LaporanKartuPersediaan)
     }
 
-    internal fun AppendToCartuPersediaan(IdTransaksiData : String, TanggalTransaksi : FormatTanggal, ProdukData : ProdukData, Keterangan : String, ProductFlow :String, ListPersediaanData : ArrayList<PersediaanData>,listKuantitas : ArrayList<KuantitasTransaksi>){
-        val laporanKartuPersediaanObj = LaporanKartuPersediaanObj()
-        laporanKartuPersediaanObj.IdTransaksiData = IdTransaksiData
-        laporanKartuPersediaanObj.TanggalTransaksi = TanggalTransaksi
-        laporanKartuPersediaanObj.ProdukData = ProdukData
-        laporanKartuPersediaanObj.Keterangan = Keterangan
-        laporanKartuPersediaanObj.ProductFlow = ProductFlow
-        laporanKartuPersediaanObj.ListPersediaanData = ListPersediaanData
-        laporanKartuPersediaanObj.ListKuantitas = listKuantitas
-        LaporanKartuPersediaan.add(laporanKartuPersediaanObj)
-    }
+
 
     fun SetAdapter(l : ArrayList<LaporanKartuPersediaanObj>){
 
@@ -246,9 +179,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         }else {
             GenerateData(filterSearch)
         }
-
-
-
     }
 
 
@@ -291,15 +221,15 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                     GenerateData(filterSearch)
-                    val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user,(filterSearch.tahun > 0), allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.LIFO
                     GenerateData(filterSearch)
-                    val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringLIFO = SaveMainData.KartuPersediaanToHtml(ctx, user,(filterSearch.tahun > 0), allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.AVERAGE
                     GenerateData(filterSearch)
-                    val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user, allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
+                    val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user,(filterSearch.tahun > 0), allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
                     AlertDialog.Builder(ctx)
                             .setTitle(lang.laporanMenuLang.exportTitle)
@@ -506,7 +436,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
     }
 
     internal fun OpenDialogDetail(dt: LaporanKartuPersediaanObj){
-        val intent = Intent(ctx,DetailKartuPersediaan::class.java)
+        val intent = Intent(ctx, DetailKartuPersediaan::class.java)
         intent.putExtra("dataDetail",dt)
         intent.putExtra("lang",lang)
         intent.putExtra("theme",theme)

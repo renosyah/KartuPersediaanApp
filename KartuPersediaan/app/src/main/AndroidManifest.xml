@@ -17,20 +17,28 @@
             android:name=".MenuUtama"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".subMenu.laporanMenu.DetailKartuPersediaan" />
+        <activity android:name=".subMenu.laporanMenu.detailKartuPersediaan.DetailKartuPersediaan" />
         <activity
             android:name=".register.Splash"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
         </activity>
         <activity android:name=".register.Register" />
-        <activity android:name=".register.OnBoard" />
-        <activity android:name=".ui.guide.GuideAndAbout"></activity>
+        <activity android:name=".register.OnBoard"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+        <activity android:name=".ui.guide.GuideAndAbout"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

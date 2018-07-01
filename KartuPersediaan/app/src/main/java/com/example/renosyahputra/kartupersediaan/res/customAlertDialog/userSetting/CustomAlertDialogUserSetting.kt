@@ -108,6 +108,7 @@ class CustomAlertDialogUserSetting : View.OnClickListener{
         username.setHint(lang.userDataSettingLang.EditUsername)
         OldPassword.setTextColor(theme.BackGroundColor)
         OldPassword.setHint(lang.userDataSettingLang.EditPassword)
+        OldPassword.visibility = if (userData.Password == "") View.GONE else View.VISIBLE
         NewPassword.setTextColor(theme.BackGroundColor)
         NewPassword.setHint(lang.userDataSettingLang.KonfirmEditPassword)
 

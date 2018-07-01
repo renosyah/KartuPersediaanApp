@@ -6,6 +6,8 @@ class AddTransDialogLang : Serializable {
     lateinit var title : String
     lateinit var titleForEdit : String
     lateinit var chooseType : String
+    lateinit var TypeIn : String
+    lateinit var TypeOUT : String
     lateinit var chooseData : String
     lateinit var chooseTime : String
     lateinit var addInformation : String
@@ -19,6 +21,7 @@ class AddTransDialogLang : Serializable {
     lateinit var Stok : String
 
     lateinit var add : String
+    lateinit var Ok : String
     lateinit var cancel : String
 
     lateinit var titleEditDetail : String

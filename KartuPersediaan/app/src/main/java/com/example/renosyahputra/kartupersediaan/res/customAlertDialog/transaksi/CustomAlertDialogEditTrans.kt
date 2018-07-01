@@ -20,6 +20,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTra
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatWaktu
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu.Companion.CheckAndMarkTransactionWithNonValidQty
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
@@ -38,6 +39,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
     lateinit var dialog : AlertDialog
 
+    lateinit var dateInSring : ChangeDateToRelevanString
 
     internal lateinit var FragmentChanger : FragmentManager
 
@@ -84,6 +86,8 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
     internal fun InitiationWidget(v : View){
 
+        dateInSring = ChangeDateToRelevanString(context,lang)
+
         LinearLayoutListViewDetailAddTrans = v.findViewById(R.id.LinearLayoutListViewDetailAddTrans)
 
         bar = v.findViewById(R.id.titleBarAddTrans)
@@ -94,12 +98,13 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
         title.setTextColor(theme.TextColor)
 
         butttonChooseType = v.findViewById(R.id.buttonSellectTypeTrans)
-        butttonChooseType.setText(newTrans.ProductFlow)
+        butttonChooseType.setText(if (newTrans.ProductFlow == TransaksiData.ProductIn) lang.addTransDialogLang.TypeIn else lang.addTransDialogLang.TypeOUT)
         butttonChooseType.setTextColor(theme.TextColor)
         butttonChooseType.setBackgroundColor(theme.BackGroundColor)
+        butttonChooseType.setBackgroundColor(ResFunction.SetBackgroundColor(context,newTrans))
 
         chooseDate = v.findViewById(R.id.ChooseDateAddTrans)
-        chooseDate.setText(newTrans.TanggalTransaksi.toDateString())
+        chooseDate.setText(dateInSring.SetAndGetFormatSimple(newTrans.TanggalTransaksi,"/","/"))
         chooseDate.setTextColor(theme.BackGroundColor)
 
         chooseTime = v.findViewById(R.id.ChooseTimeAddTrans)
@@ -186,7 +191,8 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
                             newTrans.TanggalTransaksi.Bulan = (monthOfYear + 1)
                             newTrans.TanggalTransaksi.Tahun = year
 
-                            chooseDate.setText(newTrans.TanggalTransaksi.toDateString())
+                            chooseDate.setText(dateInSring.SetAndGetFormatSimple(newTrans.TanggalTransaksi,"/","/"))
+
 
                         },
                         now.get(Calendar.YEAR),
@@ -199,21 +205,23 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
             }
             butttonChooseType -> {
 
-                val option = arrayOf<CharSequence>(TransaksiData.ProductIn, TransaksiData.ProductOut)
+                val option = arrayOf<CharSequence>(lang.addTransDialogLang.TypeIn,lang.addTransDialogLang.TypeOUT)
                 android.support.v7.app.AlertDialog.Builder(context)
                         .setTitle(lang.addTransDialogLang.chooseType)
                         .setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
                             if (i == 0){
 
                                 newTrans.ProductFlow = TransaksiData.ProductIn
+                                butttonChooseType.setText(lang.addTransDialogLang.TypeIn)
 
                             }else if (i == 1){
 
                                 newTrans.ProductFlow = TransaksiData.ProductOut
+                                butttonChooseType.setText(lang.addTransDialogLang.TypeOUT)
 
                             }
 
-                            butttonChooseType.setText(newTrans.ProductFlow)
+                            butttonChooseType.setBackgroundColor(ResFunction.SetBackgroundColor(context,newTrans))
 
                             dialogInterface.dismiss()
                         })
@@ -329,7 +337,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
         val dialogEditQty = android.support.v7.app.AlertDialog.Builder(context)
                 .setTitle(lang.addTransDialogLang.Stok + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
+                .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
                     if ((checkDuluQty - Integer.parseInt(qty.text.toString())) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
 
@@ -377,7 +385,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
         val dialogEditQty = android.support.v7.app.AlertDialog.Builder(context)
                 .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.price)
-                .setPositiveButton("Ok", DialogInterface.OnClickListener { dialogInterface, i ->
+                .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
                     detail.get(pos).ProdukData.Harga = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
                     detail.get(pos).SetHargaAll(Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString()))

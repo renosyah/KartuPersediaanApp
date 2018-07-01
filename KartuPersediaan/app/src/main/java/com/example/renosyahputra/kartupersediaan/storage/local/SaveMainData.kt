@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
-import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
@@ -14,6 +13,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.itextpdf.text.Document
 import com.itextpdf.text.PageSize
@@ -142,7 +142,7 @@ companion object {
 
     }
 
-    fun KartuPersediaanToHtml(ctx : Context,userData: UserData, tglPeriod : ArrayList<FormatTanggal>,ProductDataToPrint : ArrayList<ProdukData>, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
+    fun KartuPersediaanToHtml(ctx : Context,userData: UserData,IsThisPeriodFilterOn : Boolean, tglPeriod : ArrayList<FormatTanggal>,ProductDataToPrint : ArrayList<ProdukData>, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
 
         val formatter = DecimalFormat("##,###")
         val now = Calendar.getInstance()
@@ -202,10 +202,10 @@ companion object {
             var StokPersediaan = 0
             var TotalPersediaan = 0
 
+
             for (d in laporanKartuPersediaanObj) {
 
                 if (d.ProdukData.IdProduk == perProduk.IdProduk){
-                    
 
                     if (d.ProductFlow == TransaksiData.ProductIn) {
 
@@ -324,7 +324,12 @@ companion object {
 
             body += "</tr>"
             val foot = "</table></div><br /><br /><br />"
-            str += header + body + total + foot
+            if (IsThisPeriodFilterOn){
+                str += header + body  + foot
+            }else {
+                str += header + body + total + foot
+            }
+
 
         }
 

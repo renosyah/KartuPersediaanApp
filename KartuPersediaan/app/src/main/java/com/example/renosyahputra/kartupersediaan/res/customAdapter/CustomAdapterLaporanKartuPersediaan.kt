@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -20,6 +21,7 @@ class CustomAdapterLaporanKartuPersediaan(ctx : Context,res : Int,objek : ArrayL
 
     internal lateinit var lang: LangObj
     internal lateinit var theme: ThemeObj
+
 
     fun SetLangTheme(lang: LangObj, theme: ThemeObj) {
         this.lang = lang
@@ -44,12 +46,13 @@ class CustomAdapterLaporanKartuPersediaan(ctx : Context,res : Int,objek : ArrayL
             holder = (row.getTag() as DataList)
         }
         val item = getItem(position)
+        val dateInSring = ChangeDateToRelevanString(context,lang)
 
         holder.name.setText(item.ProdukData.Nama)
         holder.name.setTextColor(theme.BackGroundColor)
 
         holder.qty.setText(lang.printLaporanLang.qtyP + " : " +item.GetKuantitas())
-        holder.date.setText(item.TanggalTransaksi.toDateString())
+        holder.date.setText(dateInSring.SetAndGetFormatSimple(item.TanggalTransaksi,"/","/"))
         holder.image.setBackgroundResource(if (item.ProductFlow == TransaksiData.ProductIn) R.drawable.arrowin else R.drawable.arrowout)
 
 

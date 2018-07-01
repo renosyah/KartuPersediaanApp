@@ -21,16 +21,24 @@ func (d *DbVar) connect() *sql.DB {
 // ----------------------------- save main Data ----------------------------------------------
 
 func (data *DataFromCloud) SaveDataFromCloud (sr *RestfullServer) error{
-	db := sr.Db.connect()
-	defer db.Close()
 
 	checkIfUsernameSameWithOtherUser,errcheckIfUsernameSameWithOtherUser := data.User.CheckIfSameUsernameWithOtherUser(sr)
 	if errcheckIfUsernameSameWithOtherUser != nil {
 		return errcheckIfUsernameSameWithOtherUser
 	}
 
+	CheckIfSameEmailWithOtherUser,errCheckIfSameEmailWithOtherUser := data.User.CheckIfSameEmailWithOtherUser(sr)
+	if errCheckIfSameEmailWithOtherUser != nil {
+		return errCheckIfSameEmailWithOtherUser
+	}
+
+
 	if checkIfUsernameSameWithOtherUser {
 		return errors.New("username is use by other user!")
+	}
+
+	if CheckIfSameEmailWithOtherUser {
+		return errors.New("email is use by other user!")
 	}
 
 
@@ -104,22 +112,31 @@ func (user *UserData) LoadDataFromCloud (sr *RestfullServer) (*DataFromCloud,err
 
 // ----------------------------- get data from db ----------------------------------------------
 func (u *UserData) CheckIfSameUsernameWithOtherUser(sr *RestfullServer) (bool,error){
-	var adaYgSama = false
+	var adaUsernameYgSama = false
 
 	db := sr.Db.connect()
 	defer db.Close()
 
-	errUserQuery := db.QueryRow("select IF(COUNT(*),'true','false') from User where Username=? and IdUser !=?",u.UserName,u.IdUser).Scan(&adaYgSama)
+	errUserQuery := db.QueryRow("select IF(COUNT(*),'true','false') from User where Username=? and IdUser !=?",u.UserName,u.IdUser).Scan(&adaUsernameYgSama)
 	if errUserQuery != nil {
-		return adaYgSama,errUserQuery
+		return adaUsernameYgSama,errUserQuery
 	}
 
-	errUserEmailQuery := db.QueryRow("select IF(COUNT(*),'true','false') from User where Email=? and IdUser !=?",u.UserName,u.IdUser).Scan(&adaYgSama)
-	if errUserQuery != nil {
-		return adaYgSama,errUserEmailQuery
+	return adaUsernameYgSama,nil
+}
+
+func (u *UserData) CheckIfSameEmailWithOtherUser(sr *RestfullServer) (bool,error){
+	var adaEmailYangSama = false
+
+	db := sr.Db.connect()
+	defer db.Close()
+
+	errUserEmailQuery := db.QueryRow("select IF(COUNT(*),'true','false') from User where Email=? and IdUser !=?",u.Email,u.IdUser).Scan(&adaEmailYangSama)
+	if errUserEmailQuery != nil {
+		return adaEmailYangSama,errUserEmailQuery
 	}
 
-	return adaYgSama,nil
+	return adaEmailYangSama,nil
 }
 
 func (u *UserData) GetUserByLogin(sr *RestfullServer) (*UserData,error){

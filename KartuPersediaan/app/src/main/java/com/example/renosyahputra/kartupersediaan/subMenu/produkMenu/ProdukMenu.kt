@@ -16,11 +16,11 @@ import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
-import com.example.renosyahputra.kartupersediaan.res.AlterAllProductInTrans.Companion.DeleteAllProduct
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.produk.CustomAlertDialogEditProduk
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans.Companion.DeleteAllProduct
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -117,6 +117,8 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
 
 
     override fun onRefresh() {
+        CariProduk.setText("")
+        ListProductCari.clear()
         SetAdapter(ListProduct)
         if (refreshProduct.isRefreshing){
             refreshProduct.isRefreshing = !refreshProduct.isRefreshing

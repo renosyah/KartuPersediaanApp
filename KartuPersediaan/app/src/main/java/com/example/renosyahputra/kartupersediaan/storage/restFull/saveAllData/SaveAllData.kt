@@ -83,7 +83,8 @@ class SaveAllData : AsyncTask<Void,Void,String>{
         if (result != ""){
             val jsonResponse = JSONObject(result)
             if (jsonResponse.getBoolean("Response")){
-                Toast.makeText(context,jsonResponse.getString("Message"),Toast.LENGTH_SHORT).show()
+                val message = jsonResponse.getString("Message")
+                Toast.makeText(context,if (message == "OK") lang.mainMenuLang.SavingComplete else message,Toast.LENGTH_SHORT).show()
             }else {
                 Toast.makeText(context,jsonResponse.getString("Message"),Toast.LENGTH_SHORT).show()
             }
