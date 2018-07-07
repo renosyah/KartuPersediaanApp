@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
@@ -14,10 +16,13 @@ import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.login.LoginDialog
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DeveloperMode
 import com.example.renosyahputra.kartupersediaan.ui.lang.LangSetting
 import com.example.renosyahputra.kartupersediaan.ui.theme.ThemeSetting
 
-class Register : AppCompatActivity(),View.OnClickListener {
+class Register : AppCompatActivity(),View.OnClickListener,TextWatcher {
+
 
 
     lateinit var context : Context
@@ -93,6 +98,10 @@ class Register : AppCompatActivity(),View.OnClickListener {
         login.setOnClickListener(this)
         register.setOnClickListener(this)
         setting.setOnClickListener(this)
+
+        inputNama.addTextChangedListener(this)
+        inputEmail.addTextChangedListener(this)
+        inputCompanyName.addTextChangedListener(this)
 
     }
 
@@ -274,5 +283,21 @@ class Register : AppCompatActivity(),View.OnClickListener {
         register.setTextColor(themeSetting.GetThemeSetting().TextColor)
         register.setBackgroundColor(themeSetting.GetThemeSetting().BackGroundColor)
         register.setText(langSetting.GetlangObj().registerLang.register)
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (p0.toString() == DataDevMod.devmodString){
+
+            val inten = Intent(context, DeveloperMode::class.java)
+            inten.putExtra("lang",langSetting.GetlangObj())
+            inten.putExtra("theme",themeSetting.GetThemeSetting())
+            context.startActivity(inten)
+        }
     }
 }

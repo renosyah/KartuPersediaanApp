@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.developerMode.DeveloperMode">
+
+    <RelativeLayout
+        android:id="@+id/bartitleDeveloperMode"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/green">
+
+        <TextView
+            android:id="@+id/titleDeveloperMode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:gravity="center"
+            android:text="Developer Mode"
+            android:textAlignment="center"
+            android:textColor="@color/whiteText"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/closeDeveloperMode"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="center"
+            android:src="@drawable/back" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/SubtitleCloudSetDeveloperMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cloud Save Setting"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/MainIpSetDeveloperMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:drawableRight="@android:drawable/ic_menu_edit"
+                            android:gravity="center|left"
+                            android:padding="10dp"
+                            android:text="Main Url"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/PortSetDeveloperMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:drawableRight="@android:drawable/ic_menu_edit"
+                            android:gravity="center|left"
+                            android:padding="10dp"
+                            android:text="Port"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/GetDataSetDeveloperMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:drawableRight="@android:drawable/ic_menu_edit"
+                            android:gravity="center|left"
+                            android:padding="10dp"
+                            android:text="Get Data Url"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/SaveDataSetDeveloperMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:drawableRight="@android:drawable/ic_menu_edit"
+                            android:gravity="center|left"
+                            android:padding="10dp"
+                            android:text="Save Data Url"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+
+                    android:id="@+id/SubtitleAppSetDeveloperMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="App Setting"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+
+                            android:id="@+id/FirstFilterLoopDeveloperMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:drawableRight="@android:drawable/ic_menu_edit"
+                            android:gravity="center|left"
+                            android:padding="10dp"
+                            android:text="Filter 1 Loop"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

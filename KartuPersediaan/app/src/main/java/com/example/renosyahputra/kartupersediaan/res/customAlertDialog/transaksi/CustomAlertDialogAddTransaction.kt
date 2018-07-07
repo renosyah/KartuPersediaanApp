@@ -19,7 +19,7 @@ import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.*
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -80,7 +80,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
     internal fun InitiationWidget(v : View){
 
-        dateInSring = ChangeDateToRelevanString(context,lang)
+        dateInSring = ChangeDateToRelevanString(context, lang)
 
         val randId = IdGenerator()
         randId.CreateRandomString(15)

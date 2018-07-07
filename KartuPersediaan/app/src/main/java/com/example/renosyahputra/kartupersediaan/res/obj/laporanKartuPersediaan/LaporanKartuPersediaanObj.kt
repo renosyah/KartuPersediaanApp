@@ -15,6 +15,39 @@ class LaporanKartuPersediaanObj : Serializable {
     lateinit var ListPersediaanData : ArrayList<PersediaanData>
     lateinit var ListKuantitas : ArrayList<KuantitasTransaksi>
 
+    fun CloneLaporanKartuPersediaan() : LaporanKartuPersediaanObj{
+        val newOne = LaporanKartuPersediaanObj()
+
+        val tanggal = FormatTanggal()
+        tanggal.Hari = this.TanggalTransaksi.Hari
+        tanggal.Bulan = this.TanggalTransaksi.Bulan
+        tanggal.Tahun = this.TanggalTransaksi.Tahun
+
+        val produk = ProdukData()
+        produk.IdProduk = this.ProdukData.IdProduk
+        produk.Nama = this.ProdukData.Nama
+        produk.Harga = this.ProdukData.Harga
+
+        val persediaan = ArrayList<PersediaanData>()
+        for (data in this.ListPersediaanData){
+            persediaan.add(data)
+        }
+        val kuantitas = ArrayList<KuantitasTransaksi>()
+        for (data in this.ListKuantitas){
+            kuantitas.add(data.CloneKuantitas())
+        }
+
+        newOne.IdTransaksiData  = this.IdTransaksiData
+        newOne.TanggalTransaksi = tanggal
+        newOne.ProdukData = produk
+        newOne.Keterangan = this.Keterangan
+        newOne.ProductFlow = this.ProductFlow
+        newOne.ListPersediaanData = persediaan
+        newOne.ListKuantitas = kuantitas
+
+        return newOne
+    }
+
     fun GetTotalListKuantitas() : Int{
         var total = 0
         for (i in this.ListKuantitas){

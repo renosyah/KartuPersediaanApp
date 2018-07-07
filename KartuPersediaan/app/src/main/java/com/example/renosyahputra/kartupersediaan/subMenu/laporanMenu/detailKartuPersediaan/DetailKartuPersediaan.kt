@@ -16,7 +16,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.
 import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.PersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.example.renosyahputra.quicktrans.ui.GetListViewTotalHeight
@@ -77,7 +77,7 @@ class DetailKartuPersediaan : AppCompatActivity(),View.OnClickListener {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
-        dateInSring = ChangeDateToRelevanString(context,lang)
+        dateInSring = ChangeDateToRelevanString(context, lang)
 
         bar = findViewById(R.id.titleDetailLapInfoBar)
         titleImage = findViewById(R.id.ImagetitleDetailLapInfo)

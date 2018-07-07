@@ -6,16 +6,20 @@ import android.content.Context.MODE_PRIVATE
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addProdukFormLang.AddProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addTransDialogLang.AddTransDialogLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.cariTanggalLaporanLang.CariTanggalLaporanLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.devModeLang.DevModeLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.editProdukFormLang.EditProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.guideLang.GuideLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.laporanMenuLang.LaporanMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginDialogLang.LoginDialogLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.logoutDialogLang.LogoutDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.registerLang.RegisterLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.saveOnlineDialogLang.SaveOnlineDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.userDataSettingLang.UserDataSettingLang
@@ -170,7 +174,7 @@ class LangSetting(ctx : Context){
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Stock Card"
         laporanMenuLang.filterPilihMethod = "Method"
-        laporanMenuLang.filterPilihPeriode = "Period"
+        laporanMenuLang.filterPilihPeriode = "Date"
         laporanMenuLang.filterPilihProduk = "Product"
         laporanMenuLang.KartuPersediaanKosong = "Stock Card Is Empty"
         laporanMenuLang.namaProductDetail = "Product Name"
@@ -179,8 +183,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.total = "Total"
         laporanMenuLang.stokKe = "Stock Number"
         laporanMenuLang.KuantitasKe = "Quantity Number"
-        laporanMenuLang.titleStockForListStock = "Stock List"
-        laporanMenuLang.titleTransForListQty = "Transaction Quantity List"
+        laporanMenuLang.titleStockForListStock = "Stock Balance"
+        laporanMenuLang.titleTransForListQty = "Transaction Balance"
         laporanMenuLang.exportTitle = "Print Document"
         laporanMenuLang.toPDF = "PDF (Potrait)"
         laporanMenuLang.toPDFLANDSCAPE = "PDF (Landscape)"
@@ -198,7 +202,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.ok = "Open"
         laporanMenuLang.no = "No"
         laporanMenuLang.FilterChooseAllProduct = "All Product"
-        laporanMenuLang.FiterChooseAllPeriod = "All Period"
+        laporanMenuLang.FiterChooseAllPeriod = "All Dates"
+        laporanMenuLang.titlePeriodeTahun = "Choose Year"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Product In"
@@ -285,6 +290,40 @@ class LangSetting(ctx : Context){
                 ""
 
 
+        val cariTanggalLaporanLang = CariTanggalLaporanLang()
+        cariTanggalLaporanLang.title = "Transaction's Date"
+        cariTanggalLaporanLang.Tampilkan = "Show"
+        cariTanggalLaporanLang.Batal = "Cancel"
+        cariTanggalLaporanLang.awal = "First Date"
+        cariTanggalLaporanLang.akhir = "Last Date"
+        cariTanggalLaporanLang.InputTanggalSalah = "Attention, date is not valid!"
+
+
+        val saveOnlineDialogLang = SaveOnlineDialogLang()
+        saveOnlineDialogLang.title = "Save Data To Cloud"
+        saveOnlineDialogLang.message = "You about to save all your data to server, press save to continue"
+        saveOnlineDialogLang.save = "Save"
+        saveOnlineDialogLang.cancel = "Cancel"
+
+        val logoutDialogLang = LogoutDialogLang()
+        logoutDialogLang.title = "Logout"
+        logoutDialogLang.message = "you'll logout, all data and session from app will be erase, are you sure?"
+        logoutDialogLang.logout = "Logout"
+        logoutDialogLang.cancel = "Cancel"
+
+        val devModeLang = DevModeLang()
+        devModeLang.title = "Developer Mode"
+        devModeLang.subtitle_app = "App Setting"
+        devModeLang.subtitle_cloud = "Cloud Setting"
+        devModeLang.editUrl = "Url Server"
+        devModeLang.editport = "Port"
+        devModeLang.editloadData = "Url Login"
+        devModeLang.editsaveData = "Url Simpan"
+        devModeLang.editloop = "Loop Stock"
+        devModeLang.title_dialog = "Edit Value"
+        devModeLang.save = "Save"
+        devModeLang.cancel = "Cancel"
+
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
         langObj.mainMenuAddTaskLang = mainMenuAddTaskLang
@@ -300,6 +339,10 @@ class LangSetting(ctx : Context){
         langObj.userDataSettingLang = userDataSettingLang
         langObj.loginDialogLang = loginDialogLang
         langObj.guideLang = guideLang
+        langObj.cariTanggalLaporanLang = cariTanggalLaporanLang
+        langObj.saveOnlineDialogLang = saveOnlineDialogLang
+        langObj.logoutDialogLang = logoutDialogLang
+        langObj.devModeLang = devModeLang
     }
 
 
@@ -415,7 +458,7 @@ class LangSetting(ctx : Context){
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Kartu Persediaan"
         laporanMenuLang.filterPilihMethod = "Metode"
-        laporanMenuLang.filterPilihPeriode = "Periode"
+        laporanMenuLang.filterPilihPeriode = "Tanggal"
         laporanMenuLang.filterPilihProduk = "Produk"
         laporanMenuLang.KartuPersediaanKosong = "Kartu Persediaan Kosong"
         laporanMenuLang.namaProductDetail = "Nama Produk"
@@ -443,7 +486,8 @@ class LangSetting(ctx : Context){
         laporanMenuLang.ok = "Buka"
         laporanMenuLang.no = "Tidak"
         laporanMenuLang.FilterChooseAllProduct = "Semua Produk"
-        laporanMenuLang.FiterChooseAllPeriod = "Semua Periode"
+        laporanMenuLang.FiterChooseAllPeriod = "Semua Tanggal"
+        laporanMenuLang.titlePeriodeTahun = "Pilih Tahun"
 
         val printLaporanLang = PrintLaporanLang()
         printLaporanLang.Pembelian = "Produk Masuk"
@@ -530,6 +574,38 @@ class LangSetting(ctx : Context){
                 "\n" +
                 ""
 
+        val cariTanggalLaporanLang = CariTanggalLaporanLang()
+        cariTanggalLaporanLang.title = "Tanggal Transaksi"
+        cariTanggalLaporanLang.Tampilkan = "Tampilkan"
+        cariTanggalLaporanLang.Batal = "Batal"
+        cariTanggalLaporanLang.awal = "Tanggal Awal"
+        cariTanggalLaporanLang.akhir = "Tanggal Akhir"
+        cariTanggalLaporanLang.InputTanggalSalah = "perhatian,Tanggal Yang diinputkan tidak valid!"
+
+        val saveOnlineDialogLang = SaveOnlineDialogLang()
+        saveOnlineDialogLang.title = "Simpan data ke Cloud"
+        saveOnlineDialogLang.message = "Anda akan menyimpan seluruh data anda ke server, tekan simpan untuk melanjukan"
+        saveOnlineDialogLang.save = "Simpan"
+        saveOnlineDialogLang.cancel = "Batal"
+
+        val logoutDialogLang = LogoutDialogLang()
+        logoutDialogLang.title = "Logout"
+        logoutDialogLang.message = "Anda akan logout, seluruh data dan sesi untuk aplikasi akan dihapus dari perangkat anda,apakah anda yakin ingin melanjutkan?"
+        logoutDialogLang.logout = "Logout"
+        logoutDialogLang.cancel = "Batal"
+
+        val devModeLang = DevModeLang()
+        devModeLang.title = "Mode Developer"
+        devModeLang.subtitle_app = "Pengaturan Aplikasi"
+        devModeLang.subtitle_cloud = "Pengaturan Cloud"
+        devModeLang.editUrl = "Url Server"
+        devModeLang.editport = "Port"
+        devModeLang.editloadData = "Url Login"
+        devModeLang.editsaveData = "Url Simpan"
+        devModeLang.editloop = "Loop Persediaan"
+        devModeLang.title_dialog = "Edit Nilai"
+        devModeLang.save = "Simpan"
+        devModeLang.cancel = "Batal"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
@@ -546,6 +622,10 @@ class LangSetting(ctx : Context){
         langObj.userDataSettingLang = userDataSettingLang
         langObj.loginDialogLang = loginDialogLang
         langObj.guideLang = guideLang
+        langObj.cariTanggalLaporanLang = cariTanggalLaporanLang
+        langObj.saveOnlineDialogLang = saveOnlineDialogLang
+        langObj.logoutDialogLang = logoutDialogLang
+        langObj.devModeLang = devModeLang
     }
 
     fun ChangeLang(s : String){

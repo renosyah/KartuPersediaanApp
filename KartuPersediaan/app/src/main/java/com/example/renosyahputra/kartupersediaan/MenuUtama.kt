@@ -1,6 +1,5 @@
 package com.example.renosyahputra.kartupersediaan
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -15,17 +14,13 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
-import com.example.renosyahputra.kartupersediaan.register.Register
+import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddProduk
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddTransaksi
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.login.LoginDialog
-import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.userSetting.CustomAlertDialogUserSetting
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
-import com.example.renosyahputra.kartupersediaan.storage.local.SaveUserData
-import com.example.renosyahputra.kartupersediaan.storage.restFull.saveAllData.SaveAllData
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.KartuPersediaanMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.ProdukMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
@@ -218,7 +213,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
                     }else if (i == 2){
 
-                        OpenUserProfilSetting()
+                        MenuUtamaRes.OpenUserProfilSetting(context,userData,nav_view,langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
                     }
 
@@ -228,13 +223,6 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
                     dialogInterface.dismiss()
                 })
                 .create().show()
-    }
-
-    internal fun OpenUserProfilSetting(){
-        val userSetting = CustomAlertDialogUserSetting(context,userData)
-        userSetting.SetNavBar(nav_view)
-        userSetting.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
-        userSetting.InitiationDialog()
     }
 
     internal fun OpenLangSetting(){
@@ -367,17 +355,7 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
             }
             R.id.SaveDataToCloud -> {
 
-                if (userData.UserName == "" || userData.Password == ""){
-
-                    Toast.makeText(context,langSetting.GetlangObj().mainMenuLang.SaveDataOnlineButAccountNotValid,Toast.LENGTH_SHORT).show()
-                    OpenUserProfilSetting()
-
-                } else {
-
-                    Toast.makeText(context,langSetting.GetlangObj().mainMenuLang.Saving,Toast.LENGTH_SHORT).show()
-                    SaveAllData(context,kartuPersediaanData,userData,langSetting.GetlangObj()).execute()
-
-                }
+                MenuUtamaRes.DialogSaveDataOnline(context,userData,nav_view,kartuPersediaanData,langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
                 return true
             }
@@ -423,8 +401,6 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
         when (item.itemId) {
 
             R.id.LaporanMenu -> {
-
-
                 supportActionBar!!.setTitle(langSetting.GetlangObj().mainMenuLang.subMenu1)
                 FragmentChanger.beginTransaction().replace(R.id.MainMenuFrameLaout,kartuPersediaanMenu).commit()
             }
@@ -440,20 +416,9 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
             R.id.SideSettingMenu -> {
                 OpenLangAndThemeSetting()
                 nav_view.menu.getItem(0).setChecked(true)
-
             }
-
             R.id.Logout -> {
-
-                val save = SaveMainData(context,kartuPersediaanData)
-                val user = SaveUserData(context,userData)
-                if (save.Delete() && user.Delete()){
-
-                    val intent = Intent(context, Register::class.java)
-                    context.startActivity(intent)
-                    (context as Activity).finish()
-
-                }
+                MenuUtamaRes.OpenDialogConfirmLogout(context,userData,kartuPersediaanData,langSetting.GetlangObj(),themeSetting.GetThemeSetting())
             }
 
         }

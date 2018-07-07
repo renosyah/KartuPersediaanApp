@@ -2,16 +2,20 @@ package com.example.renosyahputra.kartupersediaan.ui.lang.obj
 
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addProdukFormLang.AddProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.addTransDialogLang.AddTransDialogLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.cariTanggalLaporanLang.CariTanggalLaporanLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.devModeLang.DevModeLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.editProdukFormLang.EditProdukFormLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.guideLang.GuideLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.laporanMenuLang.LaporanMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.loginDialogLang.LoginDialogLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.logoutDialogLang.LogoutDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuAddTaskLang.MainMenuAddTaskLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuLang.MainMenuLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang.MainMenuSettingLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.registerLang.RegisterLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.saveOnlineDialogLang.SaveOnlineDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.userDataSettingLang.UserDataSettingLang
@@ -33,4 +37,8 @@ class LangObj : Serializable {
     lateinit var userDataSettingLang : UserDataSettingLang
     lateinit var loginDialogLang : LoginDialogLang
     lateinit var guideLang : GuideLang
+    lateinit var cariTanggalLaporanLang : CariTanggalLaporanLang
+    lateinit var saveOnlineDialogLang : SaveOnlineDialogLang
+    lateinit var logoutDialogLang : LogoutDialogLang
+    lateinit var devModeLang  : DevModeLang
 }

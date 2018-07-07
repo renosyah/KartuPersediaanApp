@@ -5,8 +5,8 @@ import android.os.AsyncTask
 import android.widget.Toast
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
-import com.example.renosyahputra.kartupersediaan.storage.local.DataDevMod
-import com.example.renosyahputra.kartupersediaan.storage.local.DevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.google.gson.Gson
 import okhttp3.MultipartBody
@@ -61,8 +61,10 @@ class SaveAllData : AsyncTask<Void,Void,String>{
                     .addFormDataPart("UserData",JsonUserData)
                     .build()
 
+            val url = devMod!!.URL + ":" + devMod!!.PORT + devMod!!.SaveDataUrl
+
             val request = Request.Builder()
-                    .url(devMod!!.SaveDataUrl)
+                    .url(url)
                     .post(requestBody)
                     .build()
 
@@ -89,9 +91,13 @@ class SaveAllData : AsyncTask<Void,Void,String>{
                 Toast.makeText(context,jsonResponse.getString("Message"),Toast.LENGTH_SHORT).show()
             }
 
-        }else if(data.ListTransaksiData.size >= 10){
+        }else if(data.ListTransaksiData.size >= 20){
 
             Toast.makeText(context,lang.mainMenuLang.SavingButDataIsTooBig,Toast.LENGTH_SHORT).show()
+
+        }else if (result == "" && data.ListTransaksiData.size >= 20) {
+
+            Toast.makeText(context,lang.mainMenuLang.SavingFail,Toast.LENGTH_SHORT).show()
 
         }else if (result == "") {
 

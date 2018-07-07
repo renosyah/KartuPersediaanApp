@@ -18,4 +18,21 @@ class FormatTanggal  :Serializable {
         val tgl2 = sdf.parse(this.toDateString()+" "+j2.MakeJamString())
         return (tgl2 >= tgl1)
     }
+
+    companion object {
+
+        fun BandingkanTanggalPatokanDenganYangLebihKecil(TanggalYgSeharusnyaLebihKecil: FormatTanggal, TanggalPatokan: FormatTanggal): Boolean {
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val tgl1 = sdf.parse(TanggalYgSeharusnyaLebihKecil.toDateString())
+            val tgl2 = sdf.parse(TanggalPatokan.toDateString())
+            return (tgl2 >= tgl1)
+        }
+
+        fun BandingkanTanggalPatokanDenganYangLebihBesar(TanggalYgSeharusnyaLebihBesar: FormatTanggal, TanggalPatokan: FormatTanggal): Boolean {
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val tgl1 = sdf.parse(TanggalYgSeharusnyaLebihBesar.toDateString())
+            val tgl2 = sdf.parse(TanggalPatokan.toDateString())
+            return (tgl2 <= tgl1)
+        }
+    }
 }

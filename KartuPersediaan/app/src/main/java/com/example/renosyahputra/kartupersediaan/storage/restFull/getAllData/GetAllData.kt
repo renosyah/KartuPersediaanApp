@@ -10,11 +10,11 @@ import com.example.renosyahputra.kartupersediaan.MenuUtama
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
-import com.example.renosyahputra.kartupersediaan.storage.local.DataDevMod
-import com.example.renosyahputra.kartupersediaan.storage.local.DevMod
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveUserData
 import com.example.renosyahputra.kartupersediaan.storage.restFull.obj.DataFromCloud
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.google.gson.Gson
 import okhttp3.MultipartBody
@@ -106,8 +106,9 @@ class GetAllData : AsyncTask<Void,Void,String>{
                     .addFormDataPart("Password",userData.Password)
                     .build()
 
+            val url = devMod!!.URL + ":" + devMod!!.PORT + devMod!!.DataUrl
             val request = Request.Builder()
-                    .url(devMod!!.DataUrl)
+                    .url(url)
                     .post(requestBody)
                     .build()
 

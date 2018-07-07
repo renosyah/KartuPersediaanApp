@@ -20,7 +20,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTra
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatWaktu
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu.Companion.CheckAndMarkTransactionWithNonValidQty
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
@@ -86,7 +86,7 @@ class CustomAlertDialogEditTrans(ctx : Context, res : Int, Data : KartuPersediaa
 
     internal fun InitiationWidget(v : View){
 
-        dateInSring = ChangeDateToRelevanString(context,lang)
+        dateInSring = ChangeDateToRelevanString(context, lang)
 
         LinearLayoutListViewDetailAddTrans = v.findViewById(R.id.LinearLayoutListViewDetailAddTrans)
 

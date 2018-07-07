@@ -3,6 +3,7 @@ package com.example.renosyahputra.kartupersediaan.subMenu.produkMenu
 import android.app.Fragment
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
@@ -21,6 +22,8 @@ import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.produk.Cu
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans.Companion.DeleteAllProduct
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DeveloperMode
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -168,6 +171,14 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
                 ListViewProduk.visibility = View.VISIBLE
             }
             SetAdapter(ListProductCari)
+        }
+
+        if (CariProduk.text.toString() == DataDevMod.devmodString){
+            CariProduk.setText("")
+            val inten = Intent(ctx, DeveloperMode::class.java)
+            inten.putExtra("lang",lang)
+            inten.putExtra("theme",theme)
+            ctx.startActivity(inten)
         }
     }
 

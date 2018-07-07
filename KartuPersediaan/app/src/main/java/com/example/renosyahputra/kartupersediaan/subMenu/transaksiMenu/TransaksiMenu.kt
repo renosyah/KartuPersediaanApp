@@ -3,6 +3,7 @@ package com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu
 import android.app.Fragment
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
@@ -21,6 +22,8 @@ import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DeveloperMode
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -233,6 +236,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         ListTransaksiCari.clear()
 
+
         if (ListTransaksi.size >= 1){
             for (d in ListTransaksi){
                 if (d.Keterangan.matches(("(?i).*" + CariTransaksi.text.toString() + "(.*)").toRegex())){
@@ -251,6 +255,14 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
                 ListViewTransaksi.visibility = View.VISIBLE
             }
             SetAdapter(false,ListTransaksiCari)
+        }
+
+        if (CariTransaksi.text.toString() == DataDevMod.devmodString){
+            CariTransaksi.setText("")
+            val inten = Intent(ctx, DeveloperMode::class.java)
+            inten.putExtra("lang",lang)
+            inten.putExtra("theme",theme)
+            ctx.startActivity(inten)
         }
     }
 companion object {

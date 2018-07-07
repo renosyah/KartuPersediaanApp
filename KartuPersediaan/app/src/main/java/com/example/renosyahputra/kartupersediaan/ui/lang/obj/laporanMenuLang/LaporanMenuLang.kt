@@ -50,4 +50,6 @@ class LaporanMenuLang : Serializable {
     lateinit var FilterChooseAllProduct : String
     lateinit var FiterChooseAllPeriod : String
 
+
+    lateinit var titlePeriodeTahun : String
 }

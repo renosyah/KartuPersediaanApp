@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.ChangeDateToRelevanString
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -46,7 +46,7 @@ class CustomAdapterLaporanKartuPersediaan(ctx : Context,res : Int,objek : ArrayL
             holder = (row.getTag() as DataList)
         }
         val item = getItem(position)
-        val dateInSring = ChangeDateToRelevanString(context,lang)
+        val dateInSring = ChangeDateToRelevanString(context, lang)
 
         holder.name.setText(item.ProdukData.Nama)
         holder.name.setTextColor(theme.BackGroundColor)
