@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Environment
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
@@ -13,7 +14,6 @@ import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
-import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.itextpdf.text.Document
 import com.itextpdf.text.PageSize
@@ -143,6 +143,7 @@ companion object {
     }
 
     fun KartuPersediaanToHtml(ctx : Context,userData: UserData,IsThisPeriodFilterOn : Boolean, tglPeriod : ArrayList<FormatTanggal>,ProductDataToPrint : ArrayList<ProdukData>, methode : String, laporanKartuPersediaanObj: ArrayList<LaporanKartuPersediaanObj>, langObj: LangObj): String {
+
 
         val formatter = DecimalFormat("##,###")
         val now = Calendar.getInstance()

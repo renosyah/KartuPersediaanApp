@@ -13,6 +13,7 @@ class DevModeLang  :Serializable {
     lateinit var editsaveData : String
 
     lateinit var editloop  :String
+    lateinit var editModeCatatan : String
 
     lateinit var title_dialog : String
     lateinit var save  :String

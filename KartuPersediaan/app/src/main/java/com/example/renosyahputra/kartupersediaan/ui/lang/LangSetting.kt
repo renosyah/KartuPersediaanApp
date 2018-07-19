@@ -218,6 +218,10 @@ class LangSetting(ctx : Context){
         printLaporanLang.total = "Total"
         printLaporanLang.stok = "Stock"
         printLaporanLang.metode = "Method"
+        printLaporanLang.MenyiapkanPrintTitleDialog = "Preparing data"
+        printLaporanLang.MenyiapkanPrintMessageDialog  = "Preparing all the data...."
+        printLaporanLang.PrintNowTitleDialog = "Print"
+        printLaporanLang.PrintNowMessageDialog ="printing all the document,please wait...."
 
 
         val registerLang = RegisterLang()
@@ -267,6 +271,8 @@ class LangSetting(ctx : Context){
         loginDialogLang.cancel = "Cancel"
         loginDialogLang.failLogin = "Fail to Login to your account!"
         loginDialogLang.emptyForm = "There is some empty form, please fill it!"
+        loginDialogLang.LoginDialogTitle = "Login"
+        loginDialogLang.LoginDialogMessage = "Login,please wait..."
 
         val guideLang = GuideLang()
         guideLang.appName = "Kartu Persediaan"
@@ -304,6 +310,8 @@ class LangSetting(ctx : Context){
         saveOnlineDialogLang.message = "You about to save all your data to server, press save to continue"
         saveOnlineDialogLang.save = "Save"
         saveOnlineDialogLang.cancel = "Cancel"
+        saveOnlineDialogLang.SavingMessage = "Saving all your data,please wait...."
+        saveOnlineDialogLang.SavingTitle = "Saving"
 
         val logoutDialogLang = LogoutDialogLang()
         logoutDialogLang.title = "Logout"
@@ -319,10 +327,11 @@ class LangSetting(ctx : Context){
         devModeLang.editport = "Port"
         devModeLang.editloadData = "Url Login"
         devModeLang.editsaveData = "Url Simpan"
-        devModeLang.editloop = "Loop Stock"
+        devModeLang.editloop = "Override Stock Loop"
         devModeLang.title_dialog = "Edit Value"
         devModeLang.save = "Save"
         devModeLang.cancel = "Cancel"
+        devModeLang.editModeCatatan = "Edit Writing Mode"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
@@ -502,6 +511,11 @@ class LangSetting(ctx : Context){
         printLaporanLang.total = "Total"
         printLaporanLang.stok = "Kuantitas"
         printLaporanLang.metode = "Metode Pencatatan"
+        printLaporanLang.MenyiapkanPrintTitleDialog = "Menyiapkan Data"
+        printLaporanLang.MenyiapkanPrintMessageDialog  = "Menyiapkan data-data yang akan di cetak, harap menunggu...."
+
+        printLaporanLang.PrintNowTitleDialog = "Mencetak"
+        printLaporanLang.PrintNowMessageDialog ="dokumen-dukumen laporan kartu persediaan sedang dicetak, harap menunggu..."
 
 
         val registerLang = RegisterLang()
@@ -551,7 +565,8 @@ class LangSetting(ctx : Context){
         loginDialogLang.cancel = "Batal"
         loginDialogLang.failLogin = "Gagal login ke akun anda!"
         loginDialogLang.emptyForm = "ada form yang kosong, harap isi!"
-
+        loginDialogLang.LoginDialogTitle = "Login"
+        loginDialogLang.LoginDialogMessage = "Login,harap menunggu..."
 
         val guideLang = GuideLang()
         guideLang.appName = "Kartu Persediaan"
@@ -587,6 +602,8 @@ class LangSetting(ctx : Context){
         saveOnlineDialogLang.message = "Anda akan menyimpan seluruh data anda ke server, tekan simpan untuk melanjukan"
         saveOnlineDialogLang.save = "Simpan"
         saveOnlineDialogLang.cancel = "Batal"
+        saveOnlineDialogLang.SavingTitle = "Menyimpan"
+        saveOnlineDialogLang.SavingMessage = "Menyimpan semua data anda, harap menunggu...."
 
         val logoutDialogLang = LogoutDialogLang()
         logoutDialogLang.title = "Logout"
@@ -602,10 +619,11 @@ class LangSetting(ctx : Context){
         devModeLang.editport = "Port"
         devModeLang.editloadData = "Url Login"
         devModeLang.editsaveData = "Url Simpan"
-        devModeLang.editloop = "Loop Persediaan"
+        devModeLang.editloop = "Override looping Persediaan"
         devModeLang.title_dialog = "Edit Nilai"
         devModeLang.save = "Simpan"
         devModeLang.cancel = "Batal"
+        devModeLang.editModeCatatan = "Edit Mode Catatan"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang

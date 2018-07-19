@@ -27,8 +27,10 @@ import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData.Companion.OpenFileKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.detailKartuPersediaan.DetailKartuPersediaan
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.FunctionForKartuPersediaanMenu
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.alternative.FunctionForKartuPersediaanMenuForAlternative
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.FunctionForKartuPersediaanMenu
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -52,8 +54,8 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         this.user = userData
     }
 
-    internal lateinit var lang : LangObj
-    internal lateinit var theme: ThemeObj
+    lateinit var lang : LangObj
+    lateinit var theme: ThemeObj
 
     fun SetLangTheme(lang : LangObj, theme: ThemeObj){
         this.lang = lang
@@ -108,14 +110,26 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
             duplicateListTransaksi.add(trs.CloneTransData())
         }
 
-        FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(Data.LoopForFilter1,MainData,duplicateListTransaksi)
+        if (Data.CovertMode == DevMod.NEW){
 
-        FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData,duplicateListTransaksi)
+            FunctionForKartuPersediaanMenuForAlternative.FromTransactionListToKartuPersediaanListWithoutFilter(Data.LoopForFilter1,MainData,duplicateListTransaksi,LaporanKartuPersediaan)
 
-        FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter,duplicateListTransaksi,LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenuForAlternative.CalculatingStockAndModifyListPersediaanDataAlternative(MainData,LaporanKartuPersediaan)
 
-        FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
 
+            FunctionForKartuPersediaanMenuForAlternative.FromKartuPersediaanListToKartuPersediaanListByFilter(filter,LaporanKartuPersediaan)
+
+        }else if (Data.CovertMode == DevMod.OLD) {
+
+            FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(Data.LoopForFilter1, MainData, duplicateListTransaksi)
+
+            FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData, duplicateListTransaksi)
+
+            FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter, duplicateListTransaksi, LaporanKartuPersediaan)
+
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData, LaporanKartuPersediaan)
+        }
         SetAdapter(LaporanKartuPersediaan)
     }
 
@@ -225,6 +239,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     FunctionForKartuPersediaanMenu.dialogTransNotValid(ctx,lang)
                 }else {
 
+
                     MainData.metodePersediaan.MetodeUse = MetodePersediaan.FIFO
                     GenerateData(filterSearch)
                     val dataStringFIFO = SaveMainData.KartuPersediaanToHtml(ctx, user,(filterSearch.TanggalAwal != null && filterSearch.TanggalAkhir != null), allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
@@ -237,16 +252,19 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                     GenerateData(filterSearch)
                     val dataStringAVERAGE = SaveMainData.KartuPersediaanToHtml(ctx, user,(filterSearch.TanggalAwal != null && filterSearch.TanggalAkhir != null), allTgl, ProductToPrint, MainData.metodePersediaan.MetodeUse, LaporanKartuPersediaan, lang)
 
+
                     AlertDialog.Builder(ctx)
                             .setTitle(lang.laporanMenuLang.exportTitle)
                             .setNegativeButton(lang.laporanMenuLang.cancel, DialogInterface.OnClickListener { dialogInterface, i ->
                                 dialogInterface.dismiss()
                             }).setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
+
                                 when (i) {
                                     0 -> {
                                         SaveMainData.SaveAsPdf(false,"KartuPersediaanFIFO.pdf", dataStringFIFO)
                                         SaveMainData.SaveAsPdf(false,"KartuPersediaanLIFO.pdf", dataStringLIFO)
                                         SaveMainData.SaveAsPdf(false,"KartuPersediaanAVERAGE.pdf", dataStringAVERAGE)
+
                                     }
                                     1 -> {
                                         SaveMainData.SaveAsPdf(true,"KartuPersediaanFIFO.pdf", dataStringFIFO)
@@ -318,6 +336,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                 val list: ListView = v.findViewById(R.id.ListView_dialog_add_product_trans)
                 val teksKosong : TextView = v.findViewById(R.id.ListView_dialog_add_product_trans_isEmpty)
                 teksKosong.setText(lang.subMenuTransLang.TransKosong)
+                teksKosong.setTextColor(theme.BackGroundColor)
 
                 if (Allperiode.size < 1){
                     teksKosong.visibility = View.VISIBLE
@@ -413,14 +432,13 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
     }
 
-    internal fun GenerateAfterFilterChoose(){
+    internal fun GenerateAfterFilterChoose() {
         if (FunctionForKartuPersediaanMenu.CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
             FunctionForKartuPersediaanMenu.dialogTransNotValid(ctx,lang)
         }else {
             GenerateData(filterSearch)
         }
     }
-
 
 
     override fun onRefresh() {

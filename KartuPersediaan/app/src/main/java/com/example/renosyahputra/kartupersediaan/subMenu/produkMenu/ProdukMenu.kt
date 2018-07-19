@@ -115,7 +115,7 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         val adapter = CustomAdapterListProduk(ctx,R.layout.custom_adapter_listproduk,l)
         adapter.SetLangTheme(lang,theme)
         ListViewProduk.adapter = adapter
-        ListViewProduk.divider =null
+        ListViewProduk.divider = null
     }
 
 

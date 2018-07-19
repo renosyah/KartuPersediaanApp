@@ -16,9 +16,11 @@ import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
-import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.KartuPersediaanMenu
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.FunctionForKartuPersediaanMenu
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.alternative.FunctionForKartuPersediaanMenuForAlternative
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.FunctionForKartuPersediaanMenu
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
+import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -185,13 +187,26 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
             duplicateListTransaksi.add(trs.CloneTransData())
         }
 
-        FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(Data.LoopForFilter1,MainData,duplicateListTransaksi)
+        if (Data.CovertMode == DevMod.NEW){
 
-        FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData,duplicateListTransaksi)
+            FunctionForKartuPersediaanMenuForAlternative.FromTransactionListToKartuPersediaanListWithoutFilter(Data.LoopForFilter1,MainData,duplicateListTransaksi,LaporanKartuPersediaan)
 
-        FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter,duplicateListTransaksi,LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenuForAlternative.CalculatingStockAndModifyListPersediaanDataAlternative(MainData,LaporanKartuPersediaan)
 
-        FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
+
+            FunctionForKartuPersediaanMenuForAlternative.FromKartuPersediaanListToKartuPersediaanListByFilter(filter,LaporanKartuPersediaan)
+
+        }else if (Data.CovertMode == DevMod.OLD) {
+
+            FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(Data.LoopForFilter1, MainData, duplicateListTransaksi)
+
+            FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData, duplicateListTransaksi)
+
+            FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter, duplicateListTransaksi, LaporanKartuPersediaan)
+
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData, LaporanKartuPersediaan)
+        }
 
         SetAdapter(ctx,ListViewKartuPersediaan,KartuPersediaanKosongStatus,LaporanKartuPersediaan)
     }

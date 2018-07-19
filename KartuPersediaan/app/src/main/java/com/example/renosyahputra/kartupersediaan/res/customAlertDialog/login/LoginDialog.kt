@@ -100,7 +100,7 @@ class LoginDialog(ctx : Context) : View.OnClickListener {
                     userData.Password = password.text.toString()
 
 
-                    GetAllData(context,userData,dialog,lang).execute()
+                    GetAllData(context,userData,dialog,lang,theme).execute()
                 }
 
 

@@ -5,7 +5,6 @@ import android.support.v4.content.res.ResourcesCompat
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
-import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 
 class ResFunction {
@@ -36,13 +35,7 @@ class ResFunction {
             }
 
             if (ketemu){
-                val ListKuantitas = ArrayList<KuantitasTransaksi>()
-                val KuantitasData = KuantitasTransaksi()
-                KuantitasData.Quantity += 1
-                KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
-                ListKuantitas.add(KuantitasData)
-
-                l.get(pos).ListKuantitas = ListKuantitas
+                l.get(pos).SetQuantityAll( l.get(pos).GetKuantitas() + 1)
             }
 
             return !(ketemu)

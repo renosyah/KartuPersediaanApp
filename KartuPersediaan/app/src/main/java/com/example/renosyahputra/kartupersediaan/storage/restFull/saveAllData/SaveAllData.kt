@@ -3,11 +3,13 @@ package com.example.renosyahputra.kartupersediaan.storage.restFull.saveAllData
 import android.content.Context
 import android.os.AsyncTask
 import android.widget.Toast
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.loadingDialog.DialogLoading
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
+import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -24,20 +26,24 @@ class SaveAllData : AsyncTask<Void,Void,String>{
     val client = OkHttpClient()
     val gson = Gson()
 
-    lateinit var dataDevMod : DataDevMod
+    var dataDevMod : DataDevMod
     var devMod: DevMod? = null
 
     lateinit var JsonDataProductList :String
     lateinit var JsonDataTransactionList :String
     lateinit var JsonUserData : String
 
-    var lang : LangObj
+    lateinit var dialogLoading : DialogLoading
 
-    constructor(context: Context, data: KartuPersediaanData,user : UserData,lang: LangObj) : super() {
+    var lang : LangObj
+    var theme  : ThemeObj
+
+    constructor(context: Context, data: KartuPersediaanData,user : UserData,lang: LangObj,theme  : ThemeObj) : super() {
         this.context = context
         this.data = data
         this.user = user
         this.lang = lang
+        this.theme = theme
         dataDevMod = DataDevMod(context)
         devMod = dataDevMod.Load()
 
@@ -46,6 +52,10 @@ class SaveAllData : AsyncTask<Void,Void,String>{
 
     override fun onPreExecute() {
         super.onPreExecute()
+        dialogLoading = DialogLoading(context)
+        dialogLoading.SetLangAndTheme(lang.saveOnlineDialogLang.SavingTitle,lang.saveOnlineDialogLang.SavingMessage,theme)
+        dialogLoading.Initialization()
+
         JsonDataProductList = gson.toJson(data.ListProdukData)
         JsonDataTransactionList = gson.toJson(data.ListTransaksiData)
         JsonUserData = gson.toJson(user)
@@ -82,6 +92,8 @@ class SaveAllData : AsyncTask<Void,Void,String>{
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
+        dialogLoading.DismissDialog()
+
         if (result != ""){
             val jsonResponse = JSONObject(result)
             if (jsonResponse.getBoolean("Response")){

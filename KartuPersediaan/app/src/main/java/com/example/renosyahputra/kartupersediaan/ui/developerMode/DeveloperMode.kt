@@ -42,6 +42,9 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
     lateinit var saveData : TextView
 
     lateinit var loopFilterOne  :TextView
+    lateinit var mode : TextView
+
+    lateinit var resetDevMod : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +79,9 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
         saveData = findViewById(R.id.SaveDataSetDeveloperMode)
 
         loopFilterOne  = findViewById(R.id.FirstFilterLoopDeveloperMode)
+        mode = findViewById(R.id.ModeCatatanDeveloperMode)
+
+        resetDevMod = findViewById(R.id.ResetSettingDeveloperMode)
 
         SetLangAndTheme(Data)
 
@@ -85,6 +91,8 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
         port.setOnClickListener(this)
         getData.setOnClickListener(this)
         saveData.setOnClickListener(this)
+        mode.setOnClickListener(this)
+        resetDevMod.setOnClickListener(this)
 
         loopFilterOne.setOnClickListener(this)
     }
@@ -105,6 +113,7 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
         getData.setText(lang.devModeLang.editloadData + " : " +Data.DataUrl)
         saveData.setText(lang.devModeLang.editsaveData + " : " +Data.SaveDataUrl)
         loopFilterOne.setText(lang.devModeLang.editloop + " : " +Data.LoopForFilter1.toString())
+        mode.setText(lang.devModeLang.editModeCatatan+" : "+Data.CovertMode)
 
     }
 
@@ -113,6 +122,34 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
     val SETTING_FOR_LOAD = "LOAD_URL"
     val SETTING_FOR_SAVE = "SAVE_URL"
     val SETTING_FOR_LOOP = "LOOP_FILTER_1"
+
+    internal fun OpenDialogSelectParam(){
+
+        val option = arrayOf<CharSequence>(DevMod.NEW,DevMod.OLD)
+        AlertDialog.Builder(context)
+                .setTitle(lang.devModeLang.editModeCatatan)
+                .setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
+                    if (i == 0){
+                       Data.CovertMode = DevMod.NEW
+
+                    }else if (i == 1){
+
+                        Data.CovertMode = DevMod.OLD
+                    }
+
+                    val save = DataDevMod(context)
+                    save.SetData(Data)
+                    save.Save()
+
+                    SetLangAndTheme(Data)
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+
+                })
+                .create().show()
+    }
 
 
     internal fun OpenDialogEditParam(context: Context,target : TextView,value : String,type : Int,settingParam  :String){
@@ -142,9 +179,6 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
                             Data.LoopForFilter1 = if (EditForm.text.toString()!= "") Integer.parseInt(EditForm.text.toString()) else 5
                         }
                     }
-
-
-
                     val save = DataDevMod(context)
                     save.SetData(Data)
                     save.Save()
@@ -182,6 +216,26 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
             }
             loopFilterOne->{
                 OpenDialogEditParam(context,loopFilterOne,Data.LoopForFilter1.toString(),InputType.TYPE_CLASS_NUMBER,SETTING_FOR_LOOP)
+            }
+            mode -> {
+                OpenDialogSelectParam()
+            }
+            resetDevMod ->{
+
+                val newData = DevMod()
+                Data.URL = newData.URL
+                Data.PORT = newData.PORT
+                Data.DataUrl = newData.DataUrl
+                Data.SaveDataUrl = newData.SaveDataUrl
+
+                Data.LoopForFilter1 = newData.LoopForFilter1
+                Data.CovertMode = newData.CovertMode
+
+                val save = DataDevMod(context)
+                save.SetData(Data)
+                save.Save()
+
+                SetLangAndTheme(newData)
             }
         }
     }

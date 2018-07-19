@@ -31,12 +31,14 @@ func (sr *RestfullServer) SaveDataFromClient(res http.ResponseWriter, req *http.
 		response.Response = false
 		response.Message = errUser.Error()
 	}
+
 	errTrans := json.Unmarshal([]byte(TransJson),&Trans)
 	if errTrans != nil{
 		fmt.Println(errTrans)
 		response.Response = false
 		response.Message = errTrans.Error()
 	}
+
 	errProduk := json.Unmarshal([]byte(productJson),&Produk)
 	if errProduk != nil{
 		fmt.Println(errProduk)

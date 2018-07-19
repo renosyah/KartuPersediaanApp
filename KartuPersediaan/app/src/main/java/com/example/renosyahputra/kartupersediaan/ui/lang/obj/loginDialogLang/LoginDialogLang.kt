@@ -11,4 +11,6 @@ class LoginDialogLang : Serializable {
     lateinit var failLogin  :String
     lateinit var emptyForm  : String
 
+    lateinit var LoginDialogTitle  :String
+    lateinit var LoginDialogMessage  :String
 }

@@ -30,6 +30,13 @@ class DetailTransaksi : Serializable {
         return qty
     }
 
+    fun SetQuantityAll(q : Int){
+        for (i in this.ListKuantitas.listIterator()){
+            i.Quantity = q
+            i.Total = i.Harga * i.Quantity
+        }
+    }
+
     fun SetHargaAll(h : Int){
         for (i in this.ListKuantitas.listIterator()){
             i.Harga = h

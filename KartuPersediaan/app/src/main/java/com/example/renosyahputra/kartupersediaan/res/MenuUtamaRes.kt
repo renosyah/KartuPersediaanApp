@@ -55,8 +55,7 @@ class MenuUtamaRes{
 
                         } else {
 
-                            Toast.makeText(context,lang.mainMenuLang.Saving, Toast.LENGTH_SHORT).show()
-                            SaveAllData(context,kartuPersediaanData,userData,lang).execute()
+                            SaveAllData(context,kartuPersediaanData,userData,lang,theme).execute()
                         }
                         dialogInterface.dismiss()
                     })

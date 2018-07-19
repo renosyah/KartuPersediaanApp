@@ -30,8 +30,6 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.ThemeSetting
 import kotlinx.android.synthetic.main.activity_menu_utama.*
 
-
-
 class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,View.OnClickListener {
 
     lateinit var context : Context
@@ -48,7 +46,6 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
     lateinit var langSetting : LangSetting
     lateinit var themeSetting : ThemeSetting
-
 
     lateinit var kartuPersediaanMenu: KartuPersediaanMenu
     lateinit var produkMenu : ProdukMenu

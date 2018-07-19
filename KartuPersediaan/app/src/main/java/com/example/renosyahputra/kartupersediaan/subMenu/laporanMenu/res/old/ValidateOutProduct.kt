@@ -153,6 +153,29 @@ class ValidateOutProduct {
             return clone
         }
 
+        fun RefreshCloneByProduk(p : ProdukData, s: ArrayList<PersediaanData>) : ArrayList<PersediaanData> {
+            val clone = ArrayList<PersediaanData>()
+
+
+            for (i in 0..(s.size)-1){
+                if (p.IdProduk == s.get(i).Produk.IdProduk) {
+                    val stk = PersediaanData()
+                    stk.Produk = ProdukData()
+                    stk.TanggalMasuk.Hari = s.get(i).TanggalMasuk.Hari
+                    stk.TanggalMasuk.Bulan = s.get(i).TanggalMasuk.Bulan
+                    stk.TanggalMasuk.Tahun = s.get(i).TanggalMasuk.Tahun
+                    stk.Jumlah = s.get(i).Jumlah
+                    stk.Produk.Harga = s.get(i).Produk.Harga
+                    stk.Produk.Nama = s.get(i).Produk.Nama
+                    stk.Produk.IdProduk = s.get(i).Produk.IdProduk
+                    stk.Total = s.get(i).Total
+
+                    clone.add(stk)
+                }
+            }
+            return clone
+        }
+
 
         fun GenerateForEachTransaction(Maindata: KartuPersediaanData,transData : ArrayList<TransaksiData>, item: TransaksiData) {
 

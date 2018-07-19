@@ -7,4 +7,7 @@ class SaveOnlineDialogLang : Serializable {
     lateinit var message : String
     lateinit var save : String
     lateinit var cancel : String
+
+    lateinit var SavingTitle : String
+    lateinit var SavingMessage  :String
 }

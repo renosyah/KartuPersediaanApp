@@ -7,12 +7,110 @@ import com.example.renosyahputra.kartupersediaan.res.obj.persediaanData.Persedia
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.GenerateDataInventoryCard
+import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.ValidateOutProduct
 
 class GenerateDataKartuPersediaanAternative {
     companion object {
 
-        fun TentukanBerapaBanyakListKuantitas(kartu : LaporanKartuPersediaanObj,MainData: KartuPersediaanData){
+        fun TentukanJumlahStok(kartu : LaporanKartuPersediaanObj,Persediaan  :ArrayList<PersediaanData>) :ArrayList<PersediaanData> {
 
+            var qtyHolder = kartu.GetKuantitas()
+
+            for (pos in 0..(Persediaan.size) - 1) {
+                val dt = Persediaan.get(pos)
+                if (dt.Produk.IdProduk == kartu.ProdukData.IdProduk) {
+
+                    if (dt.Jumlah - qtyHolder < 0) {
+
+                        qtyHolder = qtyHolder - dt.Jumlah
+                        Persediaan.get(pos).Jumlah = 0
+
+                    } else if (dt.Jumlah - qtyHolder > 0) {
+
+                        Persediaan.get(pos).Jumlah = dt.Jumlah - qtyHolder
+
+                        break
+                    } else if (dt.Jumlah - qtyHolder >= 0) {
+
+                        Persediaan.get(pos).Jumlah = dt.Jumlah - qtyHolder
+
+                        break
+                    }
+                }
+
+            }
+
+            return ValidateOutProduct.RefreshClone(Persediaan)
+        }
+
+        fun TentukanJumlahKuantitas(kartu : LaporanKartuPersediaanObj,Persediaan  :ArrayList<PersediaanData>) :ArrayList<PersediaanData> {
+
+
+            for (detailKuantitas in kartu.ListKuantitas) {
+
+                var qtyHolder = detailKuantitas.Quantity
+
+
+                for (dt in Persediaan) {
+
+                    if (dt.Produk.IdProduk == kartu.ProdukData.IdProduk) {
+
+                        if (dt.Jumlah - qtyHolder < 0 && dt.Jumlah > 0 && dt.Jumlah != qtyHolder) {
+
+
+                            val clone = detailKuantitas.CloneKuantitas()
+                            clone.Quantity = qtyHolder - dt.Jumlah
+                            clone.Harga = dt.Produk.Harga
+                            clone.Total = clone.Harga * clone.Quantity
+                            kartu.ListKuantitas.add(clone)
+
+                            detailKuantitas.Quantity = dt.Jumlah
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            dt.Jumlah = 0
+
+                            break
+
+                        }
+
+                        if (dt.Jumlah > 0 && dt.Jumlah == qtyHolder) {
+
+                            kartu.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            qtyHolder -= dt.Jumlah
+                            dt.Jumlah = 0
+
+                            break
+
+                        } else if (dt.Jumlah - qtyHolder > 0) {
+
+                            kartu.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            dt.Jumlah -= qtyHolder
+
+                            break
+
+                        } else if (dt.Jumlah - qtyHolder >= 0) {
+
+                            kartu.ProdukData.Harga = dt.Produk.Harga
+                            detailKuantitas.Harga = dt.Produk.Harga
+                            detailKuantitas.Total = detailKuantitas.Harga * detailKuantitas.Quantity
+
+                            dt.Jumlah -= qtyHolder
+
+                            break
+                        }
+
+                    }
+                }
+            }
+
+            return ValidateOutProduct.RefreshClone(Persediaan)
 
         }
 
@@ -47,11 +145,12 @@ class GenerateDataKartuPersediaanAternative {
             LastData.Produk.Nama = product.Nama
 
             newDs.add(LastData)
+
             return newDs
         }
 
 
-        fun IsiSetiapDataKuantitasDanKartuPersediaan(Maindata : KartuPersediaanData,LaporanKartupersediaan : ArrayList<LaporanKartuPersediaanObj>){
+        fun IsiSetiapDataKuantitasDanKartuPersediaan(ApakahIniMenentukanKuantitas : Boolean, Maindata: KartuPersediaanData,LaporanKartupersediaan : ArrayList<LaporanKartuPersediaanObj>){
 
             for (EachKartu in LaporanKartupersediaan){
 
@@ -80,38 +179,24 @@ class GenerateDataKartuPersediaanAternative {
                     }
 
 
-                    TentukanBerapaBanyakListKuantitas(EachKartu, Maindata)
+                    if (ApakahIniMenentukanKuantitas && Maindata.metodePersediaan.MetodeUse != MetodePersediaan.AVERAGE){
 
+                        Maindata.ListPersediaanData = TentukanJumlahKuantitas(EachKartu,Maindata.ListPersediaanData)
 
+                    }else if (!ApakahIniMenentukanKuantitas) {
+
+                        Maindata.ListPersediaanData = TentukanJumlahStok(EachKartu, Maindata.ListPersediaanData)
+
+                    }
 
                     if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.LIFO) {
                         Maindata.ListPersediaanData = GenerateDataInventoryCard.ReverseData(Maindata.ListPersediaanData)
                     }
 
                 }
-                var newStock = ArrayList<PersediaanData>()
-
-                for (s in Maindata.ListPersediaanData) {
-
-                    if (s.Produk.IdProduk == EachKartu.ProdukData.IdProduk) {
-                        val stk = PersediaanData()
-                        stk.Produk = ProdukData()
-
-                        stk.TanggalMasuk.Hari = s.TanggalMasuk.Hari
-                        stk.TanggalMasuk.Bulan = s.TanggalMasuk.Bulan
-                        stk.TanggalMasuk.Tahun = s.TanggalMasuk.Tahun
-                        stk.Jumlah = s.Jumlah
-                        stk.Produk.Harga = s.Produk.Harga
-                        stk.Produk.Nama = s.Produk.Nama
-                        stk.Produk.IdProduk = s.Produk.IdProduk
-                        stk.Total = s.Total
-
-                        newStock.add(stk)
-
-                    }
-                }
 
 
+                var newStock = ValidateOutProduct.RefreshCloneByProduk(EachKartu.ProdukData,Maindata.ListPersediaanData)
 
                 if (Maindata.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
                     val holder =  GenerateDataKartuPersediaanAternative.JadikanSatuUntukAVERAGE(EachKartu.ProductFlow, EachKartu, EachKartu.ProdukData, newStock)

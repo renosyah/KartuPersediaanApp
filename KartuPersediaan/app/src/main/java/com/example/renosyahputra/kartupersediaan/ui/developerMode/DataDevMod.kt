@@ -5,8 +5,8 @@ import java.io.*
 
 class DevMod : Serializable {
     companion object {
-        val OLD = "OLD"
-        val NEW = "NEW"
+        val OLD = "By Transaction Data"
+        val NEW = "By KartuPersediaan Data"
     }
     var URL = "http://192.168.23.1"
     var PORT = 7890

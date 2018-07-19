@@ -7,6 +7,7 @@ import android.os.AsyncTask
 import android.support.v7.app.AlertDialog
 import android.widget.Toast
 import com.example.renosyahputra.kartupersediaan.MenuUtama
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.loadingDialog.DialogLoading
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
@@ -16,6 +17,7 @@ import com.example.renosyahputra.kartupersediaan.storage.restFull.obj.DataFromCl
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
+import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.google.gson.Gson
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
@@ -30,6 +32,8 @@ class GetAllData : AsyncTask<Void,Void,String>{
     var userData : UserData
     var dialog : AlertDialog
     var lang  : LangObj
+    var theme  : ThemeObj
+    lateinit var dialogLoading : DialogLoading
 
     val client = OkHttpClient()
     val gson = Gson()
@@ -63,15 +67,6 @@ class GetAllData : AsyncTask<Void,Void,String>{
         SaveDataAndGoToMainMenu(context,userFromCloud,kartuPersediaanDataFromCloud)
     }
 
-
-    internal fun GoToMainMenu(context: Context,userData: UserData,kartuPersediaanData: KartuPersediaanData){
-        val intent = Intent(context, MenuUtama::class.java)
-        intent.putExtra("data", kartuPersediaanData)
-        intent.putExtra("user", userData)
-        context.startActivity(intent)
-        (context as Activity).finish()
-    }
-
     internal fun SaveDataAndGoToMainMenu(context: Context,userData: UserData,kartuPersediaanData: KartuPersediaanData){
         val saveSession = SaveUserData(context,userData)
         saveSession.SaveSession()
@@ -83,17 +78,32 @@ class GetAllData : AsyncTask<Void,Void,String>{
     }
 
 
-    constructor(context: Context, userData: UserData,dialog : AlertDialog,lang  : LangObj) : super() {
+    internal fun GoToMainMenu(context: Context,userData: UserData,kartuPersediaanData: KartuPersediaanData){
+        val intent = Intent(context, MenuUtama::class.java)
+        intent.putExtra("data", kartuPersediaanData)
+        intent.putExtra("user", userData)
+        context.startActivity(intent)
+        (context as Activity).finish()
+    }
+
+
+
+
+    constructor(context: Context, userData: UserData,dialog : AlertDialog,lang  : LangObj, theme  : ThemeObj) : super() {
         this.context = context
         this.userData = userData
         this.dialog = dialog
         this.lang = lang
+        this.theme = theme
         dataDevMod = DataDevMod(context)
         devMod = dataDevMod.Load()
     }
 
     override fun onPreExecute() {
         super.onPreExecute()
+        dialogLoading = DialogLoading(context)
+        dialogLoading.SetLangAndTheme(lang.loginDialogLang.LoginDialogTitle,lang.loginDialogLang.LoginDialogMessage,theme)
+        dialogLoading.Initialization()
     }
 
 
@@ -124,7 +134,7 @@ class GetAllData : AsyncTask<Void,Void,String>{
 
     override fun onPostExecute(result: String?) {
         super.onPostExecute(result)
-
+        dialogLoading.DismissDialog()
         dialog.dismiss()
 
         if (result !=""){
