@@ -20,6 +20,9 @@ class AddTransDialogLang : Serializable {
     lateinit var StokTersedia : String
     lateinit var Stok : String
 
+    lateinit var EditpriceTitle : String
+    lateinit var EditStockLeftTitle : String
+
     lateinit var add : String
     lateinit var Ok : String
     lateinit var cancel : String
@@ -33,4 +36,8 @@ class AddTransDialogLang : Serializable {
     lateinit var CheckAgain : String
 
     lateinit var warningThereIsProductQtyLow : String
+    lateinit var warningThereisNoProductYet : String
+    lateinit var warningPleaseFillQty : String
+    lateinit var warningPleaseFillPrice : String
+    lateinit var SameDateAndTimeWithOtherTransaction  :String
 }

@@ -6,10 +6,10 @@ import android.content.Context
 import android.view.View
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
-import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
@@ -134,7 +134,7 @@ class CustomAlertDialogEditProduk(ctx : Context, res : Int, List : ArrayList<Pro
                     editProduct.Nama = editP.Nama
                     editProduct.Harga = editP.Harga
                     editProduct.Satuan = editP.Satuan
-                    AlterAllProductInTrans.AlterAll(transDatas, editProduct)
+                    AlterAllProductInTrans.AlterThisProductInEachDetailTransaction(transDatas, editProduct)
 
                     SetAdapter()
                     dialog.dismiss()

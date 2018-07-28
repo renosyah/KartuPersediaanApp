@@ -35,6 +35,9 @@ class GenerateDataForAverage{
                             data.SetTotalAll(data.ProdukData.Harga,data.GetKuantitas())
 
                             TotalHolder -= data.GetTotalListKuantitas()
+
+                            TotalHolder = if (kartu.Jumlah == 0) 0 else if (kartu.Jumlah == 1) data.ProdukData.Harga else TotalHolder
+
                             kartu.Total = TotalHolder
                         }
 

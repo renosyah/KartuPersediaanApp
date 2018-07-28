@@ -19,9 +19,9 @@ import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterTransaksi
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.CustomAlertDialogEditTrans
-import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
+import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.res.TransaksiMenuRes
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DeveloperMode
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
@@ -44,13 +44,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
 
     internal lateinit var ListViewTransaksi : ListView
 
-    lateinit var ListTransaksi : ArrayList<TransaksiData>
     lateinit var ListTransaksiCari : ArrayList<TransaksiData>
-
-    fun SetListTransaksi(ListTransaksi : ArrayList<TransaksiData>){
-        this.ListTransaksi = ListTransaksi
-    }
-
 
     fun SetLangTheme(lang : LangObj, theme: ThemeObj){
         this.lang = lang
@@ -90,7 +84,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         CariTransaksi.setHint(lang.subMenuTransLang.CariTrans)
         TransaksiKosong.setTextColor(theme.BackGroundColor)
 
-        SetAdapter(true,ListTransaksi)
+        SetAdapter(true,MainData.ListTransaksiData)
         CheckTransKosong()
 
         ListViewTransaksi.setOnItemClickListener(this)
@@ -102,14 +96,14 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
 
     internal fun CheckTransKosong(){
 
-        if (ListTransaksi.size < 1){
+        if (MainData.ListTransaksiData.size < 1){
 
             TransaksiKosong.visibility = View.VISIBLE
             TransaksiKosong.setText(lang.subMenuTransLang.TransKosong)
             ListViewTransaksi.visibility = View.GONE
-
+            CariTransaksi.visibility = View.GONE
         }else {
-
+            CariTransaksi.visibility = View.VISIBLE
             TransaksiKosong.visibility = View.GONE
             ListViewTransaksi.visibility = View.VISIBLE
         }
@@ -117,8 +111,8 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
 
     override fun onRefresh() {
         ListTransaksiCari.clear()
-        CariTransaksi.setText("")
-        SetAdapter(true,ListTransaksi)
+        TransaksiMenuRes.SortTransactionDataByDateAndTime(MainData)
+        SetAdapter(true,MainData.ListTransaksiData)
         if (refreshTrans.isRefreshing){
             refreshTrans.isRefreshing = !refreshTrans.isRefreshing
         }
@@ -126,7 +120,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
     internal fun SetAdapter(IsThisNotSearch  :Boolean,l : ArrayList<TransaksiData>){
 
         if (IsThisNotSearch ){
-            CheckAndMarkTransactionWithNonValidQty(l)
+            TransaksiMenuRes.CheckAndMarkTransactionWithNonValidQty(l)
         }
 
         val adapter = CustomAdapterTransaksi(ctx,R.layout.custom_adapter_transaksi,l)
@@ -134,8 +128,8 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         ListViewTransaksi.adapter = adapter
         ListViewTransaksi.divider = null
 
-        if (CheckValidQuantityProductInAllTransaction(l) && IsThisNotSearch ){
-            dialogTransNotValid(ctx,lang)
+        if (TransaksiMenuRes.CheckValidQuantityProductInAllTransaction(l) && IsThisNotSearch ){
+            TransaksiMenuRes.dialogTransNotValid(ctx,lang)
         }
     }
 
@@ -143,9 +137,9 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-        if (ListTransaksiCari.size < 1 && ListTransaksi.size >= 1){
+        if (ListTransaksiCari.size < 1 && MainData.ListTransaksiData.size >= 1){
 
-            OpenDialog(ListTransaksi.get(p2))
+            OpenDialog(MainData.ListTransaksiData.get(p2))
 
         }else if (ListTransaksiCari.size >= 1){
 
@@ -158,8 +152,8 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         var ketemu = false
         var pos = 0
 
-        for (i in 0..(ListTransaksi.size)-1){
-            if (ListTransaksi.get(i).IdTransaksiData == Transaksi.IdTransaksiData){
+        for (i in 0..(MainData.ListTransaksiData.size)-1){
+            if (MainData.ListTransaksiData.get(i).IdTransaksiData == Transaksi.IdTransaksiData){
                 ketemu = true
                 pos = i
                 break
@@ -167,7 +161,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         }
 
         if (ketemu){
-            OpenDialogEdit(MainData,ListTransaksi,pos)
+            OpenDialogEdit(MainData,MainData.ListTransaksiData,pos)
         }
         CheckTransKosong()
     }
@@ -182,12 +176,27 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         dialogEdit.Initiated()
     }
 
-    internal fun OpenDialogHapus(Transaksi: TransaksiData){
+    internal fun DialogHapusTransaksi(context: Context,MainlistTrans : ArrayList<TransaksiData>,Transaksi: TransaksiData){
+        AlertDialog.Builder(context)
+                .setTitle(lang.subMenuTransLang.titleHapusTransaksi)
+                .setMessage(lang.subMenuTransLang.messageHapusTransaksi)
+                .setPositiveButton(lang.subMenuTransLang.yesHapus, DialogInterface.OnClickListener { dialogInterface, i ->
+                    HapusTransaksi(MainlistTrans,Transaksi)
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton(lang.subMenuTransLang.noHapus, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .create()
+                .show()
+    }
+
+    internal fun HapusTransaksi(MainlistTrans : ArrayList<TransaksiData>,Transaksi: TransaksiData){
         var ketemu = false
         var pos = 0
 
-        for (i in 0..(ListTransaksi.size)-1){
-            if (ListTransaksi.get(i).IdTransaksiData == Transaksi.IdTransaksiData){
+        for (i in 0..(MainlistTrans.size)-1){
+            if (MainlistTrans.get(i).IdTransaksiData == Transaksi.IdTransaksiData){
                 ketemu = true
                 pos = i
                 break
@@ -195,8 +204,10 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         }
 
         if (ketemu){
-            ListTransaksi.removeAt(pos)
-            SetAdapter(true,ListTransaksi)
+            MainlistTrans.removeAt(pos)
+            ListTransaksiCari.clear()
+            CheckTransKosong()
+            SetAdapter(true,MainlistTrans)
         }
     }
 
@@ -211,7 +222,7 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
                             FindRealTransDataAndEdit(MainData,transData)
                         }
                         1 -> {
-                            OpenDialogHapus(transData)
+                            DialogHapusTransaksi(ctx,MainData.ListTransaksiData,transData)
                         }
 
                     }
@@ -237,8 +248,8 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
         ListTransaksiCari.clear()
 
 
-        if (ListTransaksi.size >= 1){
-            for (d in ListTransaksi){
+        if (MainData.ListTransaksiData.size >= 1){
+            for (d in MainData.ListTransaksiData){
                 if (d.Keterangan.matches(("(?i).*" + CariTransaksi.text.toString() + "(.*)").toRegex())){
                     ListTransaksiCari.add(d)
                 }
@@ -265,59 +276,4 @@ class TransaksiMenu : Fragment(), AdapterView.OnItemClickListener,TextWatcher,Sw
             ctx.startActivity(inten)
         }
     }
-companion object {
-    fun dialogTransNotValid(ctx : Context,lang: LangObj){
-
-        AlertDialog.Builder(ctx).setTitle(lang.laporanMenuLang.WarningInvalidProduckInTransTitle)
-                .setMessage(lang.laporanMenuLang.WarningInvalidProduckInTrans)
-                .setIcon(R.drawable.warning)
-                .setPositiveButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
-                    dialogInterface.dismiss()
-                })
-                .create()
-                .show()
-    }
-
-    fun CheckValidQuantityProductInAllTransaction(l : ArrayList<TransaksiData>) : Boolean {
-        var isThisInValid = false
-        for (t in l.listIterator()){
-            for (d in t.ListDetail.listIterator()){
-                if (d.IsThisValidDetailTransaction ==  false || t.IsThisValidTransaction == false){
-                    isThisInValid = true
-                    break
-                }
-
-            }
-            if (isThisInValid){
-                break
-            }
-        }
-        return isThisInValid
-    }
-
-    fun CheckAndMarkTransactionWithNonValidQty(l: ArrayList<TransaksiData>) {
-        for (t in l) {
-            var IsThisValid = true
-
-            for (d in t.ListDetail) {
-
-                val checkDuluQty = (ResFunction.GetTotalQtyProductFromAllTrans(t, d.ProdukData, l))
-                if (((checkDuluQty - d.GetKuantitas()) < 0 && t.ProductFlow == TransaksiData.ProductOut)) {
-                    IsThisValid = false
-                }
-
-                d.IsThisValidDetailTransaction = IsThisValid
-
-                if (!IsThisValid) {
-                    break
-                }
-
-            }
-            t.IsThisValidTransaction = IsThisValid
-        }
-
-    }
-}
-
-
 }

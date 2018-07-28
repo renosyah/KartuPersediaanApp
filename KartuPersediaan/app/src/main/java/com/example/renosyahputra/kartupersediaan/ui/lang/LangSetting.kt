@@ -107,7 +107,10 @@ class LangSetting(ctx : Context){
         subMenuProdukLang.hapus = "Delete"
         subMenuProdukLang.batal = "Cancel"
         subMenuProdukLang.edit = "Edit"
-
+        subMenuProdukLang.titleHapusProduk = "Delete Product"
+        subMenuProdukLang.messageHapusProduk = "all transaction details containing this Product Data will be deleted, are you sure want to delete this product?"
+        subMenuProdukLang.yesHapus = "Delete"
+        subMenuProdukLang.noHapus = "Cancel"
 
         val addProdukFormLang = AddProdukFormLang()
         addProdukFormLang.title = "Add Product"
@@ -136,7 +139,10 @@ class LangSetting(ctx : Context){
         subMenuTransLang.batal = "Cancel"
         subMenuTransLang.edit = "Edit"
         subMenuTransLang.lihatDetail = "See Detail"
-
+        subMenuTransLang.titleHapusTransaksi = "Delete Transaction"
+        subMenuTransLang.messageHapusTransaksi = "This Transaction will be delete, are you sure?"
+        subMenuTransLang.yesHapus = "Delete Transaction"
+        subMenuTransLang.noHapus = "Cancel"
 
         val addTransDialogLang = AddTransDialogLang()
         addTransDialogLang.titleForEdit = "Edit Transaction"
@@ -156,6 +162,9 @@ class LangSetting(ctx : Context){
         addTransDialogLang.StokTersedia = "Stock Left"
         addTransDialogLang.Stok = "Stock"
 
+        addTransDialogLang.EditpriceTitle = "Edit Price for"
+        addTransDialogLang.EditStockLeftTitle = "Stock left for"
+
         addTransDialogLang.add = "Ok"
         addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Cancel"
@@ -170,6 +179,10 @@ class LangSetting(ctx : Context){
         addTransDialogLang.warningThereIsProductQtyLow = "Warning, there is some Product Stock is below require"
 
         addTransDialogLang.tutup = "Close"
+        addTransDialogLang.warningThereisNoProductYet = "There is no product to added in any transaction, please register at least one product!"
+        addTransDialogLang.warningPleaseFillQty = "Please fill Quantity's data!"
+        addTransDialogLang.warningPleaseFillPrice = "Fail to change the price, Please fill Price's data!"
+        addTransDialogLang.SameDateAndTimeWithOtherTransaction = "This transaction date and time same with other one!"
 
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Stock Card"
@@ -399,7 +412,10 @@ class LangSetting(ctx : Context){
         subMenuProdukLang.hapus = "Hapus"
         subMenuProdukLang.batal = "Batal"
         subMenuProdukLang.edit = "Edit"
-
+        subMenuProdukLang.titleHapusProduk = "Hapus Produk"
+        subMenuProdukLang.messageHapusProduk = "Seluruh detail transaksi yang memiliki data produk ini akan dihapus juga,Apakah anda yakin ingin menghapus produk ini?"
+        subMenuProdukLang.yesHapus = "Hapus"
+        subMenuProdukLang.noHapus = "Batal"
 
         val addProdukFormLang = AddProdukFormLang()
         addProdukFormLang.title = "Form Tambah Produk"
@@ -429,6 +445,10 @@ class LangSetting(ctx : Context){
         subMenuTransLang.batal = "Batal"
         subMenuTransLang.edit = "Edit"
         subMenuTransLang.lihatDetail = "Lihat Detail"
+        subMenuTransLang.titleHapusTransaksi = "Hapus Transaksi"
+        subMenuTransLang.messageHapusTransaksi = "Transaksi ini akan dihapus, apakah anda yakin ingin?"
+        subMenuTransLang.yesHapus = "Hapus Transaksi"
+        subMenuTransLang.noHapus = "Batal"
 
 
         val addTransDialogLang = AddTransDialogLang()
@@ -449,6 +469,9 @@ class LangSetting(ctx : Context){
         addTransDialogLang.StokTersedia = "Stok Tersedia"
         addTransDialogLang.Stok = "Stok"
 
+        addTransDialogLang.EditpriceTitle = "Edit Harga Perolehan"
+        addTransDialogLang.EditStockLeftTitle = "Stok Tersedia untuk Produk"
+
         addTransDialogLang.add = "Ok"
         addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Batal"
@@ -463,6 +486,10 @@ class LangSetting(ctx : Context){
         addTransDialogLang.warningThereIsProductQtyLow = "Perhatian, ada Stok produk yang tidak memenuhi kebutuhan!"
 
         addTransDialogLang.tutup = "Tutup"
+        addTransDialogLang.warningThereisNoProductYet = "Belum ada produk yang didaftarkan, silahkan menambahkan produk setidaknya satu!"
+        addTransDialogLang.warningPleaseFillQty = "Mohon mengisi data kuantitas!"
+        addTransDialogLang.warningPleaseFillPrice = "gagal mengubah harga, Mohon mengisi data Harga Perolehan!"
+        addTransDialogLang.SameDateAndTimeWithOtherTransaction = "Transaksi ini memiliki tanggal dan waktu yang sama dengan salah satu transaksi lainya!"
 
         val laporanMenuLang =  LaporanMenuLang()
         laporanMenuLang.Kartupersediaan = "Kartu Persediaan"
@@ -484,7 +511,7 @@ class LangSetting(ctx : Context){
         laporanMenuLang.save = "Simpan"
         laporanMenuLang.cancel = "Batal"
         laporanMenuLang.saved = "File Tersimpan di Folder KartuPersediaan"
-        laporanMenuLang.titleLaporan = "Kartu Persediaan Barang"
+        laporanMenuLang.titleLaporan = "Kartu Persediaan"
         laporanMenuLang.dateAwalLap = "Dari"
         laporanMenuLang.dateAkhirLap = ""
         laporanMenuLang.hinga = "-"

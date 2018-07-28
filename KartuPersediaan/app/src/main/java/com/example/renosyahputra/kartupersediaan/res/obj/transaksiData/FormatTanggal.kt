@@ -12,6 +12,14 @@ class FormatTanggal  :Serializable {
         return Hari.toString() +"/"+Bulan+"/"+ Tahun
     }
 
+    fun CloneTanggal() : FormatTanggal {
+        val date = FormatTanggal()
+        date.Hari = this.Hari
+        date.Bulan = this.Bulan
+        date.Tahun = this.Tahun
+        return date
+    }
+
     fun BandingkanTanggalYangLebihKecil(j1 : FormatWaktu,j2  :FormatWaktu,tanggal: FormatTanggal) : Boolean {
         val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm")
         val tgl1 = sdf.parse(tanggal.toDateString()+" "+j1.MakeJamString())

@@ -16,4 +16,9 @@ class SubMenuTransLang : Serializable {
     lateinit var hapus : String
 
     lateinit var lihatDetail : String
+
+    lateinit var titleHapusTransaksi : String
+    lateinit var messageHapusTransaksi : String
+    lateinit var yesHapus : String
+    lateinit var noHapus : String
 }

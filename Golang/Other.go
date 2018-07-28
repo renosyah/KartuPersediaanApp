@@ -26,7 +26,7 @@ func SetTimeFormat(st string) *FormatWaktu {
 	s := strings.Split(st, ":")
 
 	jam,_ := strconv.Atoi(s[0])
-	menit,_ := strconv.Atoi(s[2])
+	menit,_ := strconv.Atoi(s[1])
 
 	d = &FormatWaktu{
 		Jam:jam,

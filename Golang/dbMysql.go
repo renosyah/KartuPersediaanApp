@@ -164,6 +164,7 @@ func (u *UserData) GetAllUserProduct(sr *RestfullServer) ([]ProdukData,error) {
 	defer db.Close()
 
 	var productList []ProdukData
+	productList = []ProdukData{}
 
 	dataProductQuery,errProductQuery := db.Query("select IdProduk,NamaProduk,harga,satuan from Produk where IdUser=?",u.IdUser)
 	if errProductQuery != nil {
@@ -207,6 +208,7 @@ func (u *UserData) GetAllUserTransaction(sr *RestfullServer) ([]TransaksiData,er
 	defer db.Close()
 
 	var transactionList []TransaksiData
+	transactionList = []TransaksiData{}
 
 	dataTransactionQuery,errTransactionQuery := db.Query("select IdTransaksi,TanggalTransaksi,WaktuTransaksi,keterangan,ProductFlow,SubTotal from Transaksi where IdUser=?",u.IdUser)
 	if errTransactionQuery != nil {
@@ -249,6 +251,7 @@ func (t *TransaksiData) GetAllDetailTransaction(sr *RestfullServer) ([]DetailTra
 	defer db.Close()
 
 	var detailTransactionList []DetailTransaksi
+	detailTransactionList = []DetailTransaksi{}
 
 	detailTransactionListQuery,errdetailTransactionListQuery := db.Query("select IdTransaksi,IdProduk,IdDetailTransaksi from DetailTransaksi where IdTransaksi=?",t.IdTransaksiData)
 	if errdetailTransactionListQuery != nil {
@@ -293,6 +296,7 @@ func (d *DetailTransaksi) GetAllDaftarKuantitas(sr *RestfullServer) ([]Kuantitas
 	defer db.Close()
 
 	var DaftarKuantitasList []KuantitasTransaksi
+	DaftarKuantitasList = []KuantitasTransaksi{}
 
 	DaftarKuantitasListQuery,errDaftarKuantitasListQuery := db.Query("select IdDetailTransaksi,Kuantitas,Harga,Total from DaftarKuantitas where IdDetailTransaksi=?",d.IdDetailTransaksiData)
 	if errDaftarKuantitasListQuery != nil {

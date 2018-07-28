@@ -10,16 +10,17 @@ import android.support.v7.widget.Toolbar
 import android.view.View
 import android.widget.*
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterDetailTransaction
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
-import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CheckAndAddQtyIfSame
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CheckAndAddQtyIfAlreadyAdded
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CompareDateAndTimeIfSameDontAccept
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.FinalQtyCheckInNewTrans
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.getTotalFromDetail
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.*
-import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -37,6 +38,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
     val MainData = Data
 
     lateinit var dialog : AlertDialog
+    lateinit var v  :View
 
     internal lateinit var Toolbar: Toolbar
     internal lateinit var FragmentChanger : FragmentManager
@@ -154,7 +156,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         dialog = AlertDialog.Builder(context).create()
         val inflater = (context as Activity).layoutInflater
-        val v = inflater.inflate(resources,null)
+        v = inflater.inflate(resources,null)
 
         InitiationWidget(v)
 
@@ -209,6 +211,8 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
             }
             butttonChooseType -> {
 
+                ResFunction.HideKeyboard(context,v)
+
                 val option = arrayOf<CharSequence>(lang.addTransDialogLang.TypeIn,lang.addTransDialogLang.TypeOUT)
                 android.support.v7.app.AlertDialog.Builder(context)
                         .setTitle(lang.addTransDialogLang.chooseType)
@@ -235,7 +239,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                         .create().show()
             }
             addProductToList -> {
-
+                ResFunction.HideKeyboard(context,v)
                 OpenProductList()
 
             }
@@ -243,7 +247,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
 
                 newTrans.Keterangan = inputInfo.text.toString()
-                newTrans.SubTotal = getTotalFromDetail(newTrans,newTrans.ListDetail)
+                newTrans.SubTotal = getTotalFromDetail(newTrans)
 
                 if (newTrans.ProductFlow == "" ||newTrans.ListDetail.size < 1 || newTrans.Keterangan == "" || (newTrans.TanggalTransaksi.Hari == 0 ||newTrans.TanggalTransaksi.Bulan == 0 ||newTrans.TanggalTransaksi.Tahun == 0)){
                     Toast.makeText(context,lang.addTransDialogLang.CheckAgain,Toast.LENGTH_SHORT).show()
@@ -265,11 +269,16 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                     return
                 }
 
+                if (CompareDateAndTimeIfSameDontAccept(MainData.ListTransaksiData,newTrans)){
+                    Toast.makeText(context,lang.addTransDialogLang.SameDateAndTimeWithOtherTransaction,Toast.LENGTH_SHORT).show()
+                    return
+                }
+
 
                 MainData.ListTransaksiData.add(newTrans)
 
 
-                Toolbar.setTitle(lang.mainMenuLang.subMenu1)
+                Toolbar.setTitle(lang.mainMenuLang.subMenu2)
 
 
                 FragmentChanger.beginTransaction().replace(R.id.MainMenuFrameLaout, transMenu).commit()
@@ -331,12 +340,18 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
         qty.setText(detail.get(pos).GetKuantitas().toString())
 
         val dialogEditQty = AlertDialog.Builder(context)
-                .setTitle(lang.addTransDialogLang.Stok + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
+                .setTitle(lang.addTransDialogLang.EditStockLeftTitle + " "+ detail.get(pos).ProdukData.Nama +" : "+checkDuluQty)
                 .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    if ((checkDuluQty - Integer.parseInt(qty.text.toString())) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
+                    val QtyInput : Int = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
+
+                    if ((checkDuluQty - QtyInput) < 0 && newTrans.ProductFlow == TransaksiData.ProductOut){
 
                         Toast.makeText(context,lang.addTransDialogLang.warningProductQtyLow + " = " + checkDuluQty,Toast.LENGTH_SHORT).show()
+
+                    }else if (QtyInput == 0) {
+
+                        Toast.makeText(context,lang.addTransDialogLang.warningPleaseFillQty,Toast.LENGTH_SHORT).show()
 
                     }else {
 
@@ -350,7 +365,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                         detail.get(pos).IdDetailTransaksiData = idDetail
 
                         KuantitasData.IdDetailTransaksiData = idDetail
-                        KuantitasData.Quantity = Integer.parseInt(qty.text.toString())
+                        KuantitasData.Quantity = QtyInput
                         KuantitasData.Harga = detail.get(pos).ProdukData.Harga
                         KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
                         ListKuantitas.add(KuantitasData)
@@ -364,9 +379,6 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                 .setNegativeButton(lang.addTransDialogLang.cancel,null)
                 .create()
 
-
-
-
         dialogEditQty.setView(v)
         dialogEditQty.show()
     }
@@ -374,16 +386,25 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
         val inflater = (context as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_edit_qty,null)
 
-
         val qty : EditText = v.findViewById(R.id.editQtyDetail)
         qty.setText(detail.get(pos).ProdukData.Harga.toString())
 
         val dialogEditQty = AlertDialog.Builder(context)
-                .setTitle("Edit "+ detail.get(pos).ProdukData.Nama +" "+lang.addTransDialogLang.price)
+                .setTitle(lang.addTransDialogLang.EditpriceTitle+" "+ detail.get(pos).ProdukData.Nama)
                 .setPositiveButton(lang.addTransDialogLang.Ok, DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    detail.get(pos).ProdukData.Harga = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
-                    detail.get(pos).SetHargaAll(Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString()))
+                    val HargaInput = Integer.parseInt(if (qty.text.toString() == "") "0" else qty.text.toString())
+
+                    if (HargaInput == 0) {
+
+                        Toast.makeText(context,lang.addTransDialogLang.warningPleaseFillPrice,Toast.LENGTH_SHORT).show()
+
+                    }else {
+
+                        detail.get(pos).ProdukData.Harga = HargaInput
+                        detail.get(pos).SetHargaAll(HargaInput)
+
+                    }
 
                     setDetailAdapter(ListDetail,newTrans.ListDetail)
 
@@ -455,7 +476,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
             detailAdded.ListPersediaanData = ArrayList()
 
-            if (CheckAndAddQtyIfSame(newTrans.ListDetail,detailAdded)){
+            if (!CheckAndAddQtyIfAlreadyAdded(newTrans.ListDetail,detailAdded)){
                 newTrans.ListDetail.add(detailAdded)
             }
 

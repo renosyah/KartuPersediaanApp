@@ -14,4 +14,9 @@ class SubMenuProdukLang : Serializable {
     lateinit var edit : String
     lateinit var batal : String
     lateinit var hapus : String
+
+    lateinit var titleHapusProduk : String
+    lateinit var messageHapusProduk : String
+    lateinit var yesHapus : String
+    lateinit var noHapus : String
 }

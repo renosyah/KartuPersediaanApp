@@ -1,7 +1,10 @@
 package com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi
 
+import android.app.Activity
 import android.content.Context
 import android.support.v4.content.res.ResourcesCompat
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
@@ -9,6 +12,13 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Transaksi
 
 class ResFunction {
     companion object {
+
+
+        fun HideKeyboard(context: Context,v: View){
+            val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(v.windowToken,0)
+        }
+
         fun SetBackgroundColor(context: Context,item : TransaksiData) : Int{
             var color_jumlah = 0
             if (item.ProductFlow == TransaksiData.ProductIn){
@@ -23,7 +33,19 @@ class ResFunction {
             return color_jumlah
         }
 
-        fun CheckAndAddQtyIfSame(l : ArrayList<DetailTransaksi>, dt : DetailTransaksi) : Boolean{
+        fun CompareDateAndTimeIfSameDontAccept(t  :ArrayList<TransaksiData>,newTrans: TransaksiData) : Boolean {
+            var Ketemu = false
+            for (data in t.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
+                if (data.IdTransaksiData != newTrans.IdTransaksiData && data.TanggalTransaksi.toDateString() == newTrans.TanggalTransaksi.toDateString() && data.Jam.MakeJamString() == newTrans.Jam.MakeJamString()){
+                    Ketemu = true
+                    break
+                }
+            }
+
+            return Ketemu
+        }
+
+        fun CheckAndAddQtyIfAlreadyAdded(l : ArrayList<DetailTransaksi>, dt : DetailTransaksi) : Boolean{
             var ketemu = false
             var pos = 0
             for (d in 0..(l.size)-1){
@@ -38,22 +60,14 @@ class ResFunction {
                 l.get(pos).SetQuantityAll( l.get(pos).GetKuantitas() + 1)
             }
 
-            return !(ketemu)
+            return ketemu
         }
 
-        fun getTotalFromDetail(t : TransaksiData, d : ArrayList<DetailTransaksi>) : Int{
+        fun getTotalFromDetail(t : TransaksiData) : Int{
             var total = 0
-            for (a in d){
-                if (t.ProductFlow == TransaksiData.ProductIn){
-                    total += a.GetTotalListKuantitas()
-                }else if (t.ProductFlow == TransaksiData.ProductOut) {
-                    total -= a.GetTotalListKuantitas()
-                }
+            for (a in t.ListDetail){
+                total += a.GetTotalListKuantitas()
             }
-            if (total < 0){
-                total = -total
-            }
-
             return total
         }
 
@@ -73,7 +87,7 @@ class ResFunction {
 
         fun GetTotalQtyProductFromAllTrans(newTrans : TransaksiData,p : ProdukData,t : ArrayList<TransaksiData>) : Int{
             var qty = 0
-            for (trans in t){
+            for (trans in t.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
 
                 if (newTrans.TanggalTransaksi.BandingkanTanggalYangLebihKecil(trans.Jam,newTrans.Jam,trans.TanggalTransaksi) && newTrans.IdTransaksiData != trans.IdTransaksiData) {
 

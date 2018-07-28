@@ -6,15 +6,13 @@ import (
 	"encoding/json"
 )
 
-var dbSet *DbVar
-
 func (sr *RestfullServer) SaveDataFromClient(res http.ResponseWriter, req *http.Request){
 
 	var productJson = req.FormValue("ProductList")
 	var TransJson = req.FormValue("TransactionList")
 	var UserJson = req.FormValue("UserData")
 
-	var dataFromCloud *DataFromCloud
+	var dataFromClient *DataFromCloud
 
 	var User *UserData
 	var Trans []TransaksiData
@@ -46,13 +44,13 @@ func (sr *RestfullServer) SaveDataFromClient(res http.ResponseWriter, req *http.
 		response.Message = errProduk.Error()
 	}
 
-	dataFromCloud = &DataFromCloud{
+	dataFromClient = &DataFromCloud{
 		User:User,
 		Transaksi:Trans,
 		Produk:Produk,
 	}
 
-	errSave := dataFromCloud.SaveDataFromCloud(sr)
+	errSave := dataFromClient.SaveDataFromCloud(sr)
 	if errSave != nil {
 		fmt.Println(errSave)
 		response.Response = false
@@ -73,6 +71,7 @@ func (sr *RestfullServer) GetAllDataToClient(res http.ResponseWriter, req *http.
 	var LoadResponse = &LoadResponse{
 		Response:true,
 		Message:"",
+		Data:&DataFromCloud{},
 	}
 	var errLoad error
 
@@ -88,13 +87,12 @@ func (sr *RestfullServer) GetAllDataToClient(res http.ResponseWriter, req *http.
 	LoadResponse.Data = dataFromCloud
 
 	json.NewEncoder(res).Encode(LoadResponse)
-
 }
 
 
 func main()  {
 
-	dbSet = &DbVar{
+	var dbSet = &DbVar{
 		NameDB:"KartuPersediaan",
 		User:"root",
 		Password:"",

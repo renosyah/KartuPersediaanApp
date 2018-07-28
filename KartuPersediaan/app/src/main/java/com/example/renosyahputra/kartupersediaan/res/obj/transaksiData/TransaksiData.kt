@@ -23,15 +23,6 @@ class TransaksiData : Serializable {
     fun CloneTransData() : TransaksiData {
         val newData = TransaksiData()
 
-        val tgl = FormatTanggal()
-        tgl.Hari = this.TanggalTransaksi.Hari
-        tgl.Bulan = this.TanggalTransaksi.Bulan
-        tgl.Tahun = this.TanggalTransaksi.Tahun
-
-        val waktu = FormatWaktu()
-        waktu.Jam = this.Jam.Jam
-        waktu.Menit = this.Jam.Menit
-
         val detail = ArrayList<DetailTransaksi>()
         for (d in this.ListDetail){
             val newDetail = DetailTransaksi()
@@ -66,8 +57,8 @@ class TransaksiData : Serializable {
         newData.Keterangan = this.Keterangan
         newData.ProductFlow = this.ProductFlow
         newData.SubTotal = this.SubTotal
-        newData.TanggalTransaksi = tgl
-        newData.Jam = waktu
+        newData.TanggalTransaksi = this.TanggalTransaksi.CloneTanggal()
+        newData.Jam = this.Jam.CloneTime()
         newData.IdTransaksiData = this.IdTransaksiData
         newData.ListDetail = detail
 

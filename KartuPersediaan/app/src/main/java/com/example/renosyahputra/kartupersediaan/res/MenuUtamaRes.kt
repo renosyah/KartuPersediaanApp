@@ -26,9 +26,8 @@ import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 
 class MenuUtamaRes{
     companion object {
-
        fun AddTransaksi(ctx : Context,MainData : KartuPersediaanData, lang : LangObj, theme: ThemeObj, nav_view : NavigationView, Toolbar: android.support.v7.widget.Toolbar, FragmentChanger : FragmentManager, transMenu : TransaksiMenu){
-            val dialog = CustomAlertDialogAddTransaction(ctx, R.layout.custom_alert_dialog_add_trans,MainData)
+           val dialog = CustomAlertDialogAddTransaction(ctx, R.layout.custom_alert_dialog_add_trans,MainData)
            dialog.SetLangTheme(lang,theme)
            dialog.SetOtherVar(nav_view,Toolbar,FragmentChanger,transMenu)
            dialog.Initiated()

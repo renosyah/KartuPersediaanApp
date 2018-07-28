@@ -14,6 +14,7 @@ import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddProduk
 import com.example.renosyahputra.kartupersediaan.res.MenuUtamaRes.Companion.AddTransaksi
@@ -114,14 +115,12 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
 
 
         produkMenu = ProdukMenu()
-        produkMenu.SetListProduct(kartuPersediaanData.ListProdukData)
-        produkMenu.settransDatas(kartuPersediaanData.ListTransaksiData)
+        produkMenu.SetMainData(kartuPersediaanData)
         produkMenu.setFloatingButton(fab)
         produkMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
 
 
         transaksiMenu =  TransaksiMenu()
-        transaksiMenu.SetListTransaksi(kartuPersediaanData.ListTransaksiData)
         transaksiMenu.SetMainData(kartuPersediaanData)
         transaksiMenu.setFloatingButton(fab)
         transaksiMenu.SetLangTheme(langSetting.GetlangObj(),themeSetting.GetThemeSetting())
@@ -311,8 +310,16 @@ class MenuUtama : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLi
                 .setTitle(langSetting.GetlangObj().mainMenuAddTaskLang.title)
                 .setItems(optionLang, DialogInterface.OnClickListener { dialogInterface, i ->
                     if (i == 0){
+                        if (kartuPersediaanData.ListProdukData.size < 1){
 
-                        AddTransaksi(context,kartuPersediaanData,langSetting.GetlangObj(),themeSetting.GetThemeSetting(),nav_view,Toolbar,FragmentChanger,transaksiMenu)
+                            Toast.makeText(context,langSetting.GetlangObj().addTransDialogLang.warningThereisNoProductYet,Toast.LENGTH_LONG).show()
+                            AddProduk(context,kartuPersediaanData.ListProdukData,langSetting.GetlangObj(),themeSetting.GetThemeSetting(),nav_view,Toolbar,FragmentChanger,produkMenu)
+
+                        }else {
+
+                            AddTransaksi(context,kartuPersediaanData,langSetting.GetlangObj(),themeSetting.GetThemeSetting(),nav_view,Toolbar,FragmentChanger,transaksiMenu)
+
+                        }
 
                     }else if (i == 1){
 

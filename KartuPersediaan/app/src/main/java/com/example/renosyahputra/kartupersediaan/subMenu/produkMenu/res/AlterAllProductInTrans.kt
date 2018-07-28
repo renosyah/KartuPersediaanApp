@@ -23,7 +23,7 @@ class AlterAllProductInTrans{
             return total
         }
 
-        fun DeleteAllProduct(t : ArrayList<TransaksiData>,p : ProdukData){
+        fun DeleteThisProductInEachDetailTransaction(t : ArrayList<TransaksiData>,p : ProdukData){
             for (i in 0..(t.size)-1){
                 val transData = t.get(i)
                 for (o in 0..(transData.ListDetail.size)-1){
@@ -37,7 +37,7 @@ class AlterAllProductInTrans{
             }
         }
 
-        fun AlterAll(t : ArrayList<TransaksiData>,p : ProdukData){
+        fun AlterThisProductInEachDetailTransaction(t : ArrayList<TransaksiData>,p : ProdukData){
             for (i in t){
                 for (o in i.ListDetail){
                     if (o.ProdukData.IdProduk == p.IdProduk){

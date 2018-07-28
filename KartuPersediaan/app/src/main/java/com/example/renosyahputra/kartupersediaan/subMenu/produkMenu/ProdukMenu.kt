@@ -19,9 +19,9 @@ import android.widget.TextView
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.produk.CustomAlertDialogEditProduk
+import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
-import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
-import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans.Companion.DeleteAllProduct
+import com.example.renosyahputra.kartupersediaan.subMenu.produkMenu.res.AlterAllProductInTrans.Companion.DeleteThisProductInEachDetailTransaction
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DeveloperMode
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
@@ -34,7 +34,6 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
     lateinit var ctx : Context
     lateinit var v : View
 
-    lateinit var ListProduct : ArrayList<ProdukData>
     lateinit var ListProductCari : ArrayList<ProdukData>
 
     lateinit var refreshProduct : SwipeRefreshLayout
@@ -42,15 +41,10 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
     lateinit var CariProduk : EditText
     lateinit var statusProdukListKosong : TextView
 
-    fun SetListProduct(ListProduct : ArrayList<ProdukData>) {
-        this.ListProduct = ListProduct
-    }
+    lateinit var MainData : KartuPersediaanData
 
-
-    lateinit var transDatas : ArrayList<TransaksiData>
-
-    fun settransDatas(transDatas : ArrayList<TransaksiData>){
-        this.transDatas = transDatas
+    fun SetMainData(MainData : KartuPersediaanData){
+        this.MainData = MainData
     }
 
     internal lateinit var lang : LangObj
@@ -88,7 +82,7 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         CariProduk.setHint(lang.subMenuProdukLang.CariProduk)
         statusProdukListKosong.setTextColor(theme.BackGroundColor)
 
-        SetAdapter(ListProduct)
+        SetAdapter(MainData.ListProdukData)
         CheckProdukKosong()
 
         ListViewProduk.setOnItemClickListener(this)
@@ -99,13 +93,13 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
     }
 
     internal fun CheckProdukKosong(){
-        if (ListProduct.size < 1){
+        if (MainData.ListProdukData.size < 1){
             statusProdukListKosong.visibility = View.VISIBLE
             statusProdukListKosong.setText(lang.subMenuProdukLang.ProdukKosong)
             ListViewProduk.visibility = View.GONE
-
+            CariProduk.visibility = View.GONE
         }else {
-
+            CariProduk.visibility = View.VISIBLE
             statusProdukListKosong.visibility = View.GONE
             ListViewProduk.visibility = View.VISIBLE
         }
@@ -120,9 +114,8 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
 
 
     override fun onRefresh() {
-        CariProduk.setText("")
         ListProductCari.clear()
-        SetAdapter(ListProduct)
+        SetAdapter(MainData.ListProdukData)
         if (refreshProduct.isRefreshing){
             refreshProduct.isRefreshing = !refreshProduct.isRefreshing
         }
@@ -131,9 +124,9 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
 
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-        if (ListProductCari.size < 1 && ListProduct.size >= 1){
+        if (ListProductCari.size < 1 && MainData.ListProdukData.size >= 1){
 
-            AlertDialogDetail(ctx,ListProduct.get(p2))
+            AlertDialogDetail(ctx,MainData.ListProdukData.get(p2))
 
         }else if (ListProductCari.size >= 1){
 
@@ -154,8 +147,8 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
         ListProductCari.clear()
 
-        if (ListProduct.size >= 1){
-            for (d in ListProduct){
+        if (MainData.ListProdukData.size >= 1){
+            for (d in MainData.ListProdukData){
                 if (d.Nama.matches(("(?i).*" + CariProduk.text.toString() + "(.*)").toRegex())){
                     ListProductCari.add(d)
                 }
@@ -194,14 +187,14 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         dialog.setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
             when (i){
                 0 -> {
-                    val dialogEdit = CustomAlertDialogEditProduk(ctx, R.layout.custom_alert_dialog_add_produk, ListProduct, p)
+                    val dialogEdit = CustomAlertDialogEditProduk(ctx, R.layout.custom_alert_dialog_add_produk, MainData.ListProdukData, p)
                     dialogEdit.SetLangTheme(lang,theme)
-                    dialogEdit.settransDatas(transDatas)
+                    dialogEdit.settransDatas(MainData.ListTransaksiData)
                     dialogEdit.SetListview(ListViewProduk)
                     dialogEdit.Initiated()
                 }
                 1 -> {
-                    HapusProduk(ListProduct,p)
+                    OpenDialogHapusProduk(ctx,MainData.ListProdukData,p)
                 }
             }
         })
@@ -211,6 +204,22 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         dialog.create()
         dialog.show()
     }
+
+    internal fun OpenDialogHapusProduk(context: Context,l : ArrayList<ProdukData>,p : ProdukData){
+        AlertDialog.Builder(context)
+                .setTitle(lang.subMenuProdukLang.titleHapusProduk + " "+p.Nama)
+                .setMessage(lang.subMenuProdukLang.messageHapusProduk)
+                .setPositiveButton(lang.subMenuProdukLang.yesHapus, DialogInterface.OnClickListener { dialogInterface, i ->
+                    HapusProduk(l,p)
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton(lang.subMenuProdukLang.noHapus, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+                .create()
+                .show()
+    }
+
 
     internal fun HapusProduk(l : ArrayList<ProdukData>,p : ProdukData){
         var ketemu = false
@@ -225,7 +234,7 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         }
 
         if (ketemu){
-            DeleteAllProduct(transDatas,l.get(pos))
+            DeleteThisProductInEachDetailTransaction(MainData.ListTransaksiData,l.get(pos))
             l.removeAt(pos)
         }
 
@@ -234,6 +243,6 @@ class ProdukMenu : Fragment(),AdapterView.OnItemClickListener,TextWatcher,SwipeR
         CheckProdukKosong()
         ListProductCari.clear()
 
-        SetAdapter(ListProduct)
+        SetAdapter(MainData.ListProdukData)
     }
 }
