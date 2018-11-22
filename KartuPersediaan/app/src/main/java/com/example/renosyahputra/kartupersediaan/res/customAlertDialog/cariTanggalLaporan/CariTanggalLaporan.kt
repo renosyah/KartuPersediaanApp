@@ -6,21 +6,13 @@ import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.renosyahputra.kartupersediaan.R
 import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
-import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterLaporanKartuPersediaan
-import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
-import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.cariTanggalLaporan.res.CariTanggalLaporanRes
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
-import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.KartuPersediaanMenu
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.alternative.FunctionForKartuPersediaanMenuForAlternative
-import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.FunctionForKartuPersediaanMenu
-import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
-import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -40,6 +32,12 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
        this.filter = filter
     }
 
+    lateinit var onCariTanggalLaporan : CariTanggalLaporanRes.OnCariTanggalLaporan
+
+    fun SetonCariTanggalLaporan(onCariTanggalLaporan : CariTanggalLaporanRes.OnCariTanggalLaporan){
+        this.onCariTanggalLaporan = onCariTanggalLaporan
+    }
+
 
     internal lateinit var lang : LangObj
     internal lateinit var theme: ThemeObj
@@ -49,23 +47,6 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
         this.theme = theme
     }
 
-    lateinit var ListViewKartuPersediaan : ListView
-    lateinit var KartuPersediaanKosongStatus : TextView
-    lateinit var MainData : KartuPersediaanData
-    lateinit var LaporanKartuPersediaan: ArrayList<LaporanKartuPersediaanObj>
-
-    fun SetVariabelNeedForGenerateData(ListViewKartuPersediaan : ListView, KartuPersediaanKosongStatus : TextView, MainData : KartuPersediaanData,LaporanKartuPersediaan: ArrayList<LaporanKartuPersediaanObj>){
-        this.ListViewKartuPersediaan = ListViewKartuPersediaan
-        this.KartuPersediaanKosongStatus  = KartuPersediaanKosongStatus
-        this.MainData = MainData
-        this.LaporanKartuPersediaan = LaporanKartuPersediaan
-    }
-
-    lateinit var SetPeriodeLap  : TextView
-
-    fun SetSetPeriodeLap(SetPeriodeLap :TextView){
-        this.SetPeriodeLap = SetPeriodeLap
-    }
 
     lateinit var bar  :LinearLayout
     lateinit var title : TextView
@@ -81,19 +62,18 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
         dialog = AlertDialog.Builder(context)
                 .setPositiveButton(lang.cariTanggalLaporanLang.Tampilkan, DialogInterface.OnClickListener { dialogInterface, i ->
 
-                    if(FormatTanggal.BandingkanTanggalPatokanDenganYangLebihBesar(filter.TanggalAwal!!,filter.TanggalAkhir!!)){
-                        SetPeriodeLap.setText(lang.laporanMenuLang.filterPilihPeriode)
+                    if(FormatTanggal.CheckJikaTanggalTerbalik(filter.TanggalAwal!!,filter.TanggalAkhir!!)){
+
                         filter.TanggalAwal = null
                         filter.TanggalAkhir = null
                         Toast.makeText(context,lang.cariTanggalLaporanLang.InputTanggalSalah,Toast.LENGTH_SHORT).show()
 
+                        onCariTanggalLaporan.OnFinishSelectFirstAndLastDate(lang.laporanMenuLang.filterPilihPeriode,filter)
+
                     }else {
-                        if (FunctionForKartuPersediaanMenu.CheckValidQuantityProductInAllTransaction(MainData.ListTransaksiData)) {
-                            FunctionForKartuPersediaanMenu.dialogTransNotValid(context,lang)
-                        }else {
-                            SetPeriodeLap.setText(if (filter.TanggalAwal!!.Tahun == filter.TanggalAkhir!!.Tahun) filter.TanggalAwal!!.Tahun.toString() else lang.laporanMenuLang.filterPilihPeriode)
-                            GenerateData(context,ListViewKartuPersediaan,KartuPersediaanKosongStatus,filter,MainData,LaporanKartuPersediaan)
-                        }
+
+                        onCariTanggalLaporan.OnFinishSelectFirstAndLastDate(if (filter.TanggalAwal!!.Tahun == filter.TanggalAkhir!!.Tahun) filter.TanggalAwal!!.Tahun.toString() else lang.laporanMenuLang.filterPilihPeriode,filter)
+
                        dialog.dismiss()
                     }
 
@@ -103,6 +83,7 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
                     dialog.dismiss()
                 })
                 .create()
+
         val inflater = (context as Activity).layoutInflater
         val v = inflater.inflate(R.layout.custom_alert_dialog_cari_tanggal,null)
 
@@ -168,66 +149,5 @@ class CariTanggalLaporan(ctx : Context)  :View.OnClickListener{
             }
         }
 
-    }
-
-
-
-
-    fun GenerateData(ctx: Context,ListViewKartuPersediaan : ListView,KartuPersediaanKosongStatus : TextView,filter : KartuPersediaanMenu.FilterCard,MainData : KartuPersediaanData,LaporanKartuPersediaan: ArrayList<LaporanKartuPersediaanObj>){
-
-        val load = DataDevMod(context)
-        val Data = load.Load()!!
-
-        MainData.ListPersediaanData.clear()
-        LaporanKartuPersediaan.clear()
-
-        val duplicateListTransaksi = ArrayList<TransaksiData>()
-
-        for (trs in MainData.ListTransaksiData.sortedWith(compareBy({ it.TanggalTransaksi.Tahun }, { it.TanggalTransaksi.Bulan }, { it.TanggalTransaksi.Hari }, { it.Jam.Jam }, { it.Jam.Menit }))){
-            duplicateListTransaksi.add(trs.CloneTransData())
-        }
-
-        if (Data.CovertMode == DevMod.NEW){
-
-            FunctionForKartuPersediaanMenuForAlternative.FromTransactionListToKartuPersediaanListWithoutFilter(Data.LoopForFilter1,MainData,duplicateListTransaksi,LaporanKartuPersediaan)
-
-            FunctionForKartuPersediaanMenuForAlternative.CalculatingStockAndModifyListPersediaanDataAlternative(MainData,LaporanKartuPersediaan)
-
-            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
-
-            FunctionForKartuPersediaanMenuForAlternative.FromKartuPersediaanListToKartuPersediaanListByFilter(filter,LaporanKartuPersediaan)
-
-        }else if (Data.CovertMode == DevMod.OLD) {
-
-            FunctionForKartuPersediaanMenu.ModifyDataListKuantitasForFIFOAndLIFO(Data.LoopForFilter1, MainData, duplicateListTransaksi)
-
-            FunctionForKartuPersediaanMenu.CalculatingStockAndModifyListPersediaanData(MainData, duplicateListTransaksi)
-
-            FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter, duplicateListTransaksi, LaporanKartuPersediaan)
-
-            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData, LaporanKartuPersediaan)
-        }
-
-        SetAdapter(ctx,ListViewKartuPersediaan,KartuPersediaanKosongStatus,LaporanKartuPersediaan)
-    }
-
-
-
-    fun SetAdapter(ctx: Context,ListViewKartuPersediaan : ListView,KartuPersediaanKosongStatus : TextView,l : ArrayList<LaporanKartuPersediaanObj>){
-
-        val adapter = CustomAdapterLaporanKartuPersediaan(ctx,R.layout.custom_adapter_laporan_kartu_persediaan,l)
-        adapter.SetLangTheme(lang,theme)
-        ListViewKartuPersediaan.adapter = adapter
-        ListViewKartuPersediaan.divider = null
-
-        if (l.size < 1){
-            KartuPersediaanKosongStatus.setText(lang.laporanMenuLang.KartuPersediaanKosong)
-            KartuPersediaanKosongStatus.setTextColor(theme.BackGroundColor)
-            KartuPersediaanKosongStatus.visibility = View.VISIBLE
-            ListViewKartuPersediaan.visibility = View.GONE
-        }else {
-            KartuPersediaanKosongStatus.visibility = View.GONE
-            ListViewKartuPersediaan.visibility = View.VISIBLE
-        }
     }
 }

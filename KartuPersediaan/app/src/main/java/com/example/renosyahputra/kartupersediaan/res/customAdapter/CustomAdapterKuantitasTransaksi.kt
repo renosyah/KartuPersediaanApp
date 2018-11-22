@@ -55,7 +55,7 @@ class CustomAdapterKuantitasTransaksi(context: Context, resource: Int, objects: 
         holder.Name.setText(lang.laporanMenuLang.KuantitasKe + " : " + (position + 1))
         holder.Name.setTextColor(theme.BackGroundColor)
         holder.qty.setText(lang.printLaporanLang.qtyP + " : " + item.Quantity)
-        holder.total.setText(lang.laporanMenuLang.total + " : " + formatter.format(item.Quantity * item.Harga))
+        holder.total.setText(lang.laporanMenuLang.total + " : " + formatter.format(item.Total))
         holder.price.setText(lang.laporanMenuLang.price + " : " + formatter.format(item.Harga))
         holder.image.setImageDrawable(ResourcesCompat.getDrawable(context.resources,R.drawable.transactionicon,null))
 

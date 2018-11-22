@@ -42,5 +42,12 @@ class FormatTanggal  :Serializable {
             val tgl2 = sdf.parse(TanggalPatokan.toDateString())
             return (tgl2 <= tgl1)
         }
+
+        fun CheckJikaTanggalTerbalik(TanggalAwal : FormatTanggal ,TanggalAkhir : FormatTanggal) : Boolean {
+            val sdf = SimpleDateFormat("dd/MM/yyyy")
+            val tgl1 = sdf.parse(TanggalAwal.toDateString())
+            val tgl2 = sdf.parse(TanggalAkhir.toDateString())
+            return (tgl1 > tgl2)
+        }
     }
 }

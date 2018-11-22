@@ -7,6 +7,10 @@ class DevMod : Serializable {
     companion object {
         val OLD = "By Transaction Data"
         val NEW = "By KartuPersediaan Data"
+
+        val MakeSenseOfAverage = "Make Sense"
+        val NotMakeSenseOfAverage = "Make No Sense"
+
     }
     var URL = "http://192.168.23.1"
     var PORT = 7890
@@ -15,6 +19,8 @@ class DevMod : Serializable {
 
     var LoopForFilter1 = 5
     var CovertMode = DevMod.OLD
+
+    var AverageMode = MakeSenseOfAverage
 }
 
 class DataDevMod(context: Context) {

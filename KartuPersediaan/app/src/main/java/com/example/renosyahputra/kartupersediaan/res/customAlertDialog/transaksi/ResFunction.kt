@@ -6,12 +6,49 @@ import android.support.v4.content.res.ResourcesCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.example.renosyahputra.kartupersediaan.R
+import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.KuantitasTransaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 
 class ResFunction {
     companion object {
+
+        fun AddedProductToDetailTransaction(newTrans: TransaksiData,p :ProdukData){
+
+            val detailAdded = DetailTransaksi()
+            val productAdded = ProdukData()
+
+            productAdded.IdProduk = p.IdProduk
+            productAdded.Nama = p.Nama
+            productAdded.Harga = p.Harga
+
+            val id = IdGenerator()
+            id.CreateRandomString(15)
+            val idDetail = id.GetId()
+
+            detailAdded.IdTransaksiData = newTrans.IdTransaksiData
+            detailAdded.IdDetailTransaksiData = idDetail
+
+            detailAdded.ProdukData = productAdded
+
+            val ListKuantitas = ArrayList<KuantitasTransaksi>()
+            val KuantitasData = KuantitasTransaksi()
+            KuantitasData.IdDetailTransaksiData = idDetail
+            KuantitasData.Quantity = 1
+            KuantitasData.Harga = detailAdded.ProdukData.Harga
+            KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
+            ListKuantitas.add(KuantitasData)
+
+            detailAdded.ListKuantitas = ListKuantitas
+
+            detailAdded.ListPersediaanData = ArrayList()
+
+            if (!CheckAndAddQtyIfAlreadyAdded(newTrans.ListDetail,detailAdded)){
+                newTrans.ListDetail.add(detailAdded)
+            }
+        }
 
 
         fun HideKeyboard(context: Context,v: View){

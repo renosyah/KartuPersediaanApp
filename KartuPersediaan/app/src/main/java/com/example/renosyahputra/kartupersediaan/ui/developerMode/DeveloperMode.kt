@@ -43,6 +43,7 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
 
     lateinit var loopFilterOne  :TextView
     lateinit var mode : TextView
+    lateinit var AverageMode : TextView
 
     lateinit var resetDevMod : TextView
 
@@ -80,6 +81,7 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
 
         loopFilterOne  = findViewById(R.id.FirstFilterLoopDeveloperMode)
         mode = findViewById(R.id.ModeCatatanDeveloperMode)
+        AverageMode = findViewById(R.id.AverageModeDeveloperMode)
 
         resetDevMod = findViewById(R.id.ResetSettingDeveloperMode)
 
@@ -92,6 +94,7 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
         getData.setOnClickListener(this)
         saveData.setOnClickListener(this)
         mode.setOnClickListener(this)
+        AverageMode.setOnClickListener(this)
         resetDevMod.setOnClickListener(this)
 
         loopFilterOne.setOnClickListener(this)
@@ -114,6 +117,7 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
         saveData.setText(lang.devModeLang.editsaveData + " : " +Data.SaveDataUrl)
         loopFilterOne.setText(lang.devModeLang.editloop + " : " +Data.LoopForFilter1.toString())
         mode.setText(lang.devModeLang.editModeCatatan+" : "+Data.CovertMode)
+        AverageMode.setText(lang.devModeLang.AverageMode + " : "+Data.AverageMode)
 
     }
 
@@ -123,6 +127,35 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
     val SETTING_FOR_SAVE = "SAVE_URL"
     val SETTING_FOR_LOOP = "LOOP_FILTER_1"
 
+    internal fun OpenDialogSelectAverageMode(){
+
+        val option = arrayOf<CharSequence>(DevMod.MakeSenseOfAverage,DevMod.NotMakeSenseOfAverage)
+        AlertDialog.Builder(context)
+                .setTitle(lang.devModeLang.AverageMode)
+                .setItems(option, DialogInterface.OnClickListener { dialogInterface, i ->
+                    if (i == 0){
+
+                        Data.AverageMode = DevMod.MakeSenseOfAverage
+
+                    }else if (i == 1){
+
+                        Data.AverageMode = DevMod.NotMakeSenseOfAverage
+
+                    }
+
+                    val save = DataDevMod(context)
+                    save.SetData(Data)
+                    save.Save()
+
+                    SetLangAndTheme(Data)
+                    dialogInterface.dismiss()
+                })
+                .setNegativeButton(lang.mainMenuSettingLang.Back, DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+
+                })
+                .create().show()
+    }
     internal fun OpenDialogSelectParam(){
 
         val option = arrayOf<CharSequence>(DevMod.NEW,DevMod.OLD)
@@ -219,6 +252,9 @@ class DeveloperMode : AppCompatActivity(),View.OnClickListener {
             }
             mode -> {
                 OpenDialogSelectParam()
+            }
+            AverageMode -> {
+                OpenDialogSelectAverageMode()
             }
             resetDevMod ->{
 

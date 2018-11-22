@@ -19,6 +19,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.registerLang.RegisterLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.runTimePermissionLang.RunTimePermissionLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.saveOnlineDialogLang.SaveOnlineDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
@@ -166,6 +167,7 @@ class LangSetting(ctx : Context){
         addTransDialogLang.EditStockLeftTitle = "Stock left for"
 
         addTransDialogLang.add = "Ok"
+        addTransDialogLang.addAllProduct = "Add All"
         addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Cancel"
 
@@ -292,21 +294,12 @@ class LangSetting(ctx : Context){
         guideLang.appVer = "Version 1.6"
         guideLang.title = "Guide"
         guideLang.titleForSocialMediaPages = "Visit My Social media's Page on : "
-        guideLang.guides = "Stock Card Cards are Cards used to record Inventory of goods, Inventory Cards can be used to record Merchandise Inventory in a trading company, recording Supplies of Raw Materials and Substituents for manufacturing companies.\n" +
+        guideLang.guides = "The stock card application helps users to build inventory card statements, simply by inputting product and transaction data, automatically the application will arrange all inventory card statements with 3 recording methods at once like FIFO, LIFO and AVERAGE methods.\n" +
                 "\n" +
-                "This inventory card application makes it easy for users to be able to compile inventory card statements, just by inputting product data and transactions, automatically the application will compile all inventory card statements with 3 recording methods at once, so users can easily see the comparison of each report .\n" +
-                "\n" +
-                "here are the usage guidelines for this app:\n" +
-                "\n" +
-                "1). after registering, you will be in the main menu, the main menu consists of 3 menus, product menu, transactions, and card supplies.\n" +
-                "\n" +
-                "2). add some product data by pressing the button in the bottom right corner, and select product added menu, input name, standard price and unit.\n" +
-                "\n" +
-                "3). when done, add some transaction data. by pressing the same button, and select the add transaction menu, enter transaction time, date, description, IN transaction type for OUT product transaction type and OUT for outgoing product transaction type, and add some products into transaction and specify quantity dah respective price product.\n" +
-                "\n" +
-                "4). when done, select the menu of the inventory card, and automatically report will be displayed\n" +
-                "\n" +
-                ""
+                "1. after registration you will be asked to input some product data.\n" +
+                "2. then add transaction data, there are 2 types of transactions are: products in and out.\n" +
+                "3. after some transaction data is added, choose menu of stock card\n" +
+                "4. print the report by pressing the printer icon."
 
 
         val cariTanggalLaporanLang = CariTanggalLaporanLang()
@@ -345,6 +338,15 @@ class LangSetting(ctx : Context){
         devModeLang.save = "Save"
         devModeLang.cancel = "Cancel"
         devModeLang.editModeCatatan = "Edit Writing Mode"
+        devModeLang.AverageMode = "Average Model Data "
+
+
+        val runTimePermissionLang = RunTimePermissionLang()
+        runTimePermissionLang.titleRequestWriteExternalDir = "Request Permission"
+        runTimePermissionLang.messageRequestWriteExternalDir = "the application has not been able to create a report document, requesting permission to create a pdf file in storage on your device"
+        runTimePermissionLang.okRequestWriteExternalDir = "Granted"
+        runTimePermissionLang.cancelRequestWriteExternalDir = "Cancel"
+        runTimePermissionLang.cancelMessageRequestWriteExternalDir = "fail to create document,permission not granted by user!"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
@@ -365,6 +367,7 @@ class LangSetting(ctx : Context){
         langObj.saveOnlineDialogLang = saveOnlineDialogLang
         langObj.logoutDialogLang = logoutDialogLang
         langObj.devModeLang = devModeLang
+        langObj.runTimePermissionLang = runTimePermissionLang
     }
 
 
@@ -446,7 +449,7 @@ class LangSetting(ctx : Context){
         subMenuTransLang.edit = "Edit"
         subMenuTransLang.lihatDetail = "Lihat Detail"
         subMenuTransLang.titleHapusTransaksi = "Hapus Transaksi"
-        subMenuTransLang.messageHapusTransaksi = "Transaksi ini akan dihapus, apakah anda yakin ingin?"
+        subMenuTransLang.messageHapusTransaksi = "Transaksi ini akan dihapus, apakah anda yakin ingin melanjutkan?"
         subMenuTransLang.yesHapus = "Hapus Transaksi"
         subMenuTransLang.noHapus = "Batal"
 
@@ -472,6 +475,7 @@ class LangSetting(ctx : Context){
         addTransDialogLang.EditpriceTitle = "Edit Harga Perolehan"
         addTransDialogLang.EditStockLeftTitle = "Stok Tersedia untuk Produk"
 
+        addTransDialogLang.addAllProduct = "Tambah Semua"
         addTransDialogLang.add = "Ok"
         addTransDialogLang.Ok = "Ok"
         addTransDialogLang.cancel = "Batal"
@@ -505,7 +509,7 @@ class LangSetting(ctx : Context){
         laporanMenuLang.KuantitasKe = "Nomor Kuantitas"
         laporanMenuLang.titleStockForListStock = "Saldo Persediaan"
         laporanMenuLang.titleTransForListQty = "Saldo Transaksi"
-        laporanMenuLang.exportTitle = "Cetak Dokumen"
+        laporanMenuLang.exportTitle = "Cetak Laporan"
         laporanMenuLang.toPDF = "PDF (Potret)"
         laporanMenuLang.toPDFLANDSCAPE = "PDF (Mendatar)"
         laporanMenuLang.save = "Simpan"
@@ -517,7 +521,7 @@ class LangSetting(ctx : Context){
         laporanMenuLang.hinga = "-"
         laporanMenuLang.WarningInvalidProduckInTrans = "ada beberapa data transaksi yang kuantitas produknya tidak valid, mohon dicek!"
         laporanMenuLang.WarningInvalidProduckInTransTitle = "Perhatian"
-        laporanMenuLang.titleOpenFile = "Dokumen Tersimpan"
+        laporanMenuLang.titleOpenFile = "Laporan Tersimpan"
         laporanMenuLang.messageOpenFile = "File Tersimpan di Folder KartuPersediaan,apakah anda ingin membukanya?"
         laporanMenuLang.ok = "Buka"
         laporanMenuLang.no = "Tidak"
@@ -600,21 +604,12 @@ class LangSetting(ctx : Context){
         guideLang.appVer = "Versi 1.6"
         guideLang.title = "Panduan"
         guideLang.titleForSocialMediaPages = "Kunjungi Halaman Sosial Media Saya Di : "
-        guideLang.guides = "Kartu Persediaan adalah Kartu yang digunakan untuk mencatat Persediaan barang, Kartu Persediaan bisa digunakan untuk mencatat Persediaan Barang Dagangan dalam perusahaan dagang, mencatat Persediaan Bahan Baku dan Bahan Pembantu untuk perusahaan manufaktur.\n" +
+        guideLang.guides = "Aplikasi kartu persediaan membantu bagi pengguna untuk dapat menyusun laporan kartu persediaan, hanya dengan menginputkan data produk dan transaksi, secara otomatis aplikasi akan menyusun semua laporan kartu persediaan dengan 3 metode pencatatan sekaligus yakni metode FIFO ,LIFO dan AVERAGE.\n" +
                 "\n" +
-                "Aplikasi kartu persediaan ini memberikan kemudahan bagi pengguna untuk dapat menyusun laporan kartu persediaan, hanya dengan menginputkan data produk dan transaksi, secara otomatis aplikasi akan menyusun semua laporan kartu persediaan dengan 3 metode pencatatan sekaligus, sehingga pengguna dapat dengan mudah melihat perbandingan dari masing - masing laporan. \n" +
-                "\n" +
-                "berikut adalah panduan penggunaan untuk aplikasi ini : \n" +
-                "\n" +
-                "1). setelah melakukan register, anda akan berada pada menu utama, menu utama tersebut terdiri dari 3 menu, menu produk, transaksi, dan kartu persediaan.\n" +
-                "\n" +
-                "2). tambahkan beberapa data produk dengan menekan tombol di sudut kanan bawah, dan pilih menu tambah produk,masukan nama, harga standar dan satuan.\n" +
-                "\n" +
-                "3). setelah selesai, tambahkan beberapa data transaksi. dengan menekan tombol yang sama, dan pilih menu tambah transaksi, masukan waktu transaksi, tanggal, keterangan, tipe transaksi IN untuk tipe transaksi produk masuk dan OUT untuk tipe transaksi produk keluar, serta menambahkan beberapa produk kedalam transaksi dan menentukan kuantitas dah harga masing-masing produk.\n" +
-                "\n" +
-                "4). setelah selesai, pilih menu kartu persediaan, dan secara otomatis laporan akan ditampilkan\n" +
-                "\n" +
-                ""
+                "1. setelah registrasi anda akan diminta memasukan beberapa data produk\n" +
+                "2. lalu menambah data transaksi, ada 2 tipe transaksi yaitu : produk masuk dan keluar.\n" +
+                "3. setelah beberapa data transaksi ditambahkan, pilih menu kartu persediaan\n" +
+                "4. cetak laporan dengan menekan icon printer."
 
         val cariTanggalLaporanLang = CariTanggalLaporanLang()
         cariTanggalLaporanLang.title = "Tanggal Transaksi"
@@ -651,6 +646,15 @@ class LangSetting(ctx : Context){
         devModeLang.save = "Simpan"
         devModeLang.cancel = "Batal"
         devModeLang.editModeCatatan = "Edit Mode Catatan"
+        devModeLang.AverageMode = "Model Data Average"
+
+
+        val runTimePermissionLang = RunTimePermissionLang()
+        runTimePermissionLang.titleRequestWriteExternalDir = "Meminta Izin Akses"
+        runTimePermissionLang.messageRequestWriteExternalDir = "aplikasi belum dapat membuat dokumen laporan,meminta izin untuk membuat file pdf di penyimpanan pada perangkan anda"
+        runTimePermissionLang.okRequestWriteExternalDir = "Diizinkan"
+        runTimePermissionLang.cancelRequestWriteExternalDir = "Batal"
+        runTimePermissionLang.cancelMessageRequestWriteExternalDir = "Gagal membuat laporan, izin tidak diberikan!"
 
         langObj.mainMenuLang = mainMenuLang
         langObj.mainMenuSettingLang = mainMenuSettingLang
@@ -671,6 +675,7 @@ class LangSetting(ctx : Context){
         langObj.saveOnlineDialogLang = saveOnlineDialogLang
         langObj.logoutDialogLang = logoutDialogLang
         langObj.devModeLang = devModeLang
+        langObj.runTimePermissionLang = runTimePermissionLang
     }
 
     fun ChangeLang(s : String){

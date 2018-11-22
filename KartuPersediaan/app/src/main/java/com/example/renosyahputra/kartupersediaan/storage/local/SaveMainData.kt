@@ -1,11 +1,17 @@
 package com.example.renosyahputra.kartupersediaan.storage.local
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Environment
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
+import android.widget.Toast
 import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
@@ -74,6 +80,24 @@ class SaveMainData(context: Context,MainData : KartuPersediaanData){
     }
 companion object {
 
+    fun RequestPermissionForWriteDataInDevicesStorageAndCheckIfNotAccept(ctx: Context,langObj: LangObj) : Boolean {
+        val ijinTidakBoleh = ContextCompat.checkSelfPermission(ctx,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED;
+        if (ijinTidakBoleh){
+            AlertDialog.Builder(ctx)
+                    .setTitle(langObj.runTimePermissionLang.titleRequestWriteExternalDir)
+                    .setMessage(langObj.runTimePermissionLang.messageRequestWriteExternalDir)
+                    .setPositiveButton(langObj.runTimePermissionLang.okRequestWriteExternalDir, DialogInterface.OnClickListener { dialogInterface, i ->
+                        ActivityCompat.requestPermissions(ctx as Activity,arrayOf<String>(Manifest.permission.WRITE_EXTERNAL_STORAGE),15)
+                        dialogInterface.dismiss()
+                    })
+                    .setNegativeButton(langObj.runTimePermissionLang.cancelRequestWriteExternalDir, DialogInterface.OnClickListener { dialogInterface, i ->
+                        Toast.makeText(ctx,langObj.runTimePermissionLang.cancelMessageRequestWriteExternalDir,Toast.LENGTH_SHORT).show()
+                        dialogInterface.dismiss()
+                    })
+                    .create().show()
+        }
+            return ijinTidakBoleh
+        }
 
     fun generateNoteOnSD(sFileName: String, sBody: String) {
         try {

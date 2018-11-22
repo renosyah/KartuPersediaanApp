@@ -51,7 +51,7 @@ class CustomAdapterPersediaanData(context: Context, resource: Int, objects: Muta
         holder.Name.setText(lang.laporanMenuLang.stokKe +" : "+ (position + 1))
         holder.Name.setTextColor(theme.BackGroundColor)
         holder.qty.setText(lang.printLaporanLang.qtyP +" : " +item.Jumlah.toString())
-        holder.total.setText(lang.laporanMenuLang.total +" : " +formatter.format(item.Jumlah * item.Produk.Harga))
+        holder.total.setText(lang.laporanMenuLang.total +" : " +formatter.format(item.Total))
         holder.price.setText(lang.laporanMenuLang.price +" : " +formatter.format(item.Produk.Harga))
 
         return row!!

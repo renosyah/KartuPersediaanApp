@@ -15,6 +15,7 @@ import com.example.renosyahputra.kartupersediaan.ui.lang.obj.mainMenuSettingLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.montInString.MonthInString
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.printLaporanLang.PrintLaporanLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.registerLang.RegisterLang
+import com.example.renosyahputra.kartupersediaan.ui.lang.obj.runTimePermissionLang.RunTimePermissionLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.saveOnlineDialogLang.SaveOnlineDialogLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuProdukLang.SubMenuProdukLang
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.subMenuTransLang.SubMenuTransLang
@@ -41,4 +42,5 @@ class LangObj : Serializable {
     lateinit var saveOnlineDialogLang : SaveOnlineDialogLang
     lateinit var logoutDialogLang : LogoutDialogLang
     lateinit var devModeLang  : DevModeLang
+    lateinit var runTimePermissionLang : RunTimePermissionLang
 }

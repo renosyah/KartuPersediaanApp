@@ -15,6 +15,8 @@ class DevModeLang  :Serializable {
     lateinit var editloop  :String
     lateinit var editModeCatatan : String
 
+    lateinit var AverageMode : String
+
     lateinit var title_dialog : String
     lateinit var save  :String
     lateinit var cancel : String

@@ -56,7 +56,7 @@
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
             android:background="@android:color/background_light"
-            app:srcCompat="@drawable/print" />
+            app:srcCompat="@drawable/pdf_logo" />
 
     </LinearLayout>
 

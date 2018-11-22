@@ -88,10 +88,10 @@ class FunctionForKartuPersediaanMenu {
         }
 
 
-        fun FillEmptyVariabelForAVERAGE(MainData: KartuPersediaanData,LaporanKartuPersediaan : ArrayList<LaporanKartuPersediaanObj>){
+        fun FillEmptyVariabelForAVERAGE(AverageMode : String,MainData: KartuPersediaanData,LaporanKartuPersediaan : ArrayList<LaporanKartuPersediaanObj>){
             if (MainData.metodePersediaan.MetodeUse == MetodePersediaan.AVERAGE) {
                 for (p in MainData.ListProdukData) {
-                    GenerateDataForAverage.FillZeroNumber(p, LaporanKartuPersediaan)
+                    GenerateDataForAverage.FillZeroNumber(AverageMode,p, LaporanKartuPersediaan)
                 }
             }
         }

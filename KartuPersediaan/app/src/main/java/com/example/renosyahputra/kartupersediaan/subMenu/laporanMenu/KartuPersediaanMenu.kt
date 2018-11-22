@@ -5,6 +5,7 @@ import android.app.Fragment
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AlertDialog
@@ -17,6 +18,7 @@ import com.example.renosyahputra.kartupersediaan.res.SortData.Companion.GetAllPe
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterLaporanKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.cariTanggalLaporan.CariTanggalLaporan
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.cariTanggalLaporan.res.CariTanggalLaporanRes
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
 import com.example.renosyahputra.kartupersediaan.res.obj.laporanKartuPersediaan.LaporanKartuPersediaanObj
 import com.example.renosyahputra.kartupersediaan.res.obj.metode.MetodePersediaan
@@ -26,6 +28,7 @@ import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.Transaksi
 import com.example.renosyahputra.kartupersediaan.res.obj.user.UserData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData
 import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData.Companion.OpenFileKartuPersediaan
+import com.example.renosyahputra.kartupersediaan.storage.local.SaveMainData.Companion.RequestPermissionForWriteDataInDevicesStorageAndCheckIfNotAccept
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.detailKartuPersediaan.DetailKartuPersediaan
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.alternative.FunctionForKartuPersediaanMenuForAlternative
 import com.example.renosyahputra.kartupersediaan.subMenu.laporanMenu.res.old.FunctionForKartuPersediaanMenu
@@ -33,8 +36,10 @@ import com.example.renosyahputra.kartupersediaan.ui.developerMode.DataDevMod
 import com.example.renosyahputra.kartupersediaan.ui.developerMode.DevMod
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
+import java.util.*
 
-class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnClickListener,SwipeRefreshLayout.OnRefreshListener{
+class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnClickListener,SwipeRefreshLayout.OnRefreshListener,CariTanggalLaporanRes.OnCariTanggalLaporan{
+
 
     lateinit var ctx : Context
     lateinit var v : View
@@ -57,10 +62,12 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
     lateinit var lang : LangObj
     lateinit var theme: ThemeObj
 
+
     fun SetLangTheme(lang : LangObj, theme: ThemeObj){
         this.lang = lang
         this.theme = theme
     }
+
 
     internal lateinit var FloatingButton : com.melnykov.fab.FloatingActionButton
 
@@ -116,7 +123,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
             FunctionForKartuPersediaanMenuForAlternative.CalculatingStockAndModifyListPersediaanDataAlternative(MainData,LaporanKartuPersediaan)
 
-            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData,LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(Data.AverageMode,MainData,LaporanKartuPersediaan)
 
             FunctionForKartuPersediaanMenuForAlternative.FromKartuPersediaanListToKartuPersediaanListByFilter(filter,LaporanKartuPersediaan)
 
@@ -128,7 +135,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
             FunctionForKartuPersediaanMenu.FromTransactionListToKartuPersediaanList(filter, duplicateListTransaksi, LaporanKartuPersediaan)
 
-            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(MainData, LaporanKartuPersediaan)
+            FunctionForKartuPersediaanMenu.FillEmptyVariabelForAVERAGE(Data.AverageMode,MainData, LaporanKartuPersediaan)
         }
         SetAdapter(LaporanKartuPersediaan)
     }
@@ -177,6 +184,7 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         sortInventoryCard.setText(lang.laporanMenuLang.filterPilihProduk)
 
         PrintNowButton = v.findViewById(R.id.PrintNowButton)
+        PrintNowButton.setColorFilter(theme.BackGroundColor, PorterDuff.Mode.SRC_ATOP)
 
         ListViewKartuPersediaan = v.findViewById(R.id.KartuPersediaanListview)
 
@@ -202,7 +210,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
     }
 
 
-
     override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         OpenDialogDetail(LaporanKartuPersediaan.get(p2))
     }
@@ -210,6 +217,10 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
     override fun onClick(p0: View?) {
         when (p0) {
             PrintNowButton-> {
+
+                if(RequestPermissionForWriteDataInDevicesStorageAndCheckIfNotAccept(ctx,lang)){
+                    return
+                }
 
                 if (LaporanKartuPersediaan.size < 1){
                     return
@@ -363,13 +374,10 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
                         filterSearch.TanggalAkhir!!.Bulan = 12
                         filterSearch.TanggalAkhir!!.Hari = 30
 
-
-
                     val dialogCariTanggal =  CariTanggalLaporan(ctx)
-                    dialogCariTanggal.SetVariabelNeedForGenerateData(ListViewKartuPersediaan, KartuPersediaanKosongStatus, MainData,LaporanKartuPersediaan)
                     dialogCariTanggal.SetTanggalAwalDanAkhir(filterSearch)
-                    dialogCariTanggal.SetSetPeriodeLap(SetPeriodeLap)
                     dialogCariTanggal.SetLangTheme(lang,theme)
+                    dialogCariTanggal.SetonCariTanggalLaporan(this)
                     dialogCariTanggal.InitiationDialog()
 
 
@@ -429,7 +437,6 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
 
             }
         }
-
     }
 
     internal fun GenerateAfterFilterChoose() {
@@ -438,6 +445,15 @@ class KartuPersediaanMenu : Fragment(),AdapterView.OnItemClickListener,View.OnCl
         }else {
             GenerateData(filterSearch)
         }
+    }
+
+    override fun OnFinishSelectFirstAndLastDate(text: String, filter: FilterCard) {
+        SetPeriodeLap.setText(text)
+        filterSearch.TanggalAkhir = filter.TanggalAkhir
+        filterSearch.TanggalAwal = filter.TanggalAwal
+        filterSearch.p = filter.p
+
+        GenerateAfterFilterChoose()
     }
 
 

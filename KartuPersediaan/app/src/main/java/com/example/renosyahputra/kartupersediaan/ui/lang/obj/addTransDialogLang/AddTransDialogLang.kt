@@ -24,6 +24,7 @@ class AddTransDialogLang : Serializable {
     lateinit var EditStockLeftTitle : String
 
     lateinit var add : String
+    lateinit var addAllProduct : String
     lateinit var Ok : String
     lateinit var cancel : String
 

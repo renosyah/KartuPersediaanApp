@@ -14,13 +14,15 @@ import com.example.renosyahputra.kartupersediaan.res.ChangeDateToRelevanString
 import com.example.renosyahputra.kartupersediaan.res.IdGenerator
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterDetailTransaction
 import com.example.renosyahputra.kartupersediaan.res.customAdapter.CustomAdapterListProduk
-import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CheckAndAddQtyIfAlreadyAdded
+import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.AddedProductToDetailTransaction
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.CompareDateAndTimeIfSameDontAccept
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.FinalQtyCheckInNewTrans
 import com.example.renosyahputra.kartupersediaan.res.customAlertDialog.transaksi.ResFunction.Companion.getTotalFromDetail
 import com.example.renosyahputra.kartupersediaan.res.obj.KartuPersediaanData
-import com.example.renosyahputra.kartupersediaan.res.obj.produkData.ProdukData
-import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.*
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.DetailTransaksi
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatTanggal
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.FormatWaktu
+import com.example.renosyahputra.kartupersediaan.res.obj.transaksiData.TransaksiData
 import com.example.renosyahputra.kartupersediaan.subMenu.transaksiMenu.TransaksiMenu
 import com.example.renosyahputra.kartupersediaan.ui.lang.obj.LangObj
 import com.example.renosyahputra.kartupersediaan.ui.theme.obj.ThemeObj
@@ -355,22 +357,8 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
                     }else {
 
-                        val ListKuantitas = ArrayList<KuantitasTransaksi>()
-                        val KuantitasData = KuantitasTransaksi()
+                        detail.get(pos).SetQuantityAll(QtyInput)
 
-                        val id = IdGenerator()
-                        id.CreateRandomString(15)
-                        val idDetail = id.GetId()
-
-                        detail.get(pos).IdDetailTransaksiData = idDetail
-
-                        KuantitasData.IdDetailTransaksiData = idDetail
-                        KuantitasData.Quantity = QtyInput
-                        KuantitasData.Harga = detail.get(pos).ProdukData.Harga
-                        KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
-                        ListKuantitas.add(KuantitasData)
-
-                        detail.get(pos).ListKuantitas = ListKuantitas
                         setDetailAdapter(ListDetail,newTrans.ListDetail)
                         dialogInterface.dismiss()
 
@@ -414,8 +402,6 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
                 .create()
 
 
-
-
         dialogEditQty.setView(v)
         dialogEditQty.show()
     }
@@ -424,6 +410,17 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
         val productdialog = AlertDialog.Builder(context)
                 .setTitle(lang.addTransDialogLang.addProduct)
+                .setNeutralButton(lang.addTransDialogLang.addAllProduct, DialogInterface.OnClickListener { dialogInterface, i ->
+
+                    LinearLayoutListViewDetailAddTrans.visibility = View.VISIBLE
+
+                    for (p in MainData.ListProdukData){
+                        AddedProductToDetailTransaction(newTrans,p)
+                    }
+                    setDetailAdapter(ListDetail,newTrans.ListDetail)
+
+                    dialogInterface.dismiss()
+                })
                 .setNegativeButton(lang.addTransDialogLang.tutup, DialogInterface.OnClickListener { dialogInterface, i ->
                     dialogInterface.dismiss()
                 }).create()
@@ -449,36 +446,7 @@ class CustomAlertDialogAddTransaction(ctx : Context,res : Int,Data : KartuPersed
 
             LinearLayoutListViewDetailAddTrans.visibility = View.VISIBLE
 
-            val detailAdded = DetailTransaksi()
-            val productAdded = ProdukData()
-            productAdded.IdProduk = MainData.ListProdukData.get(i).IdProduk
-            productAdded.Nama = MainData.ListProdukData.get(i).Nama
-            productAdded.Harga = MainData.ListProdukData.get(i).Harga
-
-            val id = IdGenerator()
-            id.CreateRandomString(15)
-            val idDetail = id.GetId()
-
-            detailAdded.IdTransaksiData = newTrans.IdTransaksiData
-            detailAdded.IdDetailTransaksiData = idDetail
-
-            detailAdded.ProdukData = productAdded
-
-            val ListKuantitas = ArrayList<KuantitasTransaksi>()
-            val KuantitasData = KuantitasTransaksi()
-            KuantitasData.IdDetailTransaksiData = idDetail
-            KuantitasData.Quantity = 1
-            KuantitasData.Harga = detailAdded.ProdukData.Harga
-            KuantitasData.Total = KuantitasData.Harga * KuantitasData.Quantity
-            ListKuantitas.add(KuantitasData)
-
-            detailAdded.ListKuantitas = ListKuantitas
-
-            detailAdded.ListPersediaanData = ArrayList()
-
-            if (!CheckAndAddQtyIfAlreadyAdded(newTrans.ListDetail,detailAdded)){
-                newTrans.ListDetail.add(detailAdded)
-            }
+            AddedProductToDetailTransaction(newTrans,MainData.ListProdukData.get(i))
 
             setDetailAdapter(ListDetail,newTrans.ListDetail)
 
